@@ -2,11 +2,29 @@
   "compilerOptions": {
     "allowSyntheticDefaultImports": true,
     "jsx": "react-native",
-    "lib": ["dom", "esnext"],
+    "lib": [
+      "dom",
+      "esnext"
+    ],
     "moduleResolution": "node",
     "noEmit": true,
     "skipLibCheck": true,
     "resolveJsonModule": true,
-    "strict": true
+    "strict": true,
+    "baseUrl": ".",
+    "paths": {
+      "*": [
+        "app/*"
+      ],
+      "@screens/*": [
+        "app/screens/*"
+      ],
+      "@components/*": [
+        "app/components/*"
+      ],
+      "@shared/*": [
+        "app/shared/*"
+      ]
+    }
   }
 }
