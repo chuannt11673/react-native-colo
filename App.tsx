@@ -1,22 +1,55 @@
-import { StatusBar } from 'expo-status-bar';
-import React from 'react';
-import { StyleSheet, View } from 'react-native';
-import LoginScreen from '@screens/login/LoginScreen';
+import * as React from 'react';
+import AuthContext from '@shared/context/AuthContext';
+import { NavigationContainer } from '@react-navigation/native';
+import HomeStack from 'navigation/HomeStack';
+import AuthStack from 'navigation/AuthStack';
 
 export default function App() {
+  const [state, dispatch] = React.useReducer(
+    (prevState: any, action: any) => {
+      switch (action.type) {
+        case 'SIGN_IN':
+          return {
+            ...prevState,
+            isSignout: false,
+            userToken: action.token
+          }
+        case 'SIGN_OUT':
+          return {
+            ...prevState,
+            isSignout: true,
+            userToken: null
+          }
+      }
+    },
+    {
+      isLoading: true,
+      isSignout: true,
+      userToken: null
+    }
+  );
+
+  const authContext = React.useMemo(() => (
+    {
+      signIn: async (data: any) => {
+        dispatch({ type: 'SIGN_IN', token: 'token' });
+      },
+      signOut: () => {
+        dispatch({ type: 'SIGN_OUT' });
+      },
+      signUp: async (data: any) => {
+        dispatch({ type: 'SIGN_IN', token: 'token' });
+      }
+    }
+  ), []);
+
   return (
-    <View style={styles.container}>
-      <LoginScreen />
-      <StatusBar style="auto" />
-    </View>
+    <AuthContext.Provider value={authContext}>
+      <NavigationContainer>
+        {
+          state.userToken ? <HomeStack /> : <AuthStack />
+        }
+      </NavigationContainer>
+    </AuthContext.Provider>
   );
 }
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: '#fff',
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
-});
