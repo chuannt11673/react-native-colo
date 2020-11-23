@@ -1,27 +1,54 @@
-import React from 'react'
-import { StyleSheet, Text, TextInput, TextInputProps, TextPropTypes, View, ViewPropTypes } from 'react-native';
+import React from 'react';
+import { Platform, StyleSheet, TextInput, TextInputProps, View } from 'react-native';
+import { RFValue } from "react-native-responsive-fontsize";
+import colors from '@shared/consts/Colors';
 
 interface FunnyTextInputProps extends TextInputProps {
-    leftIcon: any;
-    rightIcon: any;
+    leftIcon?: any,
+    rightIcon?: any,
+    containerStyle?: any
 }
 
-export default class FunnyTextInput extends React.Component {
-    static propTypes = {
-        containerStyle: ViewPropTypes.style,
-    }
-
-    render(): any {
-        return (
-            <View style={[styles.container]}>
-                <TextInput {...this.props} />
+const FunnyTextInput = (props: FunnyTextInputProps) => {
+    return (
+        <View style={[styles.container, props.containerStyle]}>
+            <View style={styles.icon}>
+                {
+                    props.leftIcon
+                }
             </View>
-        )
-    }
+            <TextInput placeholder={props.placeholder} {...props} style={[styles.input, props.style]} />
+            <View style={styles.icon}>
+                {
+                    props.rightIcon
+                }
+            </View>
+        </View>
+    )
 }
+
+export default FunnyTextInput;
 
 const styles = StyleSheet.create({
     container: {
-        flexDirection: 'row'
+        width: '100%',
+        height: 46,
+        borderWidth: 1,
+        borderRadius: 20,
+        borderColor: colors.black1,
+        flexDirection: 'row',
+        alignItems: 'center',
+        justifyContent: 'space-around',
+        padding: 8
+    },
+    input: {
+        width: '80%',
+        fontSize: RFValue(16),
+        fontFamily: Platform.OS === 'android' ? 'Roboto' : 'Arial',
+        fontWeight: 'normal'
+    },
+    icon: {
+        width: '10%'
     }
 })
+
