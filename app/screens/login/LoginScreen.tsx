@@ -1,7 +1,8 @@
 import React, { useState } from 'react';
-import { Keyboard, KeyboardAvoidingView, ScrollView, TouchableOpacity, TouchableWithoutFeedback, View } from 'react-native';
+import { Keyboard, SafeAreaView, ScrollView, TouchableOpacity, TouchableWithoutFeedback, View } from 'react-native';
 import FunnyText from '@components/FunnyText';
 import FunnyTextInput from '@components/FunnyTextInput';
+import FunnyLogo from '@components/FunnyLogo';
 
 import { AntDesign, Ionicons, FontAwesome } from '@expo/vector-icons';
 
@@ -19,10 +20,8 @@ export default function LoginScreen({ navigation }: any) {
         <TouchableWithoutFeedback onPress={
             Keyboard.dismiss
         }>
-            <ScrollView contentContainerStyle={styles.container}>
-                <View style={styles.logo}>
-                    <FunnyText style={styles.logoText}>Colo</FunnyText>
-                </View>
+            <SafeAreaView style={styles.container}>
+                <FunnyLogo />
                 <FunnyText style={styles.header}>Đăng nhập</FunnyText>
                 <FunnyTextInput
                     containerStyle={{
@@ -100,7 +99,7 @@ export default function LoginScreen({ navigation }: any) {
                         <FunnyText style={styles.registerButtonText}>Đăng ký</FunnyText>
                     </TouchableOpacity>
                 </View>
-            </ScrollView>
+            </SafeAreaView>
         </TouchableWithoutFeedback>
     )
 }

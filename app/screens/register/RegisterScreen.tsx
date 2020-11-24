@@ -1,15 +1,17 @@
 import FunnyText from '@components/FunnyText';
 import FunnyTextInput from '@components/FunnyTextInput';
+import FunnyLogo from '@components/FunnyLogo';
+
 import { AntDesign, Ionicons } from '@expo/vector-icons';
 import React from 'react';
-import { Keyboard, KeyboardAvoidingView, Platform, StatusBar, TouchableWithoutFeedback, View } from 'react-native';
+import { Keyboard, KeyboardAvoidingView, Platform, TouchableWithoutFeedback } from 'react-native';
 import { ScrollView } from 'react-native-gesture-handler';
 import colors from '@shared/consts/Colors';
 
 import styles from './RegisterStyle';
 import { Button } from 'react-native-elements';
 
-export default function RegisterScreen() {
+export default function RegisterScreen({ navigation }: any) {
     const [securePassword, setSecurePassword] = React.useState(true);
     const [isConfirmed, setIsConfirmed] = React.useState(false);
 
@@ -23,6 +25,10 @@ export default function RegisterScreen() {
         }
     };
 
+    const registerHandler = () => {
+        navigation.navigate('Confirmation');
+    };
+
     return (
         <KeyboardAvoidingView
             behavior={Platform.OS == 'ios' ? 'padding' : 'height'}
@@ -33,9 +39,7 @@ export default function RegisterScreen() {
         >
             <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
                 <ScrollView contentContainerStyle={styles.container}>
-                    <View style={styles.logo}>
-                        <FunnyText style={styles.logoText}>Colo</FunnyText>
-                    </View>
+                    <FunnyLogo />
                     <FunnyText style={styles.header}>Đăng ký tài khoản</FunnyText>
                     <FunnyTextInput
                         containerStyle={{
@@ -87,6 +91,9 @@ export default function RegisterScreen() {
                         containerStyle={styles.loginButtonContainer}
                         buttonStyle={styles.loginButton}
                         title='Đăng ký'
+                        onPress={
+                            registerHandler
+                        }
                     />
                 </ScrollView>
             </TouchableWithoutFeedback>

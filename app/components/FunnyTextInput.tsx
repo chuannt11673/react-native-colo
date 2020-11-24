@@ -17,7 +17,7 @@ const FunnyTextInput = (props: FunnyTextInputProps) => {
                     props.leftIcon
                 }
             </View>
-            <TextInput placeholder={props.placeholder} {...props} style={[styles.input, props.style]} />
+            <TextInput placeholder={props.placeholder} {...props} style={[styles.input, props.style]}  />
             <View style={styles.icon}>
                 {
                     props.rightIcon
@@ -44,8 +44,7 @@ const styles = StyleSheet.create({
     input: {
         width: '80%',
         fontSize: RFValue(16),
-        fontFamily: Platform.OS === 'android' ? 'Roboto' : 'Arial',
-        fontWeight: 'normal'
+        fontWeight: 'normal',
     },
     icon: {
         width: '10%'

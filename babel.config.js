@@ -9,7 +9,8 @@ module.exports = {
         alias: {
           "@screens": "./app/screens",
           "@components": "./app/components",
-          "@shared": "./app/shared"
+          "@shared": "./app/shared",
+          "@assets": "./assets"
         }
       }
     ]
