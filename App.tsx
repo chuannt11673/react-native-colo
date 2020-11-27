@@ -6,6 +6,7 @@ import AuthStack from 'navigation/AuthStack';
 
 import AxiosClient from '@shared/Axios';
 import OAuthConfig from '@shared/Config';
+import { ConnectTokenResponse } from '@shared/interfaces/ConnectTokenResponse';
 
 export default function App() {
   const [state, dispatch] = React.useReducer(
@@ -32,22 +33,34 @@ export default function App() {
     }
   );
 
+  const signInHanler = (username: string, password: string) => {
+    const loginFormData = new FormData();
+    loginFormData.append('client_id', OAuthConfig.clientId);
+    loginFormData.append('grant_type', OAuthConfig.grant_type);
+    loginFormData.append('scope', OAuthConfig.scope);
+    loginFormData.append('username', username);
+    loginFormData.append('password', password);
+
+    AxiosClient.post('http://colo-auth.azurewebsites.net/connect/token', loginFormData, {
+      headers: {
+        'Content-Type': 'multipart/form-data'
+      }
+    }).then(res => {
+      const data: ConnectTokenResponse = res.data;
+      dispatch({ type: 'SIGN_IN', token: data.access_token });
+    }, err => {
+      // Toast here
+    });
+  }
+
+  const signOutHandler = () => {
+    dispatch({ type: 'SIGN_OUT' });
+  }
+
   const authContext = React.useMemo(() => (
     {
-      signIn: async (username: string, password: string) => {
-        const form = new FormData();
-        form.append('client_id', OAuthConfig.clientId);
-        form.append('grant_type', OAuthConfig.grant_type);
-        form.append('scope', OAuthConfig.scope);
-        form.append('username', username);
-        form.append('password', password);
-        AxiosClient.post('/connect/token', form).then(res => {
-          console.log(res);
-        });
-      },
-      signOut: () => {
-        dispatch({ type: 'SIGN_OUT' });
-      }
+      signIn: signInHanler,
+      signOut: signOutHandler
     }
   ), []);
 
