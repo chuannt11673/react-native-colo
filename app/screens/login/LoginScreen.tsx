@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Keyboard, SafeAreaView, ScrollView, TouchableOpacity, TouchableWithoutFeedback, View } from 'react-native';
+import { Keyboard, SafeAreaView, TouchableOpacity, TouchableWithoutFeedback, View } from 'react-native';
 import FunnyText from '@components/FunnyText';
 import FunnyTextInput from '@components/FunnyTextInput';
 import FunnyLogo from '@components/FunnyLogo';
@@ -9,13 +9,28 @@ import { AntDesign, Ionicons, FontAwesome } from '@expo/vector-icons';
 import styles from './LoginStyle';
 import colors from '@shared/consts/Colors';
 import { Button } from 'react-native-elements';
+import AuthContext from '@shared/context/AuthContext';
 
 export default function LoginScreen({ navigation }: any) {
+    const [username, setUsername] = useState<string>('');
+    const [password, setPassword] = useState<string>('');
     const [securePassword, setSecurePassword] = useState(true);
+    const { signIn } = React.useContext(AuthContext);
+    
     const registerHandler = () => {
         navigation.navigate('Register');
     };
 
+    const usernameOnchange = (value: string) => {
+        setUsername(value);
+    }
+    const passwordOnchange = (value: string) => {
+        setPassword(value);
+    }
+    const signInHandler = () => {
+        signIn(username, password);
+    };
+    
     return (
         <TouchableWithoutFeedback onPress={
             Keyboard.dismiss
@@ -30,6 +45,9 @@ export default function LoginScreen({ navigation }: any) {
                     placeholder='Email hoặc số điện thoại'
                     leftIcon={
                         <AntDesign name="user" size={24} color={colors.black1} />
+                    }
+                    onChangeText={
+                        usernameOnchange
                     }
                 />
                 <FunnyTextInput
@@ -56,6 +74,9 @@ export default function LoginScreen({ navigation }: any) {
                             }
                         />
                     }
+                    onChangeText={
+                        passwordOnchange
+                    }
                 />
                 <View style={styles.forgotPassword}>
                     <FunnyText style={styles.forgotPasswordText}>Quên mật khẩu</FunnyText>
@@ -64,6 +85,9 @@ export default function LoginScreen({ navigation }: any) {
                     containerStyle={styles.loginButtonContainer}
                     buttonStyle={styles.loginButton}
                     title='Đăng nhập'
+                    onPress={
+                        signInHandler
+                    }
                 />
                 <FunnyText style={styles.otherLoginText}>Hoặc đăng nhập với...</FunnyText>
                 <View style={styles.externalLogin}>
