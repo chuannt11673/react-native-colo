@@ -71,6 +71,12 @@ const styles = StyleSheet.create({
     },
     registerButtonText: {
         color: colors.primary
+    },
+    errorMessage: {
+        marginTop: 20,
+    },
+    error: {
+        color: colors.primary
     }
 });
 

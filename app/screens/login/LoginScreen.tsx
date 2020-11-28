@@ -10,17 +10,20 @@ import styles from './LoginStyle';
 import colors from '@shared/consts/Colors';
 import { Button } from 'react-native-elements';
 import AuthContext from '@shared/context/AuthContext';
+import OAuthConfig from '@shared/Config';
+import AxiosClient from '@shared/Axios';
+import { ConnectTokenResponse } from '@shared/interfaces/ConnectTokenResponse';
 
 export default function LoginScreen({ navigation }: any) {
     const [username, setUsername] = useState<string>('');
     const [password, setPassword] = useState<string>('');
     const [securePassword, setSecurePassword] = useState(true);
+    const [errorMessage, setErrorMessage] = useState('');
     const { signIn } = React.useContext(AuthContext);
     
     const registerHandler = () => {
         navigation.navigate('Register');
     };
-
     const usernameOnchange = (value: string) => {
         setUsername(value);
     }
@@ -28,8 +31,39 @@ export default function LoginScreen({ navigation }: any) {
         setPassword(value);
     }
     const signInHandler = () => {
-        signIn(username, password);
+        const loginFormData = new FormData();
+        loginFormData.append('client_id', OAuthConfig.clientId);
+        loginFormData.append('grant_type', OAuthConfig.grant_type);
+        loginFormData.append('scope', OAuthConfig.scope);
+        loginFormData.append('username', username);
+        loginFormData.append('password', password);
+        AxiosClient.post('http://colo-auth.azurewebsites.net/connect/token', loginFormData, {
+            headers: {
+                'Content-Type': 'multipart/form-data'
+            }
+        }).then((res: any) => {
+            const responseModel : ConnectTokenResponse = res;
+            if (responseModel) {
+                AxiosClient.defaults.headers.common['Authorization'] = responseModel.access_token;
+            }
+            signIn(responseModel.access_token);
+        }, err => {
+            const errorMessage = err?.response?.data?.error_description;
+            setErrorMessage(errorMessage);
+        });
     };
+
+    const ErrorMessage = () => {
+        if (errorMessage) {
+            return (
+                <View style={styles.errorMessage}>
+                    <FunnyText style={styles.error}>{errorMessage}</FunnyText>
+                </View>
+            )
+        }
+
+        return null;
+    }
     
     return (
         <TouchableWithoutFeedback onPress={
@@ -81,6 +115,7 @@ export default function LoginScreen({ navigation }: any) {
                 <View style={styles.forgotPassword}>
                     <FunnyText style={styles.forgotPasswordText}>Quên mật khẩu</FunnyText>
                 </View>
+                <ErrorMessage />
                 <Button
                     containerStyle={styles.loginButtonContainer}
                     buttonStyle={styles.loginButton}
