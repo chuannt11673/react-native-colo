@@ -1,7 +1,8 @@
 {
   "expo": {
-    "name": "Colo",
-    "slug": "Colo",
+    "scheme": "colo.app",
+    "name": "colo",
+    "slug": "colo",
     "version": "1.0.0",
     "orientation": "portrait",
     "icon": "./assets/icon.png",

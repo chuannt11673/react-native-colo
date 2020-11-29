@@ -1,7 +1,7 @@
-import Axios, { AxiosInstance } from "axios";
+import Axios from "axios";
 
 const AxiosClient = Axios.create({
-    baseURL: 'http://colo-auth.azurewebsites.net',
+    baseURL: 'https://colo-auth.azurewebsites.net',
     timeout: 3000
 });
 AxiosClient.interceptors.response.use((response: any) => {

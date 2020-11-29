@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Keyboard, SafeAreaView, TouchableOpacity, TouchableWithoutFeedback, View } from 'react-native';
 import FunnyText from '@components/FunnyText';
 import FunnyTextInput from '@components/FunnyTextInput';
@@ -10,9 +10,24 @@ import styles from './LoginStyle';
 import colors from '@shared/consts/Colors';
 import { Button } from 'react-native-elements';
 import AuthContext from '@shared/context/AuthContext';
-import OAuthConfig from '@shared/Config';
 import AxiosClient from '@shared/Axios';
 import { ConnectTokenResponse } from '@shared/interfaces/ConnectTokenResponse';
+
+import { useAuthRequest, ResponseType, makeRedirectUri, AuthRequestConfig } from 'expo-auth-session';
+import * as WebBrowser from 'expo-web-browser';
+WebBrowser.maybeCompleteAuthSession();
+// Endpoint
+const discovery = {
+    authorizationEndpoint: 'https://colo-auth.azurewebsites.net/connect/authorize',
+};
+const config: AuthRequestConfig = {
+    clientId: 'spa',
+    scopes: ['openid', 'profile', 'WebAppAPI'],
+    responseType: 'code',
+    redirectUri: makeRedirectUri({
+        preferLocalhost: true
+    })
+};
 
 export default function LoginScreen({ navigation }: any) {
     const [username, setUsername] = useState<string>('');
@@ -20,7 +35,22 @@ export default function LoginScreen({ navigation }: any) {
     const [securePassword, setSecurePassword] = useState(true);
     const [errorMessage, setErrorMessage] = useState('');
     const { signIn } = React.useContext(AuthContext);
-    
+
+    const [request, response, promptAsync] = useAuthRequest(
+        config,
+        discovery
+    );
+
+    useEffect(() => {
+        if (response && response.type === 'success') {
+            const token = response.params.access_token;
+            console.log(token);
+        }
+    }, [response]);
+
+    const googleSignInHandler = async () => {
+        await promptAsync();
+    }
     const registerHandler = () => {
         navigation.navigate('Register');
     };
@@ -32,17 +62,17 @@ export default function LoginScreen({ navigation }: any) {
     }
     const signInHandler = () => {
         const loginFormData = new FormData();
-        loginFormData.append('client_id', OAuthConfig.clientId);
-        loginFormData.append('grant_type', OAuthConfig.grant_type);
-        loginFormData.append('scope', OAuthConfig.scope);
+        loginFormData.append('client_id', 'spa');
+        loginFormData.append('grant_type', 'password');
+        loginFormData.append('scope', 'openid profile WebAppAPI');
         loginFormData.append('username', username);
         loginFormData.append('password', password);
-        AxiosClient.post('http://colo-auth.azurewebsites.net/connect/token', loginFormData, {
+        AxiosClient.post('/connect/token', loginFormData, {
             headers: {
                 'Content-Type': 'multipart/form-data'
             }
         }).then((res: any) => {
-            const responseModel : ConnectTokenResponse = res;
+            const responseModel: ConnectTokenResponse = res;
             if (responseModel) {
                 AxiosClient.defaults.headers.common['Authorization'] = responseModel.access_token;
             }
@@ -52,7 +82,6 @@ export default function LoginScreen({ navigation }: any) {
             setErrorMessage(errorMessage);
         });
     };
-
     const ErrorMessage = () => {
         if (errorMessage) {
             return (
@@ -64,7 +93,7 @@ export default function LoginScreen({ navigation }: any) {
 
         return null;
     }
-    
+
     return (
         <TouchableWithoutFeedback onPress={
             Keyboard.dismiss
@@ -133,6 +162,9 @@ export default function LoginScreen({ navigation }: any) {
                         title='Google'
                         icon={
                             <Ionicons name="logo-google" size={24} color="#db3236" />
+                        }
+                        onPress={
+                            googleSignInHandler
                         }
                     />
                     <Button
