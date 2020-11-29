@@ -11,22 +11,26 @@ import colors from '@shared/consts/Colors';
 import { Button } from 'react-native-elements';
 import AuthContext from '@shared/context/AuthContext';
 import AxiosClient from '@shared/Axios';
-import { ConnectTokenResponse } from '@shared/interfaces/ConnectTokenResponse';
+import { TokenResponse } from 'shared/interfaces/TokenResponse';
 
-import { useAuthRequest, ResponseType, makeRedirectUri, AuthRequestConfig } from 'expo-auth-session';
+import { useAuthRequest, makeRedirectUri, AuthRequestConfig } from 'expo-auth-session';
 import * as WebBrowser from 'expo-web-browser';
 WebBrowser.maybeCompleteAuthSession();
 // Endpoint
 const discovery = {
-    authorizationEndpoint: 'https://colo-auth.azurewebsites.net/connect/authorize',
+    authorizationEndpoint: AxiosClient.defaults.baseURL + '/connect/authorize',
 };
 const config: AuthRequestConfig = {
-    clientId: 'spa',
-    scopes: ['openid', 'profile', 'WebAppAPI'],
-    responseType: 'code',
+    clientId: 'native',
+    scopes: ["openid", "profile", "WebAppAPI"],
+    responseType: 'id_token token',
     redirectUri: makeRedirectUri({
-        preferLocalhost: true
-    })
+        native: 'colo.app://redirect',
+        preferLocalhost: false
+    }),
+    extraParams: {
+        nonce: 'abz' // implicit flow need nonce
+    }
 };
 
 export default function LoginScreen({ navigation }: any) {
@@ -41,15 +45,13 @@ export default function LoginScreen({ navigation }: any) {
         discovery
     );
 
-    useEffect(() => {
-        if (response && response.type === 'success') {
-            const token = response.params.access_token;
-            console.log(token);
-        }
-    }, [response]);
-
-    const googleSignInHandler = async () => {
-        await promptAsync();
+    const googleSignInHandler = () => {
+        promptAsync().then((res: any) => {
+            const token: any = res?.authentication?.accessToken;
+            if (token) {
+                signIn(token);
+            }
+        });
     }
     const registerHandler = () => {
         navigation.navigate('Register');
@@ -72,14 +74,14 @@ export default function LoginScreen({ navigation }: any) {
                 'Content-Type': 'multipart/form-data'
             }
         }).then((res: any) => {
-            const responseModel: ConnectTokenResponse = res;
+            const responseModel: TokenResponse = res;
             if (responseModel) {
                 AxiosClient.defaults.headers.common['Authorization'] = responseModel.access_token;
             }
             signIn(responseModel.access_token);
         }, err => {
             const errorMessage = err?.response?.data?.error_description;
-            setErrorMessage(errorMessage);
+            setErrorMessage(errorMessage ?? 'Incorrect username or password');
         });
     };
     const ErrorMessage = () => {
