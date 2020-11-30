@@ -3,10 +3,7 @@ import AuthContext from '@shared/context/AuthContext';
 import { NavigationContainer } from '@react-navigation/native';
 import HomeStack from 'navigation/HomeStack';
 import AuthStack from 'navigation/AuthStack';
-import * as WebBrowser from 'expo-web-browser'
-import AxiosClient from 'shared/Axios';
-import { makeRedirectUri } from 'expo-auth-session';
-WebBrowser.maybeCompleteAuthSession();
+import * as OAuth from '@shared/OAuth';
 
 export default function App() {
   const [state, dispatch] = React.useReducer(
@@ -35,12 +32,8 @@ export default function App() {
   const signInHanler = (token?: string) => {
     dispatch({ type: 'SIGN_IN', token: token });
   }
-  const returnUrl = makeRedirectUri({
-    native: 'colo.app://redirect',
-    preferLocalhost: false
-  });
   const signOutHandler = async () => {
-    await WebBrowser.openAuthSessionAsync(`${AxiosClient.defaults.baseURL}/api/Identity/logout?returnUrl=${returnUrl}`, '');
+    await OAuth.signOut();
     dispatch({ type: 'SIGN_OUT' });
   }
   const authContext = React.useMemo(() => (

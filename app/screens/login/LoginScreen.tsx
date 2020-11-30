@@ -1,50 +1,16 @@
-import React, { useEffect, useState } from 'react';
+import React, { useState } from 'react';
 import { Keyboard, SafeAreaView, TouchableOpacity, TouchableWithoutFeedback, View } from 'react-native';
 import FunnyText from '@components/FunnyText';
 import FunnyTextInput from '@components/FunnyTextInput';
 import FunnyLogo from '@components/FunnyLogo';
-
 import { AntDesign, Ionicons, FontAwesome } from '@expo/vector-icons';
-
 import styles from './LoginStyle';
 import colors from '@shared/consts/Colors';
 import { Button } from 'react-native-elements';
 import AuthContext from '@shared/context/AuthContext';
-import AxiosClient from '@shared/Axios';
-import { TokenResponse } from 'shared/interfaces/TokenResponse';
-
-import { useAuthRequest, makeRedirectUri, AuthRequestConfig } from 'expo-auth-session';
+import { useAuthRequest } from 'expo-auth-session';
+import * as OAuth from '@shared/OAuth';
 import * as WebBrowser from 'expo-web-browser';
-WebBrowser.maybeCompleteAuthSession();
-// Endpoint
-const discovery = {
-    authorizationEndpoint: AxiosClient.defaults.baseURL + '/connect/authorize',
-};
-const config: AuthRequestConfig = {
-    clientId: 'native',
-    scopes: ["openid", "profile", "WebAppAPI"],
-    responseType: 'id_token token',
-    redirectUri: makeRedirectUri({
-        native: 'colo.app://redirect',
-        preferLocalhost: false
-    }),
-    extraParams: {
-        nonce: 'abz' // implicit flow need nonce
-    }
-};
-const facebookConfig: AuthRequestConfig = {
-    clientId: 'native',
-    scopes: ["openid", "profile", "WebAppAPI"],
-    responseType: 'id_token token',
-    redirectUri: makeRedirectUri({
-        native: 'colo.app://redirect',
-        preferLocalhost: false
-    }),
-    extraParams: {
-        provider: 'Facebook',
-        nonce: 'abz' // implicit flow need nonce
-    }
-};
 
 export default function LoginScreen({ navigation }: any) {
     const [username, setUsername] = useState<string>('');
@@ -52,14 +18,13 @@ export default function LoginScreen({ navigation }: any) {
     const [securePassword, setSecurePassword] = useState(true);
     const [errorMessage, setErrorMessage] = useState('');
     const { signIn } = React.useContext(AuthContext);
-
-    const [request, response, promptAsync] = useAuthRequest(
-        config,
-        discovery
+    const [, , promptAsync] = useAuthRequest(
+        OAuth.googleConfig,
+        OAuth.discovery
     );
-    const [fbRequest, fbResponse, fbPromptAsync] = useAuthRequest(
-        facebookConfig,
-        discovery
+    const [, , fbPromptAsync] = useAuthRequest(
+        OAuth.facebookConfig,
+        OAuth.discovery
     );
     const facebookSignInHandler = async () => {
         const state: any = await fbPromptAsync();
@@ -75,36 +40,16 @@ export default function LoginScreen({ navigation }: any) {
             signIn(token);
         }
     }
-    const registerHandler = () => {
-        navigation.navigate('Register');
-    };
-    const usernameOnchange = (value: string) => {
-        setUsername(value);
-    }
-    const passwordOnchange = (value: string) => {
-        setPassword(value);
-    }
     const signInHandler = () => {
-        const loginFormData = new FormData();
-        loginFormData.append('client_id', 'spa');
-        loginFormData.append('grant_type', 'password');
-        loginFormData.append('scope', 'openid profile WebAppAPI');
-        loginFormData.append('username', username);
-        loginFormData.append('password', password);
-        AxiosClient.post('/connect/token', loginFormData, {
-            headers: {
-                'Content-Type': 'multipart/form-data'
-            }
-        }).then((res: any) => {
-            const responseModel: TokenResponse = res;
-            if (responseModel) {
-                AxiosClient.defaults.headers.common['Authorization'] = responseModel.access_token;
-            }
-            signIn(responseModel.access_token);
-        }, err => {
-            const errorMessage = err?.response?.data?.error_description;
-            setErrorMessage(errorMessage ?? 'Incorrect username or password');
-        });
+        OAuth.signIn(username, password)
+            .then(res => {
+                if (res?.access_token) {
+                    signIn(res.access_token);
+                }
+            })
+            .catch(err => {
+                setErrorMessage('Invalid email or password');
+            });
     };
     const ErrorMessage = () => {
         if (errorMessage) {
@@ -116,7 +61,13 @@ export default function LoginScreen({ navigation }: any) {
         }
 
         return null;
-    }
+    };
+    React.useEffect(() => {
+        WebBrowser.warmUpAsync();
+        return () => {
+            WebBrowser.coolDownAsync();
+        }
+    }, []);
 
     return (
         <TouchableWithoutFeedback onPress={
@@ -134,7 +85,7 @@ export default function LoginScreen({ navigation }: any) {
                         <AntDesign name="user" size={24} color={colors.black1} />
                     }
                     onChangeText={
-                        usernameOnchange
+                        (value: string) => setUsername(value)
                     }
                 />
                 <FunnyTextInput
@@ -162,7 +113,7 @@ export default function LoginScreen({ navigation }: any) {
                         />
                     }
                     onChangeText={
-                        passwordOnchange
+                        (value: string) => setPassword(value)
                     }
                 />
                 <View style={styles.forgotPassword}>
@@ -211,7 +162,7 @@ export default function LoginScreen({ navigation }: any) {
                             marginLeft: 6
                         }}
                         onPress={
-                            registerHandler
+                            () => navigation.navigate('Register')
                         }
                     >
                         <FunnyText style={styles.registerButtonText}>Đăng ký</FunnyText>
