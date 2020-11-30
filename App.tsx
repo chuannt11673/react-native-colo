@@ -40,7 +40,7 @@ export default function App() {
     preferLocalhost: false
   });
   const signOutHandler = async () => {
-    await WebBrowser.openAuthSessionAsync(AxiosClient.defaults.baseURL + `/api/Identity/logout?returnUrl=${returnUrl}` , returnUrl);
+    await WebBrowser.openAuthSessionAsync(`${AxiosClient.defaults.baseURL}/api/Identity/logout?returnUrl=${returnUrl}`, '');
     dispatch({ type: 'SIGN_OUT' });
   }
   const authContext = React.useMemo(() => (
