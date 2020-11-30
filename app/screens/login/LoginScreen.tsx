@@ -32,6 +32,19 @@ const config: AuthRequestConfig = {
         nonce: 'abz' // implicit flow need nonce
     }
 };
+const facebookConfig: AuthRequestConfig = {
+    clientId: 'native',
+    scopes: ["openid", "profile", "WebAppAPI"],
+    responseType: 'id_token token',
+    redirectUri: makeRedirectUri({
+        native: 'colo.app://redirect',
+        preferLocalhost: false
+    }),
+    extraParams: {
+        provider: 'Facebook',
+        nonce: 'abz' // implicit flow need nonce
+    }
+};
 
 export default function LoginScreen({ navigation }: any) {
     const [username, setUsername] = useState<string>('');
@@ -44,14 +57,23 @@ export default function LoginScreen({ navigation }: any) {
         config,
         discovery
     );
-
-    const googleSignInHandler = () => {
-        promptAsync().then((res: any) => {
-            const token: any = res?.authentication?.accessToken;
-            if (token) {
-                signIn(token);
-            }
-        });
+    const [fbRequest, fbResponse, fbPromptAsync] = useAuthRequest(
+        facebookConfig,
+        discovery
+    );
+    const facebookSignInHandler = async () => {
+        const state: any = await fbPromptAsync();
+        const token = state?.authentication?.accessToken;
+        if (token) {
+            signIn(token);
+        }
+    }
+    const googleSignInHandler = async () => {
+        const state: any = await promptAsync();
+        const token = state?.authentication?.accessToken;
+        if (token) {
+            signIn(token);
+        }
     }
     const registerHandler = () => {
         navigation.navigate('Register');
@@ -176,6 +198,9 @@ export default function LoginScreen({ navigation }: any) {
                         title='Facebook'
                         icon={
                             <FontAwesome name="facebook" size={24} color="#3b5998" />
+                        }
+                        onPress={
+                            facebookSignInHandler
                         }
                     />
                 </View>
