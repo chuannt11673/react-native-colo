@@ -3,6 +3,7 @@ import AuthContext from '@shared/context/AuthContext';
 import { NavigationContainer } from '@react-navigation/native';
 import HomeStack from 'navigation/HomeStack';
 import AuthStack from 'navigation/AuthStack';
+import * as SecureStore from 'expo-secure-store';
 import * as OAuth from '@shared/OAuth';
 
 export default function App() {
@@ -29,10 +30,12 @@ export default function App() {
       userToken: null
     }
   );
-  const signInHanler = (token?: string) => {
+  const signInHanler = async (token: string) => {
+    await SecureStore.setItemAsync(OAuth.MY_SECURE_AUTH_STATE_KEY, token);
     dispatch({ type: 'SIGN_IN', token: token });
   }
   const signOutHandler = async () => {
+    await SecureStore.deleteItemAsync(OAuth.MY_SECURE_AUTH_STATE_KEY);
     await OAuth.signOut();
     dispatch({ type: 'SIGN_OUT' });
   }

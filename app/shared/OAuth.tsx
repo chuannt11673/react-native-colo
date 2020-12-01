@@ -4,12 +4,13 @@ import { TokenResponse } from "@shared/interfaces/TokenResponse";
 import * as WebBrowser from 'expo-web-browser';
 WebBrowser.maybeCompleteAuthSession();
 
-export const clientId = 'native';
+export const MY_SECURE_AUTH_STATE_KEY = 'TokenKey';
+export const clientId = 'dev';
 export const scopes = ['openid', 'profile', 'WebAppAPI'];
 export const responseType = 'id_token token';
 export const redirectUri = makeRedirectUri({
     native: 'colo.app://redirect',
-    preferLocalhost: false
+    preferLocalhost: true
 });
 export const discovery = {
     authorizationEndpoint: 'https://colo-auth.azurewebsites.net/connect/authorize'
@@ -49,5 +50,4 @@ export const signIn = async (username: string, password: string) => {
 };
 export const signOut = async () => {
     await WebBrowser.openAuthSessionAsync('https://colo-auth.azurewebsites.net/api/Identity/logout?returnUrl=' + redirectUri, redirectUri);
-    WebBrowser.dismissAuthSession();
 };
