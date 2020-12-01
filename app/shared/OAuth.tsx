@@ -48,7 +48,6 @@ export const signIn = async (username: string, password: string) => {
     return state;
 };
 export const signOut = async () => {
-    await WebBrowser.openAuthSessionAsync('https://colo-auth.azurewebsites.net/api/Identity/logout?returnUrl=' + redirectUri, redirectUri, {
-        showTitle: false
-    });
+    await WebBrowser.openAuthSessionAsync('https://colo-auth.azurewebsites.net/api/Identity/logout?returnUrl=' + redirectUri, redirectUri);
+    WebBrowser.dismissAuthSession();
 };

@@ -18,7 +18,7 @@ export default function LoginScreen({ navigation }: any) {
     const [securePassword, setSecurePassword] = useState(true);
     const [errorMessage, setErrorMessage] = useState('');
     const { signIn } = React.useContext(AuthContext);
-    const [, , promptAsync] = useAuthRequest(
+    const [request, , promptAsync] = useAuthRequest(
         OAuth.googleConfig,
         OAuth.discovery
     );
