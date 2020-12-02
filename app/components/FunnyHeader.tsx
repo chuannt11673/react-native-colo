@@ -2,7 +2,7 @@ import React from 'react'
 import { Header } from 'react-native-elements';
 import colors from '@shared/consts/Colors';
 import * as ExpoGradient from 'expo-linear-gradient';
-import { StatusBar } from 'react-native';
+import { StatusBar } from 'expo-status-bar';
 
 const FunnyGradient: any = ExpoGradient.LinearGradient;
 interface FunnyHeaderProps {
@@ -13,7 +13,7 @@ interface FunnyHeaderProps {
 export default function FunnyHeader(props: FunnyHeaderProps) {
     return (
         <>
-            <StatusBar barStyle='light-content' />
+            <StatusBar style='light' />
             <Header
                 leftComponent={
                     props.leftComponent ?? { icon: 'menu', color: colors.white }
