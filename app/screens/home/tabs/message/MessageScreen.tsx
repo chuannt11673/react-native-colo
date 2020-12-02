@@ -1,11 +1,11 @@
 import React, { useEffect, useState } from 'react'
-import { Text, TouchableOpacity, View, Image, StatusBar, FlatList } from 'react-native';
+import { Text, TouchableOpacity, View, Image, FlatList } from 'react-native';
 import * as UserService from '@shared/services/UserService';
 import { styles, itemStyles } from './MessageStyle';
 import Moment from 'moment';
-import colors from '@shared/consts/Colors';
+import FunnyHeader from 'components/FunnyHeader';
 
-export default function MessageScreen({ navigation }: any) {
+export default function MessageScreen({ }: any) {
     const [data, setData] = useState<any[]>([]);
 
     useEffect(() => {
@@ -19,12 +19,12 @@ export default function MessageScreen({ navigation }: any) {
         return (
             <TouchableOpacity onPress={
                 () => {
-                    navigation.navigate('Chat', {
-                        item: {
-                            ...item,
-                            time: null
-                        }
-                    })
+                    // navigation.navigate('Chat', {
+                    //     item: {
+                    //         ...item,
+                    //         time: null
+                    //     }
+                    // })
                 }
             }>
                 <View style={itemStyles.item}>
@@ -50,7 +50,7 @@ export default function MessageScreen({ navigation }: any) {
 
     return (
         <View style={styles.container}>
-            <StatusBar barStyle='light-content' backgroundColor={colors.primary} translucent={true} />
+            <FunnyHeader title='Tin Nhắn' />
             <FlatList
                 data={data}
                 keyExtractor={item => item.id}

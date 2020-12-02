@@ -20,6 +20,7 @@ const MessageStack = () => {
             <MessageNavigator.Screen
                 name='Message'
                 component={MessageScreen}
+                options={{ headerShown: false }}
             />
         </MessageNavigator.Navigator>
     )
@@ -30,6 +31,7 @@ const DiaryStack = () => {
             <DiaryNavigator.Screen
                 name='Diary'
                 component={DiaryScreen}
+                options={{ headerShown: false }}
             />
         </DiaryNavigator.Navigator>
     )
@@ -40,6 +42,7 @@ const DatingStack = () => {
             <DatingNavigator.Screen
                 name='Dating'
                 component={DatingScreen}
+                options={{ headerShown: false }}
             />
         </DatingNavigator.Navigator>
     )
@@ -50,6 +53,7 @@ const ProfileStack = () => {
             <ProfileNavigator.Screen
                 name='Profile'
                 component={ProfileScreen}
+                options={{ headerShown: false }}
             />
         </ProfileNavigator.Navigator>
     )

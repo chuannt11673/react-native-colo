@@ -8,6 +8,7 @@ import { FontAwesome, SimpleLineIcons } from '@expo/vector-icons';
 import FunnyTruncatedText from '@components/FunnyTruncatedText';
 import FunnyImageGrid from '@components/FunnyImageGrid';
 import FunnyAvatar from '@components/FunnyAvatar';
+import FunnyHeader from '@components/FunnyHeader';
 
 export default function DiaryScreen({ navigation }: any) {
     const [data, setData] = useState<any[]>([]);
@@ -54,12 +55,12 @@ export default function DiaryScreen({ navigation }: any) {
 
     return (
         <>
-            <StatusBar barStyle='light-content' backgroundColor={colors.primary} translucent={true} />
+            <FunnyHeader title='Nhật Ký' />
             <ScrollView style={styles.container}>
                 <View style={styles.header}>
                     <TouchableOpacity onPress={
                         () => {
-                            navigation.navigate('CreatePost');
+                            // navigation.navigate('CreatePost');
                         }
                     }>
                         <View style={styles.headerAvatar}>

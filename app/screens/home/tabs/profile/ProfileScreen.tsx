@@ -6,6 +6,7 @@ import * as UserService from '@shared/services/UserService';
 import { styles } from './ProfileStyles';
 import colors from '@shared/consts/Colors';
 import FunnyImage from '@components/FunnyImage';
+import FunnyHeader from 'components/FunnyHeader';
 
 export default function ProfileScreen() {
     const [data, setData] = useState<any>();
@@ -18,7 +19,6 @@ export default function ProfileScreen() {
     const renderData = () => {
         return (
             <>
-                <StatusBar barStyle='light-content' backgroundColor='transparent' translucent={true} />
                 <FunnyImage uri={data.avatar} containerStyle={styles.avatarStyle} />
                 <View style={styles.reorderArea}>
                     <View style={styles.reorderTouchMove}>
@@ -64,10 +64,13 @@ export default function ProfileScreen() {
     }
 
     return (
-        <ScrollView style={styles.container}>
-            {
-                data ? renderData() : null
-            }
-        </ScrollView>
+        <>
+            <FunnyHeader title='Cá Nhân' />
+            <ScrollView style={styles.container}>
+                {
+                    data ? renderData() : null
+                }
+            </ScrollView>
+        </>
     )
 }
