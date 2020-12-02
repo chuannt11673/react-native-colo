@@ -1,15 +1,30 @@
-import React from 'react';
-import { Platform, StyleSheet, TextInput, TextInputProps, View } from 'react-native';
+import React, { useEffect, useRef, useState } from 'react';
+import { Platform, StyleSheet, Text, TextInput, TextInputProps, View } from 'react-native';
 import { RFValue } from "react-native-responsive-fontsize";
 import colors from '@shared/consts/Colors';
 
 interface FunnyTextInputProps extends TextInputProps {
     leftIcon?: any,
     rightIcon?: any,
-    containerStyle?: any
+    containerStyle?: any,
 }
 
 const FunnyTextInput = (props: FunnyTextInputProps) => {
+    const inputRef = useRef<TextInput>(null);
+    const [value, setValue] = useState('');
+
+    const changeTextHandler = (val: string) => {
+        setValue(val);
+    }
+
+    useEffect(() => {
+        inputRef.current?.setNativeProps({
+            value: value,
+            style: {
+                fontFamily: 'normal'
+            }
+        });
+    }, [props.secureTextEntry]);
     return (
         <View style={[styles.container, props.containerStyle]}>
             <View style={styles.icon}>
@@ -17,7 +32,7 @@ const FunnyTextInput = (props: FunnyTextInputProps) => {
                     props.leftIcon
                 }
             </View>
-            <TextInput placeholder={props.placeholder} {...props} style={[styles.input, props.style]}  />
+            <TextInput ref={inputRef} {...props} style={[styles.input, props.style]} value={value} onChangeText={changeTextHandler} />
             <View style={styles.icon}>
                 {
                     props.rightIcon
@@ -44,7 +59,7 @@ const styles = StyleSheet.create({
     input: {
         width: '80%',
         fontSize: RFValue(16),
-        fontWeight: 'normal',
+        fontWeight: 'normal'
     },
     icon: {
         width: '10%'
