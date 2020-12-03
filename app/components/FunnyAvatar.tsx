@@ -6,11 +6,19 @@ interface FunnyAvatarProps {
     uri?: string;
     name?: string;
     content?: string;
-}
+};
+const defaultUri = require('@assets/images/default-avatar.jpg');
 export default function FunnyAvatar(props: FunnyAvatarProps) {
+    const [uri, setUri] = React.useState(defaultUri);
+    React.useEffect(() => {
+        if (props.uri) {
+            setUri({ uri: props.uri });
+        }
+    }, []);
+
     return (
         <View style={itemStyles.item}>
-            <Image source={{ uri: props.uri }} style={itemStyles.avatar} />
+            <Image source={uri} style={itemStyles.avatar} />
             <View>
                 {
                     props.name ? (

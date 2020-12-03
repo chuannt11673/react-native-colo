@@ -9,12 +9,24 @@ import FunnyTruncatedText from '@components/FunnyTruncatedText';
 import FunnyImageGrid from '@components/FunnyImageGrid';
 import FunnyAvatar from '@components/FunnyAvatar';
 import FunnyHeader from '@components/FunnyHeader';
+import AxiosClient from 'shared/Axios';
 
 export default function DiaryScreen({ navigation }: any) {
     const [data, setData] = useState<any[]>([]);
     useEffect(() => {
-        UserService.getDiary().then(res => {
-            setData(res);
+        UserService.getDiary().then((res: any) => {
+            const values = res.map((item: any) => {
+                return {
+                    ...item,
+                    photos: item.images.map((image: any) => {
+                        const url = AxiosClient.defaults.baseURL + image.url.replace('wwwroot', '');
+                        return url.replaceAll(`\\`, `/`);
+                    })
+                }
+            });
+            setData(values);
+        }, err => {
+            console.error(err?.response);
         })
     }, []);
 
@@ -28,7 +40,7 @@ export default function DiaryScreen({ navigation }: any) {
                 </View>
                 <View style={styles.action}>
                     <FunnyButton
-                        title={'12'}
+                        title={item.likes.length + ''}
                         icon={
                             <SimpleLineIcons name="heart" size={21} color={colors.secondary} />
                         }

@@ -34,7 +34,7 @@ export default function FunnyImageGrid(props: FunnyImageGridProps) {
         }, err => {
             throw err;
         })
-    }, []);
+    }, [props.images]);
 
     const getHorizontalStyle = (index: number) => {
         if (index === 0) {

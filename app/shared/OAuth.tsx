@@ -5,14 +5,12 @@ import * as WebBrowser from 'expo-web-browser';
 WebBrowser.maybeCompleteAuthSession();
 
 export const MY_SECURE_AUTH_STATE_KEY = 'TokenKey';
-// export const clientId = 'dev'; // dev env
-export const clientId = 'native';
+export const clientId = 'dev';
 export const scopes = ['openid', 'profile', 'WebAppAPI'];
 export const responseType = 'id_token token';
 export const redirectUri = makeRedirectUri({
     native: 'colo.app://redirect',
-    preferLocalhost: false
-    // preferLocalhost: true // dev env
+    preferLocalhost: true
 });
 export const discovery = {
     authorizationEndpoint: 'https://colo-auth.azurewebsites.net/connect/authorize'

@@ -18,12 +18,14 @@ const FunnyTextInput = (props: FunnyTextInputProps) => {
     }
 
     useEffect(() => {
-        inputRef.current?.setNativeProps({
-            value: value,
-            style: {
-                fontFamily: 'normal'
-            }
-        });
+        if (Platform.OS === 'android') {
+            inputRef.current?.setNativeProps({
+                value: value,
+                style: {
+                    fontFamily: 'normal'
+                }
+            });
+        }
     }, [props.secureTextEntry]);
     return (
         <View style={[styles.container, props.containerStyle]}>
