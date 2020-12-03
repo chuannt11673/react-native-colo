@@ -46,7 +46,7 @@ export default function DiaryScreen({ navigation }: any) {
                         }
                     />
                     <FunnyButton
-                        title={'3'}
+                        title={item.comments.length + ''}
                         icon={
                             <SimpleLineIcons name="bubbles" size={21} color={colors.black} />
                         }
@@ -55,7 +55,7 @@ export default function DiaryScreen({ navigation }: any) {
                         }
                     />
                     <FunnyButton
-                        title={'5'}
+                        title={item.shares.length + ''}
                         icon={
                             <SimpleLineIcons name="cursor" size={21} color={colors.black} />
                         }
