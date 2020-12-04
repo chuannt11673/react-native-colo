@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { ScrollView, StatusBar, Text, TouchableOpacity, View } from 'react-native';
+import { ScrollView, Text, TouchableOpacity, View } from 'react-native';
 import * as UserService from '@shared/services/UserService';
 import FunnyButton from '@components/FunnyButton';
 import { styles } from './DiaryStyle';
@@ -26,7 +26,7 @@ export default function DiaryScreen({ navigation }: any) {
             });
             setData(values);
         }, err => {
-            console.error(err?.response);
+            console.log(err?.response);
         })
     }, []);
 

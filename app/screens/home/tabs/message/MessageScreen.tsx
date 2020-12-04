@@ -4,14 +4,24 @@ import * as UserService from '@shared/services/UserService';
 import { styles, itemStyles } from './MessageStyle';
 import Moment from 'moment';
 import FunnyHeader from 'components/FunnyHeader';
+import * as Storage from '@shared/Storage';
 
+const defaultAvatar = require('@assets/images/default-avatar.jpg');
 export default function MessageScreen({ }: any) {
     const [data, setData] = useState<any[]>([]);
-
     useEffect(() => {
-        UserService.getMesssages().then(res => {
-            setData(res);
-        })
+        Storage.getUserInfo().then(user => {
+            UserService.getMesssages().then((res: any) => {
+                const responseData = res.data.map((item: any) => {
+                    return {
+                        ...item,
+                        name: item.aUsername === user.name ? item.bUsername : item.aUsername,
+                        avatar: null
+                    }
+                });
+                setData(responseData);
+            })
+        });
     }, []);
 
     const renderItem = (value: any) => {
@@ -28,7 +38,7 @@ export default function MessageScreen({ }: any) {
                 }
             }>
                 <View style={itemStyles.item}>
-                    <Image source={{ uri: item.avatar }} style={itemStyles.avatar} />
+                    <Image source={ item.avatar ? { uri: item.avatar } : defaultAvatar } style={itemStyles.avatar} />
                     <Text style={itemStyles.name}>
                         {item.name}
                     </Text>

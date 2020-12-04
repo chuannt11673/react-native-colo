@@ -5,6 +5,7 @@ import HomeStack from 'navigation/HomeStack';
 import AuthStack from 'navigation/AuthStack';
 import * as SecureStore from 'expo-secure-store';
 import * as OAuth from '@shared/OAuth';
+import * as Storage from '@shared/Storage';
 
 export default function App() {
   const [state, dispatch] = React.useReducer(
@@ -32,11 +33,13 @@ export default function App() {
   );
   const signInHanler = async (token: string) => {
     await SecureStore.setItemAsync(OAuth.MY_SECURE_AUTH_STATE_KEY, token);
+    await Storage.storeUserInfo();
     dispatch({ type: 'SIGN_IN', token: token });
   }
   const signOutHandler = async () => {
     await SecureStore.deleteItemAsync(OAuth.MY_SECURE_AUTH_STATE_KEY);
     await OAuth.signOut();
+    await Storage.clear();
     dispatch({ type: 'SIGN_OUT' });
   }
   const authContext = React.useMemo(() => (
