@@ -59,8 +59,8 @@ const itemStyles = StyleSheet.create({
     },
     name: {
         fontSize: 16,
-        fontWeight: 'bold',
-        color: colors.black
+        fontWeight: '700',
+        color: colors.name
     },
     message: {
         fontSize: 14,

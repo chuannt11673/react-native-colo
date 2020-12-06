@@ -82,7 +82,7 @@ export default function LoginScreen({ navigation }: any) {
                     }}
                     placeholder='Email hoặc số điện thoại'
                     leftIcon={
-                        <AntDesign name="user" size={24} color={colors.black1} />
+                        <AntDesign name="user" size={24} color={colors.border} />
                     }
                     onChangeText={
                         (value: string) => setUsername(value)
@@ -98,7 +98,7 @@ export default function LoginScreen({ navigation }: any) {
                         securePassword
                     }
                     leftIcon={
-                        <AntDesign name="lock" size={24} color={colors.black1} />
+                        <AntDesign name="lock" size={24} color={colors.border} />
                     }
                     rightIcon={
                         <Ionicons
@@ -106,7 +106,7 @@ export default function LoginScreen({ navigation }: any) {
                                 securePassword ? "ios-eye-off" : "ios-eye"
                             }
                             size={24}
-                            color={colors.black1}
+                            color={colors.border}
                             onPress={
                                 () => setSecurePassword(!securePassword)
                             }

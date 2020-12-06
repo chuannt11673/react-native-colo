@@ -59,7 +59,7 @@ const styles = StyleSheet.create({
         justifyContent: 'space-evenly',
         backgroundColor: colors.white,
         borderWidth: 1,
-        borderColor: colors.black1,
+        borderColor: colors.border,
         borderRadius: 12
     },
     externalLoginTitle: {

@@ -19,8 +19,8 @@ export default function DiaryScreen({ navigation }: any) {
                 return {
                     ...item,
                     photos: item.images.map((image: any) => {
-                        const url = AxiosClient.defaults.baseURL + image.url.replace('wwwroot', '');
-                        return url.replaceAll(`\\`, `/`);
+                        const url = `${AxiosClient.defaults.baseURL}/${image.url}`;
+                        return url;
                     })
                 }
             });

@@ -7,16 +7,18 @@ import FunnyHeader from 'components/FunnyHeader';
 import * as Storage from '@shared/Storage';
 
 const defaultAvatar = require('@assets/images/default-avatar.jpg');
-export default function MessageScreen({ }: any) {
+export default function MessageScreen({ navigation }: any) {
     const [data, setData] = useState<any[]>([]);
     useEffect(() => {
         Storage.getUserInfo().then(user => {
             UserService.getMesssages().then((res: any) => {
                 const responseData = res.data.map((item: any) => {
                     return {
-                        ...item,
+                        id: item.id,
                         name: item.aUsername === user.name ? item.bUsername : item.aUsername,
-                        avatar: null
+                        avatar: null,
+                        message: item.message,
+                        time: item.time
                     }
                 });
                 setData(responseData);
@@ -29,12 +31,12 @@ export default function MessageScreen({ }: any) {
         return (
             <TouchableOpacity onPress={
                 () => {
-                    // navigation.navigate('Chat', {
-                    //     item: {
-                    //         ...item,
-                    //         time: null
-                    //     }
-                    // })
+                    navigation.navigate('Chat', {
+                        item: {
+                            ...item,
+                            time: null
+                        }
+                    })
                 }
             }>
                 <View style={itemStyles.item}>

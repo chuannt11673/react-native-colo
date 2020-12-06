@@ -3,9 +3,9 @@ const colors = {
     black: 'black',
     primary: '#ff0600',
     secondary: '#f31a9f',
-
-    black1: '#999999',
-    hyperlink: '#3333ff'
+    border: '#999999',
+    hyperlink: '#3333ff',
+    name: '#404040',
 };
 
 export default colors;

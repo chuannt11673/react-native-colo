@@ -47,7 +47,7 @@ export default function RegisterScreen({ navigation }: any) {
                         }}
                         placeholder='Email hoặc số điện thoại'
                         leftIcon={
-                            <AntDesign name="user" size={24} color={colors.black1} />
+                            <AntDesign name="user" size={24} color={colors.border} />
                         }
                     />
                     <FunnyTextInput
@@ -61,10 +61,10 @@ export default function RegisterScreen({ navigation }: any) {
                             securePassword
                         }
                         leftIcon={
-                            <AntDesign name="lock" size={24} color={colors.black1} />
+                            <AntDesign name="lock" size={24} color={colors.border} />
                         }
                         rightIcon={
-                            <Ionicons name={securePassword ? "ios-eye-off" : "ios-eye"} size={24} color={colors.black1} onPress={() => setSecurePassword(!securePassword)} />
+                            <Ionicons name={securePassword ? "ios-eye-off" : "ios-eye"} size={24} color={colors.border} onPress={() => setSecurePassword(!securePassword)} />
                         }
                         onChangeText={
                             (value: string) => setPassword(value)
@@ -78,7 +78,7 @@ export default function RegisterScreen({ navigation }: any) {
                         placeholder='Nhập lại mật khẩu'
                         secureTextEntry={true}
                         leftIcon={
-                            <AntDesign name="lock" size={24} color={colors.black1} />
+                            <AntDesign name="lock" size={24} color={colors.border} />
                         }
                         rightIcon={
                             isConfirmed ? <AntDesign name="checkcircle" size={24} color="#00e600" /> : null

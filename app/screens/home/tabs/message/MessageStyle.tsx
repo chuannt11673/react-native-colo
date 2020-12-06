@@ -19,7 +19,7 @@ export const itemStyles = StyleSheet.create({
         width: windowWidth,
 		height: 100,
 		borderBottomWidth: 1,
-        borderBottomColor: colors.black1,
+        borderBottomColor: colors.border,
         justifyContent: 'center',
     },
     avatar: {
@@ -34,7 +34,8 @@ export const itemStyles = StyleSheet.create({
 		top: 25,
 		left: 80,
 		fontSize: 16,
-		fontWeight: "bold"
+        fontWeight: "bold",
+        color: colors.name
     },
     message: {
         position: 'absolute',

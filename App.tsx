@@ -6,6 +6,7 @@ import AuthStack from 'navigation/AuthStack';
 import * as SecureStore from 'expo-secure-store';
 import * as OAuth from '@shared/OAuth';
 import * as Storage from '@shared/Storage';
+import * as WebBrowser from 'expo-web-browser';
 
 export default function App() {
   const [state, dispatch] = React.useReducer(
@@ -32,15 +33,22 @@ export default function App() {
     }
   );
   const signInHanler = async (token: string) => {
-    await SecureStore.setItemAsync(OAuth.MY_SECURE_AUTH_STATE_KEY, token);
-    await Storage.storeUserInfo();
-    dispatch({ type: 'SIGN_IN', token: token });
+    SecureStore.setItemAsync(OAuth.MY_SECURE_AUTH_STATE_KEY, token).then(() => {
+      Storage.storeUserInfo().then(() => {
+        setTimeout(() => {
+          dispatch({ type: 'SIGN_IN', token: token });
+        }, 600);
+      });
+    });
   }
   const signOutHandler = async () => {
-    await SecureStore.deleteItemAsync(OAuth.MY_SECURE_AUTH_STATE_KEY);
-    await OAuth.signOut();
-    await Storage.clear();
-    dispatch({ type: 'SIGN_OUT' });
+    OAuth.signOut().then(() => {
+      SecureStore.deleteItemAsync(OAuth.MY_SECURE_AUTH_STATE_KEY).then(() => 
+      {
+        Storage.clear();
+        dispatch({ type: 'SIGN_OUT' });
+      })
+    });
   }
   const authContext = React.useMemo(() => (
     {
@@ -48,6 +56,20 @@ export default function App() {
       signOut: signOutHandler
     }
   ), []);
+
+  React.useEffect(() => {
+    WebBrowser.warmUpAsync();
+    SecureStore.getItemAsync(OAuth.MY_SECURE_AUTH_STATE_KEY).then(res => {
+      if (res) {
+        Storage.getUserInfo().then(_ => {
+          dispatch({ type: 'SIGN_IN', token: res });
+        });
+      }
+    });
+    return () => {
+      WebBrowser.coolDownAsync();
+    };
+  }, []);
 
   return (
     <AuthContext.Provider value={authContext}>

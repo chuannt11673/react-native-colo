@@ -9,7 +9,7 @@ export const styles = StyleSheet.create({
     },
     item: {
         paddingBottom: 10,
-        borderBottomColor: colors.black1,
+        borderBottomColor: colors.border,
         borderBottomWidth: 1
     },
     content: {
@@ -38,7 +38,7 @@ export const styles = StyleSheet.create({
         width: windowWidth / 3,
         borderTopWidth: 1,
         borderLeftWidth: 1,
-        borderColor: colors.black1,
+        borderColor: colors.border,
         borderRadius: 0
     },
     headerTitleStyle: {

@@ -19,7 +19,7 @@ export const styles = StyleSheet.create({
         position: 'absolute',
         top: -25,
         borderWidth: 1,
-        borderColor: colors.black1,
+        borderColor: colors.border,
         borderRadius: 25,
         justifyContent: 'center',
         alignItems: 'center',
@@ -42,7 +42,7 @@ export const styles = StyleSheet.create({
     },
     contentArea: {
         padding: 15,
-        borderBottomColor: colors.black1,
+        borderBottomColor: colors.border,
         borderBottomWidth: 1,
     },
     contentText: {
@@ -52,7 +52,7 @@ export const styles = StyleSheet.create({
     },
     moreInfoView: {
         padding: 30,
-        borderBottomColor: colors.black1,
+        borderBottomColor: colors.border,
         borderBottomWidth: 1,
     },
     moreInfoText: {
