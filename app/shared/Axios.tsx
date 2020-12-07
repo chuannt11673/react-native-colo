@@ -11,7 +11,16 @@ AxiosClient.interceptors.request.use(async config => {
     config.headers['Authorization'] = `Bearer ${token}`;
     return config;
 });
-AxiosClient.interceptors.response.use((response: any) => {
-    return response?.data;
-});
+
+export function unauthorizedInterceptor(callback: any) {
+    AxiosClient.interceptors.response.use((response: any) => {
+        return response?.data;
+    }, async err => {
+        if (err?.response?.status === 401) {
+           callback();
+           return;
+        }
+        throw err;
+    });
+}
 export default AxiosClient;

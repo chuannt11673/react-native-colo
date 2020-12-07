@@ -5,7 +5,8 @@ const windowWidth = Dimensions.get('window').width;
 const styles = StyleSheet.create({
     container: {
         flex: 1,
-        backgroundColor: colors.white
+        backgroundColor: colors.white,
+        padding: 10
     },
     item: {
         padding: 5,
@@ -25,4 +26,6 @@ const styles = StyleSheet.create({
     messageText: {
         fontSize: 16
     }
-})
+});
+
+export default styles;

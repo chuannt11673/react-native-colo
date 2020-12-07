@@ -29,4 +29,9 @@ export const getProfile = () => {
             'https://images.unsplash.com/photo-1594671025903-3c5737bac2de?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=500&q=60'
         ]
     })
+};
+export const getCommunicationMessages = (communicationId: string) => {
+    return AxiosClient.post('/api/Users/GetChatHistory', {
+        communicationId: communicationId
+    });
 }

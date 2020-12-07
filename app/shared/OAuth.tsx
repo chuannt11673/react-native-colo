@@ -1,7 +1,7 @@
 import { AuthRequestConfig, makeRedirectUri } from "expo-auth-session";
-import AxiosClient from "./Axios";
 import { TokenResponse } from "@shared/interfaces/TokenResponse";
 import * as WebBrowser from 'expo-web-browser';
+import Axios from 'axios';
 WebBrowser.maybeCompleteAuthSession();
 
 export const MY_SECURE_AUTH_STATE_KEY = 'TokenKey';
@@ -10,7 +10,7 @@ export const scopes = ['openid', 'profile', 'WebAppAPI'];
 export const responseType = 'id_token token';
 export const redirectUri = makeRedirectUri({
     native: 'colo.app://redirect',
-    preferLocalhost: false
+    preferLocalhost: true
 });
 export const discovery = {
     authorizationEndpoint: 'https://colo-auth.azurewebsites.net/connect/authorize'
@@ -41,7 +41,7 @@ export const signIn = async (username: string, password: string) => {
     form.append('scope', 'openid profile WebAppAPI');
     form.append('username', username);
     form.append('password', password);
-    const state: TokenResponse = await AxiosClient.post('/connect/token', form, {
+    const state: TokenResponse = await Axios.post(`${discovery.authorizationEndpoint}/connect/token`, form, {
         headers: {
             'Content-Type': 'multipart/form-data'
         }

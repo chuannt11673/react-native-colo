@@ -4,26 +4,26 @@ import * as UserService from '@shared/services/UserService';
 import { styles, itemStyles } from './MessageStyle';
 import Moment from 'moment';
 import FunnyHeader from 'components/FunnyHeader';
-import * as Storage from '@shared/Storage';
 
 const defaultAvatar = require('@assets/images/default-avatar.jpg');
 export default function MessageScreen({ navigation }: any) {
     const [data, setData] = useState<any[]>([]);
     useEffect(() => {
-        Storage.getUserInfo().then(user => {
-            UserService.getMesssages().then((res: any) => {
-                const responseData = res.data.map((item: any) => {
-                    return {
-                        id: item.id,
-                        name: item.aUsername === user.name ? item.bUsername : item.aUsername,
-                        avatar: null,
-                        message: item.message,
-                        time: item.time
-                    }
-                });
-                setData(responseData);
-            })
-        });
+        UserService.getMesssages().then((res: any) => {
+            if (!res)
+                return;
+            
+            const responseData = res?.data?.map((item: any) => {
+                return {
+                    ...item,
+                    avatar: null,
+                    message: item.latestMessage
+                }
+            });
+            setData(responseData);
+        }, err => {
+            console.error(err);
+        })
     }, []);
 
     const renderItem = (value: any) => {

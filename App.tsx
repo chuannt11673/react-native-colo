@@ -7,6 +7,7 @@ import * as SecureStore from 'expo-secure-store';
 import * as OAuth from '@shared/OAuth';
 import * as Storage from '@shared/Storage';
 import * as WebBrowser from 'expo-web-browser';
+import { unauthorizedInterceptor } from '@shared/Axios';
 
 export default function App() {
   const [state, dispatch] = React.useReducer(
@@ -42,12 +43,10 @@ export default function App() {
     });
   }
   const signOutHandler = async () => {
-    OAuth.signOut().then(() => {
-      SecureStore.deleteItemAsync(OAuth.MY_SECURE_AUTH_STATE_KEY).then(() => 
-      {
-        Storage.clear();
-        dispatch({ type: 'SIGN_OUT' });
-      })
+    WebBrowser.dismissAuthSession();
+    SecureStore.deleteItemAsync(OAuth.MY_SECURE_AUTH_STATE_KEY).then(() => {
+      Storage.clear();
+      dispatch({ type: 'SIGN_OUT' });
     });
   }
   const authContext = React.useMemo(() => (
@@ -65,6 +64,10 @@ export default function App() {
           dispatch({ type: 'SIGN_IN', token: res });
         });
       }
+    });
+  
+    unauthorizedInterceptor(async () => {
+      await signOutHandler();
     });
     return () => {
       WebBrowser.coolDownAsync();
