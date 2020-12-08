@@ -14,6 +14,7 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 import * as AuthService from '@shared/services/AuthenticationService';
 
 import * as WebBrowser from 'expo-web-browser';
+import UserInfoResponseModel from 'shared/interfaces/UserInfoResponseModel';
 
 WebBrowser.maybeCompleteAuthSession();
 
@@ -57,12 +58,12 @@ export default function App() {
   };
 
   const [loginState, dispatch] = React.useReducer(loginReducer, initialLoginState);
-  const googleSignInHook = AuthService.GoogleSignInHook();
-  const facebookSignInHook = AuthService.FacebookSignInHook();
 
-  const signIn = async (username: string, token: string) => {
-    await AsyncStorage.setItem(CommonConstants.tokenKey, token);    
-    dispatch({ type: 'Login', id: username, token: token });
+  const signIn = async (token: string) => {
+    await AsyncStorage.setItem(CommonConstants.tokenKey, token);
+    const userInfo : UserInfoResponseModel = await AxiosClient.get('/connect/userinfo');
+    await AsyncStorage.setItem(CommonConstants.userInfoKey, JSON.stringify(userInfo));
+    dispatch({ type: 'Login', id: userInfo.name, token: token });
   };
 
   const authContext = React.useMemo(() => (
@@ -70,7 +71,7 @@ export default function App() {
       signIn: async (username: string, password: string, callback: (err: any) => void) => {
         try {
           const response = await AuthService.SignIn(username, password);
-          await signIn(username, response.access_token);
+          await signIn(response.access_token);
         }
         catch (err) {
           const errorMessage = err?.response?.data?.error_description;
@@ -79,19 +80,8 @@ export default function App() {
           }
         }
       },
-      googleSignIn: async () => {
-        const response: any = await googleSignInHook.promptAsync();
-        const authentication = response.authentication;
-        if (authentication) {
-          await signIn('', authentication.accessToken);
-        }
-      },
-      facebookSignIn: async () => {
-        const response: any = await facebookSignInHook.promptAsync();
-        const authentication = response.authentication;
-        if (authentication) {
-          await signIn('', authentication.accessToken);
-        }
+      signInToken: async (token: string) => {
+        await signIn(token);
       },
       signOut: async () => {
         await AsyncStorage.removeItem(CommonConstants.tokenKey);

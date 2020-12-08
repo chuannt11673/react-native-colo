@@ -1,5 +1,7 @@
-import React from 'react';
-import { SafeAreaView, StyleSheet } from 'react-native';
+import React, { useEffect, useState } from 'react';
+import { Platform, StatusBar, StyleSheet, Text, View } from 'react-native';
+import { Avatar } from 'react-native-elements';
+import { LinearGradient } from 'expo-linear-gradient';
 
 import { createDrawerNavigator } from '@react-navigation/drawer';
 import { Ionicons } from '@expo/vector-icons';
@@ -10,21 +12,56 @@ import HomeTabs from '@screens/home/HomeTabs';
 import ChatScreen from '@screens/chat/ChatScreen';
 
 import AuthContext from '@shared/context/AuthContext';
+import CommonConsts from '@shared/consts/CommonConstants';
+import colors from '@shared/consts/Colors';
+
+import AsyncStorage from '@react-native-async-storage/async-storage';
+import UserInfoResponseModel from 'shared/interfaces/UserInfoResponseModel';
+
+import { FontAwesome } from '@expo/vector-icons';
 
 const Drawer = createDrawerNavigator();
 
 function DrawerContent(props: any) {
   const { signOut } = React.useContext(AuthContext);
+  const [user, setUser] = useState('');
 
   const signOutHandler = async () => {
     await signOut();
   };
 
+  useEffect(() => {
+    AsyncStorage.getItem(CommonConsts.userInfoKey).then((res) => {
+      if (res) {
+        const userInfo: UserInfoResponseModel = JSON.parse(res);
+        setUser(userInfo.name);
+      }
+    });
+  });
+
   return (
-    <SafeAreaView style={{
-      flex: 1,
-      justifyContent: 'flex-end'
+    <View style={{
+      flex: 1
     }}>
+      <View style={{
+        height: 88,
+      }}>
+        <LinearGradient
+          colors={[colors.primary, colors.secondary]}
+          start={{ x: 0, y: 0.5 }}
+          end={{ x: 1, y: 0.5 }}
+          style={{
+            flex: 1,
+            flexDirection: 'row',
+            alignItems: 'flex-end',
+            justifyContent: 'center',
+            padding: 10
+          }}
+        >
+            <FontAwesome name="user" size={24} color="white" />
+            <Text style={{ marginLeft: 6, color: colors.white, fontSize: 16 }}>{user}</Text>
+        </LinearGradient>
+      </View>
       <FunnyButton
         title='Logout'
         containerStyle={styles.loginBtnContainer}
@@ -36,13 +73,13 @@ function DrawerContent(props: any) {
           signOutHandler
         }
       />
-    </SafeAreaView>
+    </View>
   )
 };
 
 export default function HomeStack() {
   return (
-    <Drawer.Navigator drawerContent={ props => <DrawerContent {...props} /> }>
+    <Drawer.Navigator drawerContent={props => <DrawerContent {...props} />}>
       <Drawer.Screen name='Home' component={HomeTabs} options={{ headerShown: false }} />
       <Drawer.Screen name='Chat' component={ChatScreen} />
     </Drawer.Navigator>
@@ -51,11 +88,11 @@ export default function HomeStack() {
 
 const styles = StyleSheet.create({
   loginBtnContainer: {
-    borderRadius: 0
+    borderRadius: 0,
   },
   logoutBtn: {
     backgroundColor: '#ccc',
-    borderRadius: 0
+    borderRadius: 0,
   }
 });
 

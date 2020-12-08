@@ -1,22 +1,49 @@
 import React, { useState } from 'react';
 import { Keyboard, SafeAreaView, TouchableOpacity, TouchableWithoutFeedback, View } from 'react-native';
+import { Button } from 'react-native-elements';
+
 import FunnyText from '@components/FunnyText';
 import FunnyTextInput from '@components/FunnyTextInput';
 import FunnyLogo from '@components/FunnyLogo';
+
 import { AntDesign, Ionicons, FontAwesome } from '@expo/vector-icons';
+
 import styles from './LoginStyle';
-import colors from '@shared/consts/Colors';
-import { Button } from 'react-native-elements';
-import AuthContext from '@shared/context/AuthContext';
+
 import * as WebBrowser from 'expo-web-browser';
+import { TokenResponse } from 'expo-auth-session';
+
+import AuthContext from '@shared/context/AuthContext';
+import colors from '@shared/consts/Colors';
+
+import * as AuthService from '@shared/services/AuthenticationService';
 
 export default function LoginScreen({ navigation }: any) {
-    const { signIn, googleSignIn, facebookSignIn } = React.useContext(AuthContext);
+    const { signIn, signInToken } = React.useContext(AuthContext);
     const signInHandler = () => {
         signIn(username, password, (err: string) => {
             setErrorMessage(err);
         });
     };
+
+    const googleSignInHook = AuthService.GoogleSignInHook();
+    const facebookSignInHook = AuthService.FacebookSignInHook();
+
+    const googleSignInHandler = async () => {
+        const response: any = await googleSignInHook.promptAsync();
+        const authentication: TokenResponse = response.authentication;
+        if (authentication) {
+            signInToken(authentication.accessToken);
+        }
+    };
+    const facebookSignInHandler = async () => {
+        const response: any = await facebookSignInHook.promptAsync();
+        const authentication: TokenResponse = response.authentication;
+        if (authentication) {
+            signInToken(authentication.accessToken);
+        }
+    };
+
 
     const [username, setUsername] = useState();
     const [password, setPassword] = useState();
@@ -113,7 +140,7 @@ export default function LoginScreen({ navigation }: any) {
                             <Ionicons name="logo-google" size={24} color="#db3236" />
                         }
                         onPress={
-                            googleSignIn
+                            googleSignInHandler
                         }
                     />
                     <Button
@@ -125,7 +152,7 @@ export default function LoginScreen({ navigation }: any) {
                             <FontAwesome name="facebook" size={24} color="#3b5998" />
                         }
                         onPress={
-                            facebookSignIn
+                            facebookSignInHandler
                         }
                     />
                 </View>
