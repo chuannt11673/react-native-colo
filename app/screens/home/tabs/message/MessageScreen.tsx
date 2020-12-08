@@ -22,7 +22,7 @@ export default function MessageScreen({ navigation }: any) {
             });
             setData(responseData);
         }, err => {
-            console.error(err);
+            return;
         })
     }, []);
 

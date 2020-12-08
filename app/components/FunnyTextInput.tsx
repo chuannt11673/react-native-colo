@@ -15,6 +15,9 @@ const FunnyTextInput = (props: FunnyTextInputProps) => {
 
     const changeTextHandler = (val: string) => {
         setValue(val);
+        if (props.onChangeText) {
+            props.onChangeText(val);
+        }
     }
 
     useEffect(() => {

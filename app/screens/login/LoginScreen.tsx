@@ -8,49 +8,21 @@ import styles from './LoginStyle';
 import colors from '@shared/consts/Colors';
 import { Button } from 'react-native-elements';
 import AuthContext from '@shared/context/AuthContext';
-import { useAuthRequest } from 'expo-auth-session';
-import * as OAuth from '@shared/OAuth';
 import * as WebBrowser from 'expo-web-browser';
 
 export default function LoginScreen({ navigation }: any) {
-    const [username, setUsername] = useState<string>('');
-    const [password, setPassword] = useState<string>('');
+    const { signIn, googleSignIn, facebookSignIn } = React.useContext(AuthContext);
+    const signInHandler = () => {
+        signIn(username, password, (err: string) => {
+            setErrorMessage(err);
+        });
+    };
+
+    const [username, setUsername] = useState();
+    const [password, setPassword] = useState();
     const [securePassword, setSecurePassword] = useState(true);
     const [errorMessage, setErrorMessage] = useState('');
-    const { signIn } = React.useContext(AuthContext);
-    const [request, , promptAsync] = useAuthRequest(
-        OAuth.googleConfig,
-        OAuth.discovery
-    );
-    const [, , fbPromptAsync] = useAuthRequest(
-        OAuth.facebookConfig,
-        OAuth.discovery
-    );
-    const facebookSignInHandler = async () => {
-        const state: any = await fbPromptAsync();
-        const token = state?.authentication?.accessToken;
-        if (token) {
-            signIn(token);
-        }
-    }
-    const googleSignInHandler = async () => {
-        const state: any = await promptAsync();
-        const token = state?.authentication?.accessToken;
-        if (token) {
-            signIn(token);
-        }
-    }
-    const signInHandler = () => {
-        OAuth.signIn(username, password)
-            .then(res => {
-                if (res?.access_token) {
-                    signIn(res.access_token);
-                }
-            })
-            .catch(err => {
-                setErrorMessage('Invalid email or password');
-            });
-    };
+
     const ErrorMessage = () => {
         if (errorMessage) {
             return (
@@ -59,9 +31,9 @@ export default function LoginScreen({ navigation }: any) {
                 </View>
             )
         }
-
         return null;
     };
+
     React.useEffect(() => {
         WebBrowser.warmUpAsync();
         return () => {
@@ -77,6 +49,7 @@ export default function LoginScreen({ navigation }: any) {
                 <FunnyLogo />
                 <FunnyText style={styles.header}>Đăng nhập</FunnyText>
                 <FunnyTextInput
+                    value={username}
                     containerStyle={{
                         width: '80%'
                     }}
@@ -85,10 +58,11 @@ export default function LoginScreen({ navigation }: any) {
                         <AntDesign name="user" size={24} color={colors.border} />
                     }
                     onChangeText={
-                        (value: string) => setUsername(value)
+                        (value: any) => setUsername(value)
                     }
                 />
                 <FunnyTextInput
+                    value={password}
                     containerStyle={{
                         width: '80%',
                         marginTop: 10
@@ -113,7 +87,7 @@ export default function LoginScreen({ navigation }: any) {
                         />
                     }
                     onChangeText={
-                        (value: string) => setPassword(value)
+                        (value: any) => setPassword(value)
                     }
                 />
                 <View style={styles.forgotPassword}>
@@ -139,7 +113,7 @@ export default function LoginScreen({ navigation }: any) {
                             <Ionicons name="logo-google" size={24} color="#db3236" />
                         }
                         onPress={
-                            googleSignInHandler
+                            googleSignIn
                         }
                     />
                     <Button
@@ -151,7 +125,7 @@ export default function LoginScreen({ navigation }: any) {
                             <FontAwesome name="facebook" size={24} color="#3b5998" />
                         }
                         onPress={
-                            facebookSignInHandler
+                            facebookSignIn
                         }
                     />
                 </View>
