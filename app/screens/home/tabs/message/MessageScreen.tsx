@@ -62,7 +62,7 @@ export default function MessageScreen({ navigation }: any) {
 
     return (
         <View style={styles.container}>
-            <FunnyHeader title='Tin Nhắn' />
+            <FunnyHeader title='Tin Nhắn' navigation={navigation} />
             <FlatList
                 data={data}
                 keyExtractor={item => item.id}

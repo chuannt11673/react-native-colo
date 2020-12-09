@@ -1,22 +1,34 @@
 import React from 'react'
 import { Header } from 'react-native-elements';
-import colors from '@shared/consts/Colors';
+
 import * as ExpoGradient from 'expo-linear-gradient';
 import { StatusBar } from 'expo-status-bar';
+
+import colors from '@shared/consts/Colors';
+
+import { Ionicons } from '@expo/vector-icons';
 
 const FunnyGradient: any = ExpoGradient.LinearGradient;
 interface FunnyHeaderProps {
     title?: string;
     leftComponent?: any;
     rightComponent?: any;
+    navigation?: any
 };
 export default function FunnyHeader(props: FunnyHeaderProps) {
+
+    const menuPressHandler = () => {
+        props.navigation?.openDrawer();
+    }
+
     return (
         <>
-            <StatusBar style='light' />
+            <StatusBar style='light' translucent={true} />
             <Header
                 leftComponent={
-                    props.leftComponent ?? { icon: 'menu', color: colors.white }
+                    props.leftComponent ?? (
+                        <Ionicons name="ios-menu" size={24}  color={colors.white} onPress={ menuPressHandler } />
+                    )
                 }
                 centerComponent={
                     { text: props.title ?? 'Title', style: { color: colors.white, fontSize: 18 } }

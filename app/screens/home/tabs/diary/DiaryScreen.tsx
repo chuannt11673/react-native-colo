@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { ScrollView, Text, TouchableOpacity, View } from 'react-native';
+import { ActivityIndicator, ScrollView, Text, TouchableOpacity, View } from 'react-native';
 import * as UserService from '@shared/services/UserService';
 import FunnyButton from '@components/FunnyButton';
 import { styles } from './DiaryStyle';
@@ -13,6 +13,7 @@ import AxiosClient from 'shared/Axios';
 
 export default function DiaryScreen({ navigation }: any) {
     const [data, setData] = useState<any[]>([]);
+    const [isLoading, setLoading] = useState(true);
     useEffect(() => {
         UserService.getDiary().then((res: any) => {
             const values = res.map((item: any) => {
@@ -25,6 +26,7 @@ export default function DiaryScreen({ navigation }: any) {
                 }
             });
             setData(values);
+            setLoading(false);
         }, err => {
             console.log(err?.response);
         })
@@ -67,54 +69,61 @@ export default function DiaryScreen({ navigation }: any) {
 
     return (
         <>
-            <FunnyHeader title='Nhật Ký' />
-            <ScrollView style={styles.container}>
-                <View style={styles.header}>
-                    <TouchableOpacity onPress={
-                        () => {
-                            // navigation.navigate('CreatePost');
-                        }
-                    }>
-                        <View style={styles.headerAvatar}>
-                            <FunnyAvatar
-                                uri='https://images.unsplash.com/photo-1529626455594-4ff0802cfb7e?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=500&q=60'
-                            />
-                            <Text style={styles.headerText}>Hôm nay bạn thế nào?</Text>
-                        </View>
-                    </TouchableOpacity>
-
-                    <View style={styles.headerActions}>
-                        <FunnyButton
-                            containerStyle={styles.headerContainer}
-                            title='Photo'
-                            titleStyle={styles.headerTitleStyle}
-                            icon={
-                                <FontAwesome name="file-image-o" size={19} color="#00b300" />
-                            }
-                        />
-                        <FunnyButton
-                            containerStyle={styles.headerContainer}
-                            title='Video'
-                            titleStyle={styles.headerTitleStyle}
-                            icon={
-                                <FontAwesome name="video-camera" size={19} color="#ff1ac6" />
-                            }
-                        />
-                        <FunnyButton
-                            containerStyle={styles.headerContainer}
-                            title='Paint'
-                            titleStyle={styles.headerTitleStyle}
-                            icon={
-                                <FontAwesome name="paint-brush" size={19} color="#ff1ac6" />
-                            }
-                        />
+            <FunnyHeader title='Nhật Ký' navigation={navigation} />
+            {
+                isLoading ? (
+                    <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
+                        <ActivityIndicator size='small' />
                     </View>
-                </View>
-                {
-                    data.map((item, index) => renderItem(item, index))
-                }
-            </ScrollView>
-        </>
+                ) : (
+                        <ScrollView style={styles.container}>
+                            <View style={styles.header}>
+                                <TouchableOpacity onPress={
+                                    () => {
+                                        // navigation.navigate('CreatePost');
+                                    }
+                                }>
+                                    <View style={styles.headerAvatar}>
+                                        <FunnyAvatar
+                                            uri='https://images.unsplash.com/photo-1529626455594-4ff0802cfb7e?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=500&q=60'
+                                        />
+                                        <Text style={styles.headerText}>Hôm nay bạn thế nào?</Text>
+                                    </View>
+                                </TouchableOpacity>
 
+                                <View style={styles.headerActions}>
+                                    <FunnyButton
+                                        containerStyle={styles.headerContainer}
+                                        title='Photo'
+                                        titleStyle={styles.headerTitleStyle}
+                                        icon={
+                                            <FontAwesome name="file-image-o" size={19} color="#00b300" />
+                                        }
+                                    />
+                                    <FunnyButton
+                                        containerStyle={styles.headerContainer}
+                                        title='Video'
+                                        titleStyle={styles.headerTitleStyle}
+                                        icon={
+                                            <FontAwesome name="video-camera" size={19} color="#ff1ac6" />
+                                        }
+                                    />
+                                    <FunnyButton
+                                        containerStyle={styles.headerContainer}
+                                        title='Paint'
+                                        titleStyle={styles.headerTitleStyle}
+                                        icon={
+                                            <FontAwesome name="paint-brush" size={19} color="#ff1ac6" />
+                                        }
+                                    />
+                                </View>
+                            </View>
+                            {
+                                data.map((item, index) => renderItem(item, index))
+                            }
+                        </ScrollView>
+                    )
+            }
+        </>
     )
 }

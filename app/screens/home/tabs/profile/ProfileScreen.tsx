@@ -1,6 +1,6 @@
 import { FontAwesome, SimpleLineIcons } from '@expo/vector-icons';
 import React, { useEffect, useState } from 'react';
-import { ScrollView, StatusBar, Text, View, Image } from 'react-native';
+import { ScrollView, StatusBar, Text, View, Image, ActivityIndicator } from 'react-native';
 import { Button } from 'react-native-elements';
 import * as UserService from '@shared/services/UserService';
 import { styles } from './ProfileStyles';
@@ -8,11 +8,14 @@ import colors from '@shared/consts/Colors';
 import FunnyImage from '@components/FunnyImage';
 import FunnyHeader from 'components/FunnyHeader';
 
-export default function ProfileScreen() {
+export default function ProfileScreen({ navigation }: any) {
     const [data, setData] = useState<any>();
+    const [isLoading, setLoading] = useState(true);
+
     useEffect(() => {
         UserService.getProfile().then(res => {
             setData(res);
+            setLoading(false);
         });
     }, []);
 
@@ -61,16 +64,24 @@ export default function ProfileScreen() {
                 }
             </>
         )
-    }
+    };
 
     return (
         <>
-            <FunnyHeader title='Cá Nhân' />
-            <ScrollView style={styles.container}>
-                {
-                    data ? renderData() : null
-                }
-            </ScrollView>
+            <FunnyHeader title='Cá Nhân' navigation={navigation} />
+            {
+                isLoading ? (
+                    <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
+                        <ActivityIndicator size='small' />
+                    </View>
+                ) : (
+                    <ScrollView style={styles.container}>
+                        {
+                            data ? renderData() : null
+                        }
+                    </ScrollView>
+                )
+            }
         </>
     )
 }

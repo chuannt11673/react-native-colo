@@ -1,18 +1,20 @@
 import React from 'react';
 import { ScrollView, Text, View, Image } from 'react-native';
-import { StatusBar } from 'expo-status-bar';
+
 import * as UserService from '@shared/services/UserService';
+
 import styles from './ChatStyle';
+import FunnyHeader from 'components/FunnyHeader';
+
+import { Button } from 'react-native-elements';
+
+import { Ionicons } from '@expo/vector-icons';
+import colors from 'shared/consts/Colors';
 
 const defaultAvatar = require('@assets/images/default-avatar.jpg');
 export default function ChatScreen({ route, navigation }: any) {
     const [data] = React.useState(route.params.item);
     const [messages, setMessages] = React.useState([]);
-    React.useLayoutEffect(() => {
-        navigation.setOptions({
-            title: data.name
-        });
-    }, []);
 
     React.useEffect(() => {
         UserService.getCommunicationMessages(data.id).then(res => {
@@ -24,7 +26,23 @@ export default function ChatScreen({ route, navigation }: any) {
 
     return (
         <>
-            <StatusBar style='auto' />
+            <FunnyHeader
+                title={data.name}
+                leftComponent={
+                    <Button
+                        icon={
+                            <Ionicons name="md-arrow-back" size={24} color={colors.white} />
+                        }
+                        buttonStyle={{ backgroundColor: 'transparent' }}
+                        onPress={
+                            () => navigation.goBack()
+                        }
+                    />
+                }
+                rightComponent={
+                    <View />
+                }
+            />
             <View
                 style={{ flex: 1 }}
             >

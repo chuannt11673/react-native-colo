@@ -2,10 +2,10 @@ import FunnyHeader from 'components/FunnyHeader'
 import React from 'react'
 import { StyleSheet, Text, View } from 'react-native'
 
-export default function DatingScreen() {
+export default function DatingScreen({ navigation }: any) {
     return (
         <>
-            <FunnyHeader title='Hẹn Hò' />
+            <FunnyHeader title='Hẹn Hò' navigation={ navigation } />
         </>
     )
 }
