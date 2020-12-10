@@ -20,6 +20,7 @@ export default function FunnyButton(props: FunnyButtonProps) {
             titleStyle={[styles.title, props.titleStyle]}
             title={props.title}
             icon={props.icon}
+            {...props}
             onPress={
                 defaultHandler
             }

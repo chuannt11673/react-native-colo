@@ -1,7 +1,5 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { ScrollView, Text, View, Image, TouchableWithoutFeedback, Keyboard } from 'react-native';
-
-import * as UserService from '@shared/services/UserService';
 
 import styles from './ChatStyle';
 
@@ -13,24 +11,51 @@ import { Button } from 'react-native-elements';
 import { Ionicons } from '@expo/vector-icons';
 
 import colors from '@shared/consts/Colors';
+import * as UserService from '@shared/services/UserService';
+import ChatMessageModel from '@shared/interfaces/ChatMessageModel';
+import UserInfoResponseModel from '@shared/interfaces/UserInfoResponseModel';
+import CommonConsts from '@shared/consts/CommonConstants';
+
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 const defaultAvatar = require('@assets/images/default-avatar.jpg');
 export default function ChatScreen({ route, navigation }: any) {
-    const [data] = React.useState(route.params.item);
-    const [messages, setMessages] = React.useState([]);
+    const [data] = useState(route.params.item);
+    const [messages, setMessages] = React.useState<ChatMessageModel[]>();
+    const [user, setUser] = useState<UserInfoResponseModel>();
 
     React.useEffect(() => {
-        UserService.getCommunicationMessages(data.id).then(res => {
-            const communicationMessages = res.data;
-            setMessages(communicationMessages);
-        });
+        AsyncStorage.getItem(CommonConsts.userInfoKey).then((res) => {
+            if (res) {
+              const userInfo: UserInfoResponseModel = JSON.parse(res);
+              setUser(userInfo);
+            };
 
+            // get conversations
+            UserService.getCommunicationMessages(data.id).then(res => {
+                const communicationMessages : ChatMessageModel[] = res.data;
+                setMessages(communicationMessages);
+            });
+        });
     }, []);
+
+    const onSendMessageHandler = (value: string) => {
+        const newMessages = messages?.concat({
+            userId: '',
+            username: user?.name || '',
+            message: value
+        });
+        setMessages(newMessages);
+    };
 
     return (
         <>
             <TouchableWithoutFeedback
-                onPress={Keyboard.dismiss}
+                onPress={
+                    () => {
+                        Keyboard.dismiss();
+                    }
+                }
             >
                 <View
                     style={{ flex: 1 }}
@@ -56,8 +81,8 @@ export default function ChatScreen({ route, navigation }: any) {
                         style={styles.container}
                     >
                         {
-                            messages.map((item: any, index: number) => {
-                                return item.isMyself ? (
+                            messages?.map((item: any, index: number) => {
+                                return item.username === user?.name ? (
                                     <View key={index} style={[styles.item, { justifyContent: 'flex-end' }, item.isNew ? { marginTop: 5 } : { padding: 5 }]}>
                                         <View style={[styles.message, { marginRight: 10, backgroundColor: '#99ffff' }]}>
                                             <Text style={styles.messageText}>
@@ -66,14 +91,18 @@ export default function ChatScreen({ route, navigation }: any) {
                                         </View>
                                         <Image
                                             style={[styles.avatar]}
-                                            source={item.isNew ? item.uri : defaultAvatar}
+                                            source={
+                                                item.avatar ? { uri: item.avatar } : defaultAvatar
+                                            }
                                         />
                                     </View>
                                 ) : (
                                         <View key={index} style={[styles.item, item.isNew ? { marginTop: 5 } : { padding: 0 }]}>
                                             <Image
                                                 style={[styles.avatar]}
-                                                source={item.isNew ? item.uri : defaultAvatar}
+                                                source={
+                                                    item.avatar ? { uri: item.avatar } : defaultAvatar
+                                                }
                                             />
                                             <View style={[styles.message, { marginLeft: 10, backgroundColor: '#c2d6d6' }]}>
                                                 <Text style={styles.messageText}>
@@ -85,7 +114,7 @@ export default function ChatScreen({ route, navigation }: any) {
                             })
                         }
                     </ScrollView>
-                    <FunnyChat />
+                    <FunnyChat onSend={onSendMessageHandler} />
                 </View>
             </TouchableWithoutFeedback>
         </>

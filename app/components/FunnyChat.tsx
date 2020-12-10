@@ -1,4 +1,4 @@
-import React, { useEffect, useState, useRef, PureComponent } from 'react';
+import React, { useEffect, useState, useRef, PureComponent, RefObject } from 'react';
 import { View, Keyboard, Animated, TextInput, Image, FlatList, Dimensions, StyleSheet, TouchableOpacity } from 'react-native';
 import { Button } from 'react-native-elements';
 
@@ -40,9 +40,12 @@ class LocalImage<P extends LocalImageProps> extends PureComponent<P> {
     }
 }
 
+interface FunnyChatProps {
+    onSend?: (value: string) => void;
+};
 
-export default function FunnyChat() {
-    const [textValue, setTextValue] = useState('');
+export default function FunnyChat(props: FunnyChatProps) {
+    const [textValue, setTextValue] = useState<string | undefined>();
     const [initialHeight, setInitialHeight] = useState(0);
     const [height, setKeyboardHeight] = useState(0);
     const [isKeyboardShown, setKeyboardShown] = useState(false);
@@ -170,42 +173,48 @@ export default function FunnyChat() {
     return (
         <View style={styles.container}>
             <View style={styles.header}>
-                <View style={styles.headerLeft}>
-                    <Button
-                        buttonStyle={{ backgroundColor: 'white' }}
-                        icon={
-                            <AntDesign name="user" size={23} style={styles.emojiIcon} />
+                <Button
+                    buttonStyle={{ backgroundColor: 'white' }}
+                    icon={
+                        <AntDesign name="user" size={23} style={styles.emojiIcon} />
+                    }
+                    onPress={
+                        () => modeToggleHandler(modes.emoji)
+                    }
+                />
+                <TextInput
+                    ref={inputRef}
+                    value={textValue}
+                    style={styles.textInput}
+                    multiline={true}
+                    placeholder='Cảm xúc / Hoạt động'
+                    autoFocus={true}
+                    onChangeText={
+                        (text) => setTextValue(text)
+                    }
+                />
+                <FunnyButton
+                    style={{ display: 'none' }}
+                    icon={
+                        <FontAwesome name="file-image-o" size={23} color={colors.secondary} />
+                    }
+                    onPress={
+                        () => modeToggleHandler(modes.photo)
+                    }
+                />
+                <FunnyButton
+                    icon={
+                        <FontAwesome name="send" size={24} color={colors.secondary} />
+                    }
+                    onPress={
+                        () => {
+                            if (props.onSend && textValue) {
+                                props.onSend(textValue);
+                                setTextValue(undefined);
+                            }
                         }
-                        onPress={
-                            () => modeToggleHandler(modes.emoji)
-                        }
-                    />
-                    <TextInput
-                        ref={inputRef}
-                        value={textValue}
-                        style={styles.textInput}
-                        placeholder='Cảm xúc / Hoạt động'
-                        autoFocus={true}
-                        onChangeText={
-                            (text) => setTextValue(text)
-                        }
-                    />
-                </View>
-                <View style={styles.headerRight}>
-                    <FunnyButton
-                        icon={
-                            <FontAwesome name="file-image-o" size={23} style={styles.imageIcon} />
-                        }
-                        onPress={
-                            () => modeToggleHandler(modes.photo)
-                        }
-                    />
-                    <FunnyButton
-                        icon={
-                            <FontAwesome name="video-camera" size={23} style={styles.videoIcon} />
-                        }
-                    />
-                </View>
+                    }
+                />
             </View>
             <Animated.FlatList
                 style={{
@@ -234,30 +243,19 @@ const styles = StyleSheet.create({
     },
     header: {
         flexDirection: 'row',
+        justifyContent: 'space-around',
         alignItems: 'center',
         height: 60,
         padding: 5,
         borderBottomWidth: 1,
         borderBottomColor: colors.border
     },
-    headerLeft: {
-        width: '60%',
-        flexDirection: 'row'
-    },
-    headerRight: {
-        width: '40%',
-        flexDirection: 'row',
-        justifyContent: 'flex-end'
-    },
     emojiIcon: {
         color: colors.secondary
     },
     textInput: {
         marginLeft: 10,
-        minWidth: 200
-    },
-    imageIcon: {
-        color: '#00b300',
+        minWidth: windowWidth * 0.8
     },
     videoIcon: {
         color: '#ff1ac6'
