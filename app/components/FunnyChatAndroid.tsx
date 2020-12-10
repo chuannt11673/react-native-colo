@@ -44,7 +44,7 @@ interface FunnyChatProps {
     onSend?: (value: string) => void;
 };
 
-export default function FunnyChat(props: FunnyChatProps) {
+export default function FunnyChatAndroid(props: FunnyChatProps) {
     const [textValue, setTextValue] = useState<string | undefined>('');
     const [initialHeight, setInitialHeight] = useState(0);
     const [height, setKeyboardHeight] = useState(0);
@@ -89,6 +89,7 @@ export default function FunnyChat(props: FunnyChatProps) {
             {
                 toValue: height,
                 duration: 200,
+                delay: 0,
                 useNativeDriver: false,
             }
         ).start();
@@ -189,6 +190,11 @@ export default function FunnyChat(props: FunnyChatProps) {
                     multiline={true}
                     placeholder='Cảm xúc / Hoạt động'
                     autoFocus={true}
+                    onTouchStart={
+                        () => {
+                            setKeyboardShown(true);
+                        }
+                    }
                     onChangeText={
                         (text) => setTextValue(text)
                     }
@@ -215,20 +221,24 @@ export default function FunnyChat(props: FunnyChatProps) {
                     }
                 />
             </View>
-            <Animated.FlatList
-                style={{
-                    height: animatedHeight
-                }}
-                data={[
-                    { id: '1' }
-                ]}
-                keyExtractor={item => item.id}
-                renderItem={
-                    () => (
-                        mode === modes.emoji ? renderEmoji() : renderImages()
-                    )
-                }
-            />
+            {
+                isKeyboardShown ? null : (
+                    <Animated.FlatList
+                        style={{
+                            height: animatedHeight
+                        }}
+                        data={[
+                            { id: '1' }
+                        ]}
+                        keyExtractor={item => item.id}
+                        renderItem={
+                            () => (
+                                mode === modes.emoji ? renderEmoji() : renderImages()
+                            )
+                        }
+                    />
+                )
+            }
         </View>
     )
 }

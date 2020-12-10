@@ -1,9 +1,10 @@
 import React, { useState } from 'react';
-import { ScrollView, Text, View, Image, TouchableWithoutFeedback, Keyboard } from 'react-native';
+import { ScrollView, Text, View, Image, TouchableWithoutFeedback, Keyboard, Platform, KeyboardAvoidingView, TextInput, Dimensions } from 'react-native';
 
 import styles from './ChatStyle';
 
 import FunnyChat from '@components/FunnyChat';
+import FunnyChatAndroid from '@components/FunnyChatAndroid';
 import FunnyHeader from '@components/FunnyHeader';
 
 import { Button } from 'react-native-elements';
@@ -27,13 +28,13 @@ export default function ChatScreen({ route, navigation }: any) {
     React.useEffect(() => {
         AsyncStorage.getItem(CommonConsts.userInfoKey).then((res) => {
             if (res) {
-              const userInfo: UserInfoResponseModel = JSON.parse(res);
-              setUser(userInfo);
+                const userInfo: UserInfoResponseModel = JSON.parse(res);
+                setUser(userInfo);
             };
 
             // get conversations
             UserService.getCommunicationMessages(data.id).then(res => {
-                const communicationMessages : ChatMessageModel[] = res.data;
+                const communicationMessages: ChatMessageModel[] = res.data;
                 setMessages(communicationMessages);
             });
         });
@@ -114,7 +115,9 @@ export default function ChatScreen({ route, navigation }: any) {
                             })
                         }
                     </ScrollView>
-                    <FunnyChat onSend={onSendMessageHandler} />
+                    {
+                        Platform.OS === 'ios' ? <FunnyChat onSend={onSendMessageHandler} /> : <FunnyChatAndroid onSend={onSendMessageHandler} />
+                    }
                 </View>
             </TouchableWithoutFeedback>
         </>
