@@ -1,12 +1,12 @@
 import React, { useEffect, useRef, useState } from 'react';
-import { Platform, StyleSheet, Text, TextInput, TextInputProps, View } from 'react-native';
+import { Platform, StyleProp, StyleSheet, TextInput, TextInputProps, View, ViewStyle } from 'react-native';
 import { RFValue } from "react-native-responsive-fontsize";
 import colors from '@shared/consts/Colors';
 
 interface FunnyTextInputProps extends TextInputProps {
-    leftIcon?: any,
-    rightIcon?: any,
-    containerStyle?: any,
+    leftIcon?: any;
+    rightIcon?: any;
+    containerStyle?: StyleProp<ViewStyle>;
 }
 
 const FunnyTextInput = (props: FunnyTextInputProps) => {
@@ -37,7 +37,7 @@ const FunnyTextInput = (props: FunnyTextInputProps) => {
                     props.leftIcon
                 }
             </View>
-            <TextInput ref={inputRef} {...props} style={[styles.input, props.style]} value={value} onChangeText={changeTextHandler} />
+            <TextInput ref={inputRef} style={[styles.input, props.style]} value={value} {...props} onChangeText={changeTextHandler} />
             <View style={styles.icon}>
                 {
                     props.rightIcon

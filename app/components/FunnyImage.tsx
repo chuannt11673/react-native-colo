@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { Dimensions, StyleSheet, Image } from 'react-native';
 import colors from '@shared/consts/Colors';
+import AxiosClient from 'shared/Axios';
 
 const windowWidth = Dimensions.get('window').width;
 interface FunnyImageProps {
@@ -13,7 +14,7 @@ export default function FunnyImage(props: FunnyImageProps) {
     const width =  props.width || windowWidth;
     
     useEffect(() => {
-        Image.getSize(props.uri, (w, h) => {
+        Image.getSize(`${AxiosClient.defaults.baseURL}${props.uri}`, (w, h) => {
             const ratio = width / w;
             setStyle({
                 width: width,
@@ -25,7 +26,7 @@ export default function FunnyImage(props: FunnyImageProps) {
     return (
         <Image
                 style={[styles.container, inStyle, props.containerStyle ]}
-                source={{ uri: props.uri }}
+                source={{ uri: `${AxiosClient.defaults.baseURL}${props.uri}` }}
                 resizeMode='cover'
         />
     )
