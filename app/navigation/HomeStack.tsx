@@ -19,6 +19,7 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 import UserInfoResponseModel from 'shared/interfaces/UserInfoResponseModel';
 
 import { FontAwesome } from '@expo/vector-icons';
+import UpdateProfileScreen from 'screens/update-profile/UpdateProfileScreen';
 
 const Drawer = createDrawerNavigator();
 
@@ -82,6 +83,7 @@ export default function HomeStack() {
     <Drawer.Navigator drawerContent={props => <DrawerContent {...props} />}>
       <Drawer.Screen name='Home' component={HomeTabs} options={{ headerShown: false }} />
       <Drawer.Screen name='Chat' component={ChatScreen} />
+      <Drawer.Screen name='UpdateProfile' component={UpdateProfileScreen} />
     </Drawer.Navigator>
   );
 };

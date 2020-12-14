@@ -22,6 +22,7 @@ export default function ProfileScreen({ navigation }: any) {
     const [mode, setMode] = useState(modes.view);
     const [isLoading, setLoading] = useState(true);
     const [avatar, setAvatar] = useState<any>();
+    const [images, setImages] = useState<any>();
 
     useEffect(() => {
         UserService.getProfile().then((res: any) => {
@@ -48,6 +49,9 @@ export default function ProfileScreen({ navigation }: any) {
                 type: `${result.type}/jpg`
             });
         }
+    };
+
+    const selectImages = async () => {
     };
 
     const renderEditProfile = () => {
@@ -191,6 +195,16 @@ export default function ProfileScreen({ navigation }: any) {
                         <Button title='Avatar' onPress={selectAvatar} />
                     </View>
 
+                    {/* images */}
+                    <View style={{
+                        width: '100%',
+                        paddingTop: 10,
+                        paddingLeft: 25,
+                        alignItems: 'flex-start'
+                    }}>
+                        <Button title='Images' onPress={selectImages} />
+                    </View>
+
                     <FunnyButton title='Save'
                         containerStyle={{
                             width: 150,
@@ -214,6 +228,7 @@ export default function ProfileScreen({ navigation }: any) {
                                     form.append('college', data.college);
                                     form.append('hobbies', data.hobbies);
                                     form.append('avatar', avatar);
+                                    form.append('images', images);
                                     const response: any = await UserService.editProfile(form);
                                     if (response.succeeded) {
                                         setData(response.data);
@@ -226,7 +241,7 @@ export default function ProfileScreen({ navigation }: any) {
                 </View>    
             </KeyboardAvoidingView>
         )
-    }
+    };
 
     const renderData = () => {
         if (!data)
@@ -284,7 +299,6 @@ export default function ProfileScreen({ navigation }: any) {
         )
     };
 
-
     return (
         <>
             <FunnyHeader title='Cá Nhân' navigation={navigation} />
@@ -310,7 +324,9 @@ export default function ProfileScreen({ navigation }: any) {
                                         backgroundColor: colors.white
                                     }}
                                     onPress={
-                                        () => setMode(modes.editProfile)
+                                        () => {
+                                            navigation.navigate('UpdateProfile');
+                                        }
                                     }
                                 />
                             </View>
@@ -321,5 +337,5 @@ export default function ProfileScreen({ navigation }: any) {
                     )
             }
         </>
-    )
+    );
 }
