@@ -16,6 +16,11 @@ import * as AuthService from '@shared/services/AuthenticationService';
 import * as WebBrowser from 'expo-web-browser';
 import UserInfoResponseModel from 'shared/interfaces/UserInfoResponseModel';
 
+import { Provider } from 'react-redux';
+import configuredStore from '@stores/index';
+
+const store = configuredStore();
+
 WebBrowser.maybeCompleteAuthSession();
 
 export default function App() {
@@ -121,12 +126,14 @@ export default function App() {
   }
 
   return (
-    <AuthContext.Provider value={authContext}>
-      <NavigationContainer>
-        {
-          loginState.access_token ? <HomeStack /> : <AuthStack />
-        }
-      </NavigationContainer>
-    </AuthContext.Provider>
+    <Provider store={store}>
+      <AuthContext.Provider value={authContext}>
+        <NavigationContainer>
+            {
+              loginState.access_token ? <HomeStack /> : <AuthStack />
+            }
+        </NavigationContainer>
+      </AuthContext.Provider>
+    </Provider>
   );
 }

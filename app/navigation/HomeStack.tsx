@@ -20,6 +20,7 @@ import UserInfoResponseModel from 'shared/interfaces/UserInfoResponseModel';
 
 import { FontAwesome } from '@expo/vector-icons';
 import UpdateProfileScreen from 'screens/update-profile/UpdateProfileScreen';
+import UploadProfileImagesScreen from 'screens/upload-profile-image/UploadProfileImagesScreen';
 
 const Drawer = createDrawerNavigator();
 
@@ -84,6 +85,7 @@ export default function HomeStack() {
       <Drawer.Screen name='Home' component={HomeTabs} options={{ headerShown: false }} />
       <Drawer.Screen name='Chat' component={ChatScreen} />
       <Drawer.Screen name='UpdateProfile' component={UpdateProfileScreen} />
+      <Drawer.Screen name='UploadProfileImages' component={UploadProfileImagesScreen} />
     </Drawer.Navigator>
   );
 };

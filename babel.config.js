@@ -10,7 +10,8 @@ module.exports = {
           "@screens": "./app/screens",
           "@components": "./app/components",
           "@shared": "./app/shared",
-          "@assets": "./assets"
+          "@assets": "./assets",
+          "@stores": "./app/stores"
         }
       }
     ]
