@@ -289,12 +289,11 @@ function UpdateProfileScreen(props: any) {
                                 containerStyle={{
                                     marginTop: 20,
                                     width: '100%',
-                                    alignItems: 'center'
                                 }}
                                 buttonStyle={{
                                     backgroundColor: colors.primary,
                                     borderRadius: 12,
-                                    width: 200,
+                                    width: '90%',
                                     height: 50
                                 }}
                                 titleStyle={{
