@@ -1,5 +1,5 @@
 import React from 'react';
-import { Alert, FlatList, Modal, ScrollView, Text, TouchableHighlight, View } from 'react-native';
+import { Alert, FlatList, Image, Modal, SafeAreaView, ScrollView, Text, TouchableHighlight, View } from 'react-native';
 import { Button } from 'react-native-elements';
 
 import FunnyHeader from '@components/FunnyHeader';
@@ -10,8 +10,7 @@ import colors from '@shared/consts/Colors';
 import { connect } from 'react-redux';
 import { updateProfile } from '@stores/actions/profile';
 import FunnyButton from '@components/FunnyButton';
-
-import * as MediaLibrary from 'expo-media-library';
+import FunnyImageGalleryModal from 'components/FunnyImageGalleryModal';
 
 function UploadProfileImagesScreen(props: any) {
     const [images, setImages] = React.useState<any[]>();
@@ -21,8 +20,6 @@ function UploadProfileImagesScreen(props: any) {
     };
 
     const addImagesHandler = async () => {
-        const response = await MediaLibrary.getAssetsAsync();
-        setImages(response.assets);
         setModalVisible(true);
     };
 
@@ -30,27 +27,20 @@ function UploadProfileImagesScreen(props: any) {
         <>
             <Modal
                 animationType="slide"
-                transparent={true}
                 visible={modalVisible}
-                onRequestClose={() => {
-                    Alert.alert('Modal has been closed.');
+                style={{
+                    flex: 1
                 }}>
-                <Button title='close' />
-                <FlatList
-                    contentContainerStyle={{
-                        flex: 1,
-                        backgroundColor: colors.secondary
-                    }}
-                    data={images}
-                    keyExtractor={item => item.id}
-                    renderItem={
-                        item => (
-                            <View>
-                                <Text>{item.item.uri}</Text>
-                            </View>
-                        )
-                    }
-                />
+                <SafeAreaView style={{
+                    flex: 1
+                }}>
+                    <Button title='Close'
+                        onPress={
+                            () => setModalVisible(false)
+                        }
+                    />
+                    <FunnyImageGalleryModal />
+                </SafeAreaView>
             </Modal>
             <FunnyHeader
                 title='Ảnh hồ sơ'

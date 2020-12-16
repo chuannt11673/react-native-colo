@@ -10,7 +10,6 @@ const initialState = {
 const profileReducer = (state = initialState, action) => {
     switch (action.type) {
         case UPDATE_PROFILE:
-            console.log('update');
             return {
                 ...state,
                 profile: action.data
