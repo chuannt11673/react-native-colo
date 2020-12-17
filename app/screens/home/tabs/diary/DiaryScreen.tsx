@@ -28,7 +28,6 @@ export default function DiaryScreen({ navigation }: any) {
             setData(values);
             setLoading(false);
         }, err => {
-            console.log(err?.response);
         })
     }, []);
 
@@ -36,7 +35,7 @@ export default function DiaryScreen({ navigation }: any) {
         return (
             <View key={index} style={styles.item}>
                 <FunnyAvatar uri={item.avatar} name={item.name} />
-                <FunnyImageGrid images={item.photos} />
+                <FunnyImageGrid images={item.photos} maxHeight={100} />
                 <View style={styles.content}>
                     <FunnyTruncatedText text={item.content} />
                 </View>

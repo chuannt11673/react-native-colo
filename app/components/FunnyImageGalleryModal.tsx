@@ -1,5 +1,5 @@
 import React from 'react';
-import { FlatList, View, Image, Text, ActivityIndicator, Dimensions, TouchableOpacity, ScrollView } from 'react-native';
+import { FlatList, View, Image, Text, ActivityIndicator, Dimensions, TouchableOpacity, ScrollView, TouchableWithoutFeedback } from 'react-native';
 import colors from '@shared/consts/Colors';
 
 import * as MediaLibrary from 'expo-media-library';
@@ -7,16 +7,19 @@ import * as MediaLibrary from 'expo-media-library';
 import { connect } from 'react-redux';
 import { updateImagesGallery } from '@stores/actions/imageGallery';
 
-import { FontAwesome } from '@expo/vector-icons';
+import { AntDesign, FontAwesome, MaterialIcons } from '@expo/vector-icons';
+import { Button, Header } from 'react-native-elements';
 
 const imageSize = Dimensions.get('screen').width * 0.333;
 interface FunnyImageGalleryModalProps {
     onSelectImage?: (uri: string) => void;
+    onCloseHandler?: () => void;
+    onSendHandler?: (images: any[]) => void; 
     images: any[];
     updateImages: (images: any[]) => void;
 }
 
-function ImageItem({ item }) {
+function ImageItem({ item, onSelect, onDeSelect }) {
     const [data, setData] = React.useState({
         ...item,
         selected: false
@@ -27,10 +30,15 @@ function ImageItem({ item }) {
             selected: !data.selected
         };
         setData(updatedData);
+        if (updatedData.selected) {
+            onSelect(updatedData);
+        } else {
+            onDeSelect(updatedData);
+        }
     };
 
     return (
-        <TouchableOpacity
+        <TouchableWithoutFeedback
             onPress={
                 onPressHandler
             }
@@ -47,21 +55,28 @@ function ImageItem({ item }) {
                 }} />
                 {
                     data.selected ? (
-                        <FontAwesome name="check-circle-o" size={24} color='#4d4dff' style={{
+                        <MaterialIcons name="radio-button-checked" size={24} color='#0000ff' style={{
                             position: 'absolute',
-                            bottom: 5,
+                            top: 5,
                             right: 5
                         }} />
-                    ) : null
+                    ) : <MaterialIcons name="radio-button-unchecked" size={24} color='#cccccc' style={{
+                        position: 'absolute',
+                        top: 5,
+                        right: 5
+                    }} />
                 }
             </View>
-        </TouchableOpacity>
+        </TouchableWithoutFeedback>
     );
 }
 
 function FunnyImageGalleryModal(props: FunnyImageGalleryModalProps) {
     const [isLoading, setIsLoading] = React.useState(true);
+    const [selectedImages, setSelectedImages] = React.useState<any[]>();
+
     React.useEffect(() => {
+        setSelectedImages([]);
         if (props.images.length === 0) {
             MediaLibrary.getAssetsAsync().then(res => {
                 const assets = res.assets;
@@ -90,6 +105,19 @@ function FunnyImageGalleryModal(props: FunnyImageGalleryModalProps) {
         });
     };
 
+    const onSelectImageHandler = (item) => {
+        const selectedImagesTemp = selectedImages?.concat([item]);
+        setSelectedImages(selectedImagesTemp);
+    };
+
+    const onDeselectImageHandler = (item) => {
+        const index = selectedImages?.findIndex(x => x.id === item.id);
+        if (index !== -1) {
+            selectedImages?.splice(index, 1);
+            setSelectedImages(selectedImages);
+        }
+    }
+
     if (isLoading) {
         return (
             <View style={{
@@ -107,21 +135,66 @@ function FunnyImageGalleryModal(props: FunnyImageGalleryModalProps) {
         <View style={{
             flex: 1
         }}>
+            <Header
+                containerStyle={{
+                    backgroundColor: 'rgba(52, 52, 52, 0.8)'
+                }}
+                style={{
+                    backgroundColor: 'transparent'
+                }}
+                leftComponent={
+                    (
+                        <Button
+                            buttonStyle={{
+                                backgroundColor: 'transparent',
+                                padding: 0
+                            }}
+                            icon={
+                                <MaterialIcons name="close" size={31} color={colors.white} />
+                            }
+                            onPress={
+                                props.onCloseHandler
+                            }
+                        />
+                    )
+                }
+                rightComponent={
+                    (
+                        <Button
+                            buttonStyle={{
+                                backgroundColor: 'transparent',
+                                padding: 0
+                            }}
+                            icon={
+                                <MaterialIcons name="send" size={31} color={colors.white} />
+                            }
+                            onPress={
+                                () => {
+                                    if (props.onSendHandler && selectedImages) {
+                                        props.onSendHandler(selectedImages);
+                                    }
+                                }
+                            }
+                        />
+                    )
+                }
+            />
             {
                 props.images.length > 0 ? (
-                    <ScrollView
-                        contentContainerStyle={{
-                            flexDirection: 'row',
-                            flexWrap: 'wrap'
-                        }}
-                        onScrollEndDrag={
+                    <FlatList
+                        data={props.images}
+                        keyExtractor={
+                            item => `${item.id}`
+                        }
+                        numColumns={3}
+                        renderItem={
+                            item => <ImageItem item={item.item} onSelect={onSelectImageHandler} onDeSelect={onDeselectImageHandler} />
+                        }
+                        onEndReached={
                             onEndReachHandler
                         }
-                    >
-                        {
-                            props.images.map((item, index) => <ImageItem key={index} item={item} />)
-                        }
-                    </ScrollView>
+                        onEndReachedThreshold={0.1}
+                    />
                 ) : (
                         <View style={{ flex: 1, backgroundColor: colors.white }}>
                             <Text>There's no image</Text>

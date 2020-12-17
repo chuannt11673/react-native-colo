@@ -1,17 +1,13 @@
 import { UPDATE_PROFILE } from '../actions/type';
 
 const initialState = {
-    profile: {
-        name: 'dummy name',
-        gender: 'male'
-    }
+    profile: null
 }
 
 const profileReducer = (state = initialState, action) => {
     switch (action.type) {
         case UPDATE_PROFILE:
             return {
-                ...state,
                 profile: action.data
             };
         default:

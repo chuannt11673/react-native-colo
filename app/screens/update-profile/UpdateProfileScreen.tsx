@@ -38,7 +38,10 @@ function UpdateProfileScreen(props: any) {
     }, []);
 
     const onSaveHandler = () => {
-        props.updateProfileAsync(data);
+        props.updateProfile({
+            ...props.profile,
+            ...data
+        });
         props.navigation.navigate('UploadProfileImages');
     };
 
@@ -320,7 +323,7 @@ const mapStateToProps = (state) => {
 
 const mapDispatchToProps = (dispatch) => {
     return {
-        updateProfileAsync: (profile) => {
+        updateProfile: (profile) => {
             dispatch(updateProfile(profile));
         }
     }

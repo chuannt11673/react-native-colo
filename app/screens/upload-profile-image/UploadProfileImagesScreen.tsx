@@ -11,12 +11,19 @@ import { connect } from 'react-redux';
 import { updateProfile } from '@stores/actions/profile';
 import FunnyButton from '@components/FunnyButton';
 import FunnyImageGalleryModal from 'components/FunnyImageGalleryModal';
+import FunnyImageGrid from 'components/FunnyImageGrid';
 
 function UploadProfileImagesScreen(props: any) {
-    const [images, setImages] = React.useState<any[]>();
+    const [images, setImages] = React.useState<any[]>([]);
     const [modalVisible, setModalVisible] = React.useState(false);
     
     const onSaveHandler = () => {
+        const propfile = {
+            ...props.profile,
+            images: images
+        };
+        props.updateProfile(propfile);
+        props.navigation.navigate('Profile');
     };
 
     const addImagesHandler = async () => {
@@ -31,16 +38,21 @@ function UploadProfileImagesScreen(props: any) {
                 style={{
                     flex: 1
                 }}>
-                <SafeAreaView style={{
+                <View style={{
                     flex: 1
                 }}>
-                    <Button title='Close'
-                        onPress={
+                    <FunnyImageGalleryModal
+                        onCloseHandler={
                             () => setModalVisible(false)
                         }
+                        onSendHandler={
+                            images => {
+                                setImages(images);
+                                setModalVisible(false);
+                            }
+                        }
                     />
-                    <FunnyImageGalleryModal />
-                </SafeAreaView>
+                </View>
             </Modal>
             <FunnyHeader
                 title='Ảnh hồ sơ'
@@ -71,7 +83,6 @@ function UploadProfileImagesScreen(props: any) {
                 }}>Thêm ảnh vào hồ sơ để chinh phục đối phương nào</Text>
                 <View style={{
                     width: '100%',
-                    height: 400,
                     marginTop: 20,
                     backgroundColor: colors.white,
                     borderRadius: 12,
@@ -80,13 +91,28 @@ function UploadProfileImagesScreen(props: any) {
                     borderRightWidth: 5,
                     borderBottomWidth: 5,
                     borderColor: '#e6e6e6',
+                    flex: 0.8,
                     justifyContent: 'center',
-                    alignItems: 'center'
+                    alignItems: 'center',
+                    paddingTop: 10
                 }}>
-                    <Ionicons name="ios-images" color={colors.border} size={100} />
+                    {
+                        images?.length === 0 ? <Ionicons name="ios-images" color={colors.border} size={100} /> :
+                        (
+                            <View style={{
+                                width: '100%',
+                            }}>
+                                <FunnyImageGrid
+                                    images={images.map(x => x.uri)}
+                                    maxHeight={86}
+                                />
+                            </View>
+                        )
+                    }
                     <FunnyButton
                         containerStyle={{
-                            top: 100
+                            position: 'absolute',
+                            bottom: 10
                         }}
                         buttonStyle={{
                             borderWidth: 1,
