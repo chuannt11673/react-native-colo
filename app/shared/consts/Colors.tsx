@@ -6,6 +6,7 @@ const colors = {
     border: '#999999',
     hyperlink: '#3333ff',
     name: '#404040',
+    darkblue: '#000099'
 };
 
 export default colors;

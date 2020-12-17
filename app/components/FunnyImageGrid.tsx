@@ -29,7 +29,7 @@ export default function FunnyImageGrid(props: FunnyImageGridProps) {
             if (props.images.length === 1) {
                 setItemStyles([{ width: windowWidth + '%', height: h * windowWidth / w + '%' }])
             } else {
-                const imageStyles = props.images.map((img, index) => {
+                const imageStyles = props.images.filter((item, index) => index <= 2).map((img, index) => {
                     return mode === modes.horizontal ? getHorizontalStyle(index) : getVerticalStyle(index);
                 });
                 setItemStyles(imageStyles);

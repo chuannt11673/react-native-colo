@@ -2,6 +2,8 @@ import * as React from 'react';
 import { ActivityIndicator, View } from 'react-native';
 import { NavigationContainer } from '@react-navigation/native';
 
+import { StatusBar } from 'expo-status-bar';
+
 import AuthContext from '@shared/context/AuthContext';
 import AxiosClient from '@shared/Axios';
 import CommonConstants from '@shared/consts/CommonConstants';
@@ -128,6 +130,7 @@ export default function App() {
 
   return (
     <Provider store={store}>
+      <StatusBar style='auto' translucent={true} />
       <AuthContext.Provider value={authContext}>
         <NavigationContainer>
             {

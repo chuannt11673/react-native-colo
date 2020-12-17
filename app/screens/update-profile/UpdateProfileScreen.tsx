@@ -1,11 +1,9 @@
 import React, { useEffect, useState } from 'react';
-import { ActivityIndicator, Keyboard, KeyboardAvoidingView, Platform, SafeAreaView, ScrollView, Text, TextInput, TouchableWithoutFeedback, View } from 'react-native';
-import { Button } from 'react-native-elements';
+import { ActivityIndicator, Keyboard, KeyboardAvoidingView, Platform, ScrollView, Text, TextInput, TouchableWithoutFeedback, View } from 'react-native';
+import { Header } from 'react-native-elements';
 
 import colors from '@shared/consts/Colors';
 
-import { Ionicons } from '@expo/vector-icons';
-import FunnyHeader from '@components/FunnyHeader';
 import FunnyButton from '@components/FunnyButton';
 
 import styles from './UpdateProfileStyle';
@@ -18,22 +16,31 @@ import { connect } from 'react-redux';
 import { updateProfile } from '@stores/actions/profile';
 
 function UpdateProfileScreen(props: any) {
+    const [isLoading, setLoading] = useState(true);
+    const [data, setData] = useState<any>(props.profile ?? {});
+
     const [fromAges, setFromAges] = useState<any>();
     const [toAges, setToAges] = useState<any>();
-    const [isLoading, setLoading] = useState(true);
-    const [data, setData] = useState<any>(props.profile);
+    const [years, setYears] = useState<any[]>([]);
 
     useEffect(() => {
-        let count = 18;
+        //  set ages
         const fromAges = [];
         const toAges = [];
-        while (count <= 50) {
-            fromAges.push({ label: `${count}`, value: `from ${count}` });
-            toAges.push({ label: `${count}`, value: `to ${count}` });
-            count++;
+        for (let index = 18; index < 50; index++) {
+            fromAges.push({ label: `${index}`, value: `from ${index}` });
+            toAges.push({ label: `${index}`, value: `to ${index}` });
         }
         setFromAges(fromAges);
         setToAges(toAges);
+
+        // get years
+        const now = new Date();
+        const years = [];
+        for (let index = 1960; index < now.getFullYear(); index++) {
+            years.push({ label: `${index}`, value: `${index}` });
+        }
+        setYears(years);
         setLoading(false);
     }, []);
 
@@ -54,21 +61,12 @@ function UpdateProfileScreen(props: any) {
 
     return (
         <>
-            <FunnyHeader
-                title='Thiết lập hồ sơ hẹn hò'
-                leftComponent={
-                    <Button
-                        icon={
-                            <Ionicons name="md-arrow-back" size={24} color={colors.white} />
-                        }
-                        buttonStyle={{ backgroundColor: 'transparent' }}
-                        onPress={
-                            () => props.navigation.goBack()
-                        }
-                    />
-                }
-                rightComponent={
-                    <View />
+            <Header
+                containerStyle={{
+                    backgroundColor: colors.white
+                }}
+                centerComponent={
+                    <Text style={{ fontSize: 18, fontWeight: '600' }}>Thiết lập hồ sơ hẹn hò</Text>
                 }
             />
             <KeyboardAvoidingView
@@ -82,11 +80,12 @@ function UpdateProfileScreen(props: any) {
                 >
                     <ScrollView style={{
                         flex: 1,
-                        paddingBottom: 50
+                        paddingBottom: 50,
+                        backgroundColor: colors.white
                     }}>
                         
                         <ScrollView style={{
-                            padding: 15,
+                            padding: 25,
                         }}>
                             <Text style={styles.title} >Tên hiển thị</Text>
                             <View style={{
@@ -94,12 +93,15 @@ function UpdateProfileScreen(props: any) {
                                 alignItems: 'center',
                                 justifyContent: 'space-between'
                             }}>
-                                <TextInput style={[styles.input, { width: '90%' }]} placeholder='' onChangeText={
-                                    value => setData({
-                                        ...data,
-                                        name: value
-                                    })
-                                } />
+                                <TextInput style={[styles.input, { width: '90%' }]} placeholder=''
+                                    onChangeText={
+                                        value => setData({
+                                            ...data,
+                                            name: value
+                                        })
+                                    }
+                                    value={data.name}
+                                />
                                 <FontAwesome name="dot-circle-o" size={24} color={colors.primary} />
                             </View>
 
@@ -109,12 +111,20 @@ function UpdateProfileScreen(props: any) {
                                 alignItems: 'center',
                                 justifyContent: 'space-between'
                             }}>
-                                <TextInput style={[styles.input, { width: '90%' }]} placeholder='' onChangeText={
-                                    value => setData({
-                                        ...data,
-                                        dob: value
-                                    })
-                                } />
+                                <RNPickerSelect
+                                    style={{
+                                        inputIOS: styles.targetRNPicker,
+                                        inputAndroid: styles.targetRNPicker
+                                    }}
+                                    onValueChange={
+                                        (value: any) => setData({
+                                            ...data,
+                                            dob: value
+                                        })
+                                    }
+                                    items={years}
+                                    value={data.dob}
+                                />
                                 <FontAwesome name="dot-circle-o" size={24} color={colors.primary} />
                             </View>
 
@@ -142,6 +152,7 @@ function UpdateProfileScreen(props: any) {
                                             { label: 'Nam', value: 'male' },
                                             { label: 'Nữ', value: 'female' }
                                         ]}
+                                        value={data.gender}
                                     />
                                 </View>
                                 <FontAwesome name="dot-circle-o" size={24} color={colors.primary} />
@@ -305,6 +316,9 @@ function UpdateProfileScreen(props: any) {
                                 title='Tiếp theo'
                                 onPress={
                                     onSaveHandler
+                                }
+                                disabled={
+                                    !data || !data.name || !data.dob || !data.gender ? true : false
                                 }
                             />
                         </ScrollView>

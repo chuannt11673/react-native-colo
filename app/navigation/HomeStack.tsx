@@ -1,6 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { Platform, StatusBar, StyleSheet, Text, View } from 'react-native';
-import { Avatar } from 'react-native-elements';
+import { StyleSheet, Text, View } from 'react-native';
 import { LinearGradient } from 'expo-linear-gradient';
 
 import { createDrawerNavigator } from '@react-navigation/drawer';
@@ -19,12 +18,10 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 import UserInfoResponseModel from 'shared/interfaces/UserInfoResponseModel';
 
 import { FontAwesome } from '@expo/vector-icons';
-import UpdateProfileScreen from 'screens/update-profile/UpdateProfileScreen';
-import UploadProfileImagesScreen from 'screens/upload-profile-image/UploadProfileImagesScreen';
 
 const Drawer = createDrawerNavigator();
 
-function DrawerContent(props: any) {
+function DrawerContent() {
   const { signOut } = React.useContext(AuthContext);
   const [user, setUser] = useState('');
 
@@ -84,8 +81,6 @@ export default function HomeStack() {
     <Drawer.Navigator drawerContent={props => <DrawerContent {...props} />}>
       <Drawer.Screen name='Home' component={HomeTabs} options={{ headerShown: false }} />
       <Drawer.Screen name='Chat' component={ChatScreen} />
-      <Drawer.Screen name='UpdateProfile' component={UpdateProfileScreen} />
-      <Drawer.Screen name='UploadProfileImages' component={UploadProfileImagesScreen} />
     </Drawer.Navigator>
   );
 };

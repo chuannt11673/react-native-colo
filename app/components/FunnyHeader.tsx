@@ -23,7 +23,6 @@ export default function FunnyHeader(props: FunnyHeaderProps) {
 
     return (
         <>
-            <StatusBar style='light' translucent={true} />
             <Header
                 leftComponent={
                     props.leftComponent ?? (

@@ -1,8 +1,7 @@
-import React from 'react';
-import { Alert, FlatList, Image, Modal, SafeAreaView, ScrollView, Text, TouchableHighlight, View } from 'react-native';
-import { Button } from 'react-native-elements';
+import React, { useEffect } from 'react';
+import { Modal, ScrollView, Text, View } from 'react-native';
+import { Button, Header } from 'react-native-elements';
 
-import FunnyHeader from '@components/FunnyHeader';
 import { Ionicons, MaterialCommunityIcons } from '@expo/vector-icons';
 
 import colors from '@shared/consts/Colors';
@@ -14,7 +13,7 @@ import FunnyImageGalleryModal from 'components/FunnyImageGalleryModal';
 import FunnyImageGrid from 'components/FunnyImageGrid';
 
 function UploadProfileImagesScreen(props: any) {
-    const [images, setImages] = React.useState<any[]>([]);
+    const [images, setImages] = React.useState<any[]>(props.profile.images ?? []);
     const [modalVisible, setModalVisible] = React.useState(false);
     
     const onSaveHandler = () => {
@@ -23,7 +22,7 @@ function UploadProfileImagesScreen(props: any) {
             images: images
         };
         props.updateProfile(propfile);
-        props.navigation.navigate('Profile');
+        props.navigation.navigate('Dating');
     };
 
     const addImagesHandler = async () => {
@@ -54,12 +53,17 @@ function UploadProfileImagesScreen(props: any) {
                     />
                 </View>
             </Modal>
-            <FunnyHeader
-                title='Ảnh hồ sơ'
+            <Header
+                containerStyle={{
+                    backgroundColor: colors.white
+                }}
+                centerComponent={
+                    <Text style={{ fontSize: 18, fontWeight: '600' }}>Ảnh hồ sơ</Text>
+                }
                 leftComponent={
                     <Button
                         icon={
-                            <Ionicons name="md-arrow-back" size={24} color={colors.white} />
+                            <Ionicons name="md-arrow-back" size={24} color={colors.black} />
                         }
                         buttonStyle={{ backgroundColor: 'transparent' }}
                         onPress={
@@ -73,12 +77,11 @@ function UploadProfileImagesScreen(props: any) {
             />
             <ScrollView contentContainerStyle={{
                 flex: 1,
-                alignItems: 'center',
-                padding: 20,
+                padding: 25,
                 backgroundColor: colors.white
             }}>
                 <Text style={{
-                    fontSize: 15,
+                    fontSize: 14,
                     fontWeight: '600',
                 }}>Thêm ảnh vào hồ sơ để chinh phục đối phương nào</Text>
                 <View style={{
@@ -101,10 +104,14 @@ function UploadProfileImagesScreen(props: any) {
                         (
                             <View style={{
                                 width: '100%',
+                                height: '100%'
                             }}>
                                 <FunnyImageGrid
                                     images={images.map(x => x.uri)}
-                                    maxHeight={86}
+                                    maxHeight={90}
+                                    containerStyle={{
+                                        maxHeight: '96%'
+                                    }}
                                 />
                             </View>
                         )

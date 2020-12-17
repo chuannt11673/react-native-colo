@@ -17,7 +17,7 @@ function ProfileScreen({ navigation, profile }: any) {
             return null;
 
         return (
-            <>                
+            <>
                 <View>
                     {
                         !profile.images || profile.images.length === 0 ? null : <FunnyImage uri={profile.images[0].uri} containerStyle={styles.avatarStyle} />
@@ -75,27 +75,6 @@ function ProfileScreen({ navigation, profile }: any) {
                     </View>
                 ) : (
                         <ScrollView style={styles.container}>
-                            <View style={{
-                                padding: 15
-                            }}>
-                                <FunnyButton
-                                    title='Edit your profile'
-                                    containerStyle={{
-                                        width: 150,
-                                    }}
-                                    buttonStyle={{
-                                        borderWidth: 1,
-                                        borderColor: colors.border,
-                                        borderRadius: 18,
-                                        backgroundColor: colors.white
-                                    }}
-                                    onPress={
-                                        () => {
-                                            navigation.navigate('UpdateProfile');
-                                        }
-                                    }
-                                />
-                            </View>
                             {
                                 renderData()
                             }

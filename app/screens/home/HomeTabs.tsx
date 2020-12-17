@@ -7,6 +7,11 @@ import MessageScreen from './tabs/message/MessageScreen';
 import DiaryScreen from './tabs/diary/DiaryScreen';
 import DatingScreen from './tabs/dating/DatingScreen';
 import ProfileScreen from './tabs/profile/ProfileScreen';
+import NotificationScreen from './tabs/notification/NotificationScreen';
+import UpdateProfileScreen from '@screens/update-profile/UpdateProfileScreen';
+import UploadProfileImagesScreen from '@screens/upload-profile-image/UploadProfileImagesScreen';
+
+import { connect } from 'react-redux';
 
 const Tab = createBottomTabNavigator();
 const MessageNavigator = createStackNavigator();
@@ -36,12 +41,35 @@ const DiaryStack = () => {
         </DiaryNavigator.Navigator>
     )
 };
-const DatingStack = () => {
+const DatingStack = (props) => {
     return (
-        <DatingNavigator.Navigator>
+        <DatingNavigator.Navigator initialRouteName={
+            props.profile ? 'Dating' : 'UpdateProfile'
+        }>
             <DatingNavigator.Screen
                 name='Dating'
                 component={DatingScreen}
+                options={{ headerShown: false }}
+            />
+            <DatingNavigator.Screen
+                name='UpdateProfile'
+                component={UpdateProfileScreen}
+                options={{ headerShown: false }}
+            />
+            <DatingNavigator.Screen
+                name='UploadProfileImages'
+                component={UploadProfileImagesScreen}
+                options={{ headerShown: false }}
+            />
+        </DatingNavigator.Navigator>
+    )
+};
+const NotificationStack = () => {
+    return (
+        <DatingNavigator.Navigator>
+            <DatingNavigator.Screen
+                name='Notification'
+                component={NotificationScreen}
                 options={{ headerShown: false }}
             />
         </DatingNavigator.Navigator>
@@ -59,7 +87,7 @@ const ProfileStack = () => {
     )
 };
 
-export default function HomeTabs() {
+function HomeTabs(props) {
     return (
         <Tab.Navigator
             screenOptions={
@@ -72,35 +100,66 @@ export default function HomeTabs() {
                                 iconName = 'bubbles';
                                 break;
                             case 'Diary':
-                                iconName = 'globe';
+                                iconName = 'home';
                                 break;
                             case 'Dating':
                                 iconName = 'heart';
                                 break;
+                            case 'Notification':
+                                iconName = 'bell';
+                                break;
                             case 'Profile':
                                 iconName = 'user';
                         }
-                        return <SimpleLineIcons name={iconName} size={21} color={color} />
+                        return <SimpleLineIcons name={iconName} size={24} color={color} />
                     }
                 })
             }
         >
             <Tab.Screen
-                name="Message"
-                component={MessageStack}
-            />
-            <Tab.Screen
                 name="Diary"
                 component={DiaryStack}
+                options={{
+                    title: 'Trang chủ'
+                }}
+            />
+            <Tab.Screen
+                name="Message"
+                component={MessageStack}
+                options={{
+                    title: 'Trò chuyện'
+                }}
             />
             <Tab.Screen
                 name="Dating"
                 component={DatingStack}
+                options={{
+                    title: 'Hẹn hò'
+                }}
+                {...props}
+            />
+            <Tab.Screen
+                name="Notification"
+                component={NotificationStack}
+                options={{
+                    title: 'Thông báo'
+                }}
             />
             <Tab.Screen
                 name="Profile"
                 component={ProfileStack}
+                options={{
+                    title: 'Cá nhân'
+                }}
             />
         </Tab.Navigator>
     )
-}
+};
+
+const mapStateToProps = (state) => {
+    return {
+        profile: state.profileReducer.profile
+    }
+};
+
+export default connect(mapStateToProps)(HomeTabs);
