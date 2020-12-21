@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React from 'react';
 import { Modal, ScrollView, Text, View } from 'react-native';
 import { Button, Header } from 'react-native-elements';
 
@@ -12,17 +12,36 @@ import FunnyButton from '@components/FunnyButton';
 import FunnyImageGalleryModal from 'components/FunnyImageGalleryModal';
 import FunnyImageGrid from 'components/FunnyImageGrid';
 
+import { editProfile } from '@shared/services/UserService';
+
 function UploadProfileImagesScreen(props: any) {
     const [images, setImages] = React.useState<any[]>(props.profile.images ?? []);
     const [modalVisible, setModalVisible] = React.useState(false);
     
     const onSaveHandler = () => {
-        const propfile = {
+        const profile = {
             ...props.profile,
             images: images
         };
-        props.updateProfile(propfile);
-        props.navigation.navigate('Dating');
+
+        const form = new FormData();
+        form.append('name', profile.name);
+        form.append('gender', profile.gender);
+        form.append('dob', profile.dob);
+        form.append('briefMessage', profile.note);
+        images.forEach(element => {
+            const file : any = {
+                uri: element.uri,
+                name: element.filename,
+                type: element.filename.split('.')[1]
+            };
+            form.append('images', file);
+        });
+
+        editProfile(form).then(res => {
+            props.updateProfile(profile);
+            props.navigation.navigate('Dating');
+        })
     };
 
     const addImagesHandler = async () => {

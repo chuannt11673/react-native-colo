@@ -1,17 +1,35 @@
 import { FontAwesome, SimpleLineIcons } from '@expo/vector-icons';
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { ScrollView, Text, View, ActivityIndicator } from 'react-native';
 import { Button } from 'react-native-elements';
 import { styles } from './ProfileStyles';
 import colors from '@shared/consts/Colors';
 import FunnyImage from '@components/FunnyImage';
 import FunnyHeader from 'components/FunnyHeader';
-import FunnyButton from 'components/FunnyButton';
+
+import { getProfile } from '@shared/services/UserService';
 
 import { connect } from 'react-redux';
+import { updateProfile } from '@stores/actions/profile';
+import AxiosClient from 'shared/Axios';
 
-function ProfileScreen({ navigation, profile }: any) {
+function ProfileScreen({ navigation, profile, updateProfile }: any) {
     const [isLoading] = useState(false);
+
+    useEffect(() => {
+        getProfile().then(res => {
+            const item = res.data;
+            const profile = {
+                ...item,
+                images: item.images.map(image => ({
+                    ...image,
+                    uri: AxiosClient.defaults.baseURL + image.url
+                }))
+            }
+            updateProfile(profile);
+        });
+    }, []);
+
     const renderData = () => {
         if (!profile)
             return null;
@@ -91,4 +109,10 @@ const mapStateToProps = (state) => {
     }
 }
 
-export default connect(mapStateToProps)(ProfileScreen);
+const mapDispatchToProps = (dispatch) => {
+    return {
+        updateProfile: (profile) => dispatch(updateProfile(profile))
+    }
+}
+
+export default connect(mapStateToProps, mapDispatchToProps)(ProfileScreen);

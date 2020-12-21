@@ -47,7 +47,9 @@ function UpdateProfileScreen(props: any) {
     const onSaveHandler = () => {
         props.updateProfile({
             ...props.profile,
-            ...data
+            ...data,
+            dob: `01/01/${data.dob}`,
+            breifMessage: data.note
         });
         props.navigation.navigate('UploadProfileImages');
     };
