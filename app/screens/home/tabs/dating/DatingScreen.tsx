@@ -10,11 +10,11 @@ import { Button } from 'react-native-elements';
 
 import { connect } from 'react-redux';
 
-function DatingScreen(props) {
+function DatingScreen(props: any) {
     const [mode, setMode] = React.useState('top');
 
     const updateProfileHandler = () => {
-        props.navigation.navigate('UpdateProfile');
+        props.navigation.navigate('UploadProfileImages');
     };
 
     return (

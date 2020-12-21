@@ -15,6 +15,9 @@ import RNPickerSelect from 'react-native-picker-select';
 import { connect } from 'react-redux';
 import { updateProfile } from '@stores/actions/profile';
 
+import { getProfile } from '@shared/services/UserService';
+import AxiosClient from '@shared/Axios';
+
 function UpdateProfileScreen(props: any) {
     const [isLoading, setLoading] = useState(true);
     const [data, setData] = useState<any>(props.profile ?? {});
@@ -41,16 +44,33 @@ function UpdateProfileScreen(props: any) {
             years.push({ label: `${index}`, value: `${index}` });
         }
         setYears(years);
-        setLoading(false);
-    }, []);
+        if (props.profile) {
+            setLoading(false);
+        } else {
+            getProfile().then(res => {
+                const item = res.data;
+                const profile = {
+                    ...item,
+                    dob: (new Date(item.dob)).getFullYear() + '',
+                    note: item.briefMessage,
+                    images: item.images.map((image: any) => ({
+                        ...image,
+                        uri: AxiosClient.defaults.baseURL + image.url
+                    }))
+                }
+                setData(profile);
+                setLoading(false);
+            });
+        }
+    }, [props.profile]);
 
     const onSaveHandler = () => {
-        props.updateProfile({
-            ...props.profile,
+        const profile = {
             ...data,
             dob: `01/01/${data.dob}`,
             breifMessage: data.note
-        });
+        };
+        props.updateProfile(profile);
         props.navigation.navigate('UploadProfileImages');
     };
 
@@ -293,12 +313,15 @@ function UpdateProfileScreen(props: any) {
                                 alignItems: 'center',
                                 justifyContent: 'space-between'
                             }}>
-                                <TextInput style={[styles.input, { width: '90%', height: 'auto', minHeight: 46 }]} placeholder='' multiline onChangeText={
-                                    value => setData({
-                                        ...data,
-                                        note: value
-                                    })
-                                } />
+                                <TextInput style={[styles.input, { width: '90%', height: 'auto', minHeight: 46 }]} placeholder='' multiline
+                                    onChangeText={
+                                        value => setData({
+                                            ...data,
+                                            note: value
+                                        })
+                                    }
+                                    value={data.note}
+                                />
                                 <FontAwesome name="dot-circle-o" size={24} color={colors.primary} />
                             </View>
                             <FunnyButton

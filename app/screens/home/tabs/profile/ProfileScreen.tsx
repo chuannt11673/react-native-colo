@@ -8,10 +8,10 @@ import FunnyImage from '@components/FunnyImage';
 import FunnyHeader from 'components/FunnyHeader';
 
 import { getProfile } from '@shared/services/UserService';
+import AxiosClient from '@shared/Axios';
 
 import { connect } from 'react-redux';
 import { updateProfile } from '@stores/actions/profile';
-import AxiosClient from 'shared/Axios';
 
 function ProfileScreen({ navigation, profile, updateProfile }: any) {
     const [isLoading] = useState(false);

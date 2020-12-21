@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { Modal, ScrollView, Text, View } from 'react-native';
 import { Button, Header } from 'react-native-elements';
 
@@ -15,13 +15,12 @@ import FunnyImageGrid from 'components/FunnyImageGrid';
 import { editProfile } from '@shared/services/UserService';
 
 function UploadProfileImagesScreen(props: any) {
-    const [images, setImages] = React.useState<any[]>(props.profile.images ?? []);
     const [modalVisible, setModalVisible] = React.useState(false);
+    const [images, setImages] = useState<any[]>([]);
     
     const onSaveHandler = () => {
         const profile = {
             ...props.profile,
-            images: images
         };
 
         const form = new FormData();
@@ -29,6 +28,7 @@ function UploadProfileImagesScreen(props: any) {
         form.append('gender', profile.gender);
         form.append('dob', profile.dob);
         form.append('briefMessage', profile.note);
+
         images.forEach(element => {
             const file : any = {
                 uri: element.uri,
@@ -39,7 +39,6 @@ function UploadProfileImagesScreen(props: any) {
         });
 
         editProfile(form).then(res => {
-            props.updateProfile(profile);
             props.navigation.navigate('Dating');
         })
     };
@@ -65,6 +64,11 @@ function UploadProfileImagesScreen(props: any) {
                         }
                         onSendHandler={
                             images => {
+                                props.updateProfile({
+                                    ...props.profile,
+                                    images: images
+                                });
+                                console.log(props.profile);
                                 setImages(images);
                                 setModalVisible(false);
                             }
@@ -119,14 +123,14 @@ function UploadProfileImagesScreen(props: any) {
                     paddingTop: 10
                 }}>
                     {
-                        images?.length === 0 ? <Ionicons name="ios-images" color={colors.border} size={100} /> :
+                        props.profile.images?.length === 0 ? <Ionicons name="ios-images" color={colors.border} size={100} /> :
                         (
                             <View style={{
                                 width: '100%',
                                 height: '100%'
                             }}>
                                 <FunnyImageGrid
-                                    images={images.map(x => x.uri)}
+                                    images={props.profile.images.map(x => x.uri)}
                                     maxHeight={90}
                                     containerStyle={{
                                         maxHeight: '96%'
