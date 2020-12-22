@@ -1,5 +1,5 @@
-import React, { useEffect, useState } from 'react';
-import { Modal, ScrollView, Text, View } from 'react-native';
+import React from 'react';
+import { ActivityIndicator, Image, Modal, ScrollView, Text, TouchableOpacity, View } from 'react-native';
 import { Button, Header } from 'react-native-elements';
 
 import { Ionicons, MaterialCommunityIcons } from '@expo/vector-icons';
@@ -16,31 +16,45 @@ import { editProfile } from '@shared/services/UserService';
 
 function UploadProfileImagesScreen(props: any) {
     const [modalVisible, setModalVisible] = React.useState(false);
-    const [images, setImages] = useState<any[]>([]);
-    
+    const [images, setImages] = React.useState<any[]>(props.profile.images);
+    const [isUpdating, setUpdating] = React.useState(false);
+
     const onSaveHandler = () => {
         const profile = {
             ...props.profile,
+            images: images.map(item => ({
+                filename: item.filename,
+                uri: item.uri
+            }))
         };
 
         const form = new FormData();
         form.append('name', profile.name);
         form.append('gender', profile.gender);
-        form.append('dob', profile.dob);
-        form.append('briefMessage', profile.note);
+        form.append('dob', `01/01/${profile.dob}`);
+        form.append('briefMessage', profile.briefMessage);
 
-        images.forEach(element => {
-            const file : any = {
-                uri: element.uri,
-                name: element.filename,
-                type: element.filename.split('.')[1]
-            };
-            form.append('images', file);
-        });
+        if (images !== props.profile.images) {
+            images.forEach(element => {
+                const file: any = {
+                    uri: element.uri,
+                    name: element.filename,
+                    type: ''
+                };
+                form.append('images', file);
+            });
+        }
 
+        setUpdating(true);
         editProfile(form).then(res => {
+            props.updateProfile(profile);
             props.navigation.navigate('Dating');
-        })
+
+            setUpdating(false);
+        }, err => {
+            setUpdating(false);
+            throw err.response;
+        });
     };
 
     const addImagesHandler = async () => {
@@ -63,12 +77,7 @@ function UploadProfileImagesScreen(props: any) {
                             () => setModalVisible(false)
                         }
                         onSendHandler={
-                            images => {
-                                props.updateProfile({
-                                    ...props.profile,
-                                    images: images
-                                });
-                                console.log(props.profile);
+                            (images: any[]) => {
                                 setImages(images);
                                 setModalVisible(false);
                             }
@@ -98,7 +107,7 @@ function UploadProfileImagesScreen(props: any) {
                     <View />
                 }
             />
-            <ScrollView contentContainerStyle={{
+            <View style={{
                 flex: 1,
                 padding: 25,
                 backgroundColor: colors.white
@@ -110,34 +119,39 @@ function UploadProfileImagesScreen(props: any) {
                 <View style={{
                     width: '100%',
                     marginTop: 20,
-                    backgroundColor: colors.white,
                     borderRadius: 12,
                     borderTopWidth: 1,
                     borderLeftWidth: 1,
                     borderRightWidth: 5,
                     borderBottomWidth: 5,
                     borderColor: '#e6e6e6',
+                    backgroundColor: colors.white,
                     flex: 0.8,
-                    justifyContent: 'center',
-                    alignItems: 'center',
-                    paddingTop: 10
+                    alignItems: 'center'
                 }}>
                     {
-                        props.profile.images?.length === 0 ? <Ionicons name="ios-images" color={colors.border} size={100} /> :
-                        (
-                            <View style={{
-                                width: '100%',
-                                height: '100%'
-                            }}>
-                                <FunnyImageGrid
-                                    images={props.profile.images.map(x => x.uri)}
-                                    maxHeight={90}
-                                    containerStyle={{
-                                        maxHeight: '96%'
-                                    }}
-                                />
-                            </View>
-                        )
+                        !images || images.length === 0 ? <Ionicons name="ios-images" color={colors.border} size={100} /> :
+                            (
+                                <ScrollView contentContainerStyle={{
+                                    flex: 0.8,
+                                    flexDirection: 'row',
+                                    flexWrap: 'wrap',
+                                    justifyContent: 'flex-start',
+                                    padding: 8
+                                }}>
+                                    {
+                                        images.map((image, index) => (
+                                            <TouchableOpacity key={index}>
+                                                <View>
+                                                    <Image source={{ uri: image.uri }} style={{
+                                                        width: 100, height: 100
+                                                    }} />
+                                                </View>
+                                            </TouchableOpacity>
+                                        ))
+                                    }
+                                </ScrollView>
+                            )
                     }
                     <FunnyButton
                         containerStyle={{
@@ -164,39 +178,55 @@ function UploadProfileImagesScreen(props: any) {
                         }
                     />
                 </View>
-                <FunnyButton
-                    containerStyle={{
-                        marginTop: 30,
-                        width: '100%',
-                    }}
-                    buttonStyle={{
-                        backgroundColor: colors.primary,
-                        borderRadius: 12,
-                        width: '100%',
-                        height: 50
-                    }}
-                    titleStyle={{
-                        color: colors.white
-                    }}
-                    title='Hoàn thành'
-                    onPress={
-                        onSaveHandler
-                    }
-                />
-            </ScrollView>
+                {
+                    isUpdating ? (
+                        <TouchableOpacity style={{
+                            marginTop: 30,
+                            width: '100%',
+                            height: 50,
+                            justifyContent: 'center',
+                            backgroundColor: colors.primary,
+                            borderRadius: 12,
+                        }}>
+                            <ActivityIndicator size='small' color={colors.white} />
+                        </TouchableOpacity>
+                    ) : 
+                    (
+                        <FunnyButton
+                            containerStyle={{
+                                marginTop: 30,
+                                width: '100%',
+                            }}
+                            buttonStyle={{
+                                backgroundColor: colors.primary,
+                                borderRadius: 12,
+                                width: '100%',
+                                height: 50
+                            }}
+                            titleStyle={{
+                                color: colors.white
+                            }}
+                            title='Hoàn thành'
+                            onPress={
+                                onSaveHandler
+                            }
+                        />
+                    )
+                }
+            </View>
         </>
     )
 }
 
-const mapStateToProps = (state) => {
+const mapStateToProps = (state: any) => {
     return {
         profile: state.profileReducer.profile
     }
 };
 
-const mapDispatchToProps = (dispatch) => {
+const mapDispatchToProps = (dispatch: any) => {
     return {
-        updateProfile: (profile) => dispatch(updateProfile(profile))
+        updateProfile: (profile: any) => dispatch(updateProfile(profile))
     }
 };
 

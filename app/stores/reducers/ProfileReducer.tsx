@@ -1,10 +1,16 @@
 import { UPDATE_PROFILE } from '../actions/type';
 
 const initialState = {
-    profile: null
+    profile: {
+        name: null,
+        dob: null,
+        gender: null,
+        briefMessage: null,
+        images: []
+    }
 }
 
-const profileReducer = (state = initialState, action) => {
+const profileReducer = (state = initialState, action: { type: any, data: any }) => {
     switch (action.type) {
         case UPDATE_PROFILE:
             return {

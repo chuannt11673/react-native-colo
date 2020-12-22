@@ -1,14 +1,12 @@
 import React, { useEffect, useState } from 'react';
 import { ActivityIndicator, Keyboard, KeyboardAvoidingView, Platform, ScrollView, Text, TextInput, TouchableWithoutFeedback, View } from 'react-native';
-import { Header } from 'react-native-elements';
-
-import colors from '@shared/consts/Colors';
+import { Button, Header } from 'react-native-elements';
 
 import FunnyButton from '@components/FunnyButton';
 
 import styles from './UpdateProfileStyle';
 
-import { FontAwesome } from '@expo/vector-icons';
+import { FontAwesome, Ionicons } from '@expo/vector-icons';
 
 import RNPickerSelect from 'react-native-picker-select';
 
@@ -16,60 +14,54 @@ import { connect } from 'react-redux';
 import { updateProfile } from '@stores/actions/profile';
 
 import { getProfile } from '@shared/services/UserService';
+
+import colors from '@shared/consts/Colors';
+import { years } from '@shared/consts/CommonConstants';
 import AxiosClient from '@shared/Axios';
 
+const listOfYear = years();
 function UpdateProfileScreen(props: any) {
     const [isLoading, setLoading] = useState(true);
-    const [data, setData] = useState<any>(props.profile ?? {});
-
-    const [fromAges, setFromAges] = useState<any>();
-    const [toAges, setToAges] = useState<any>();
-    const [years, setYears] = useState<any[]>([]);
+    const [data, setData] = useState<any>({
+        ...props.profile,
+        images: undefined
+    });
 
     useEffect(() => {
-        //  set ages
-        const fromAges = [];
-        const toAges = [];
-        for (let index = 18; index < 50; index++) {
-            fromAges.push({ label: `${index}`, value: `from ${index}` });
-            toAges.push({ label: `${index}`, value: `to ${index}` });
-        }
-        setFromAges(fromAges);
-        setToAges(toAges);
-
-        // get years
-        const now = new Date();
-        const years = [];
-        for (let index = 1960; index < now.getFullYear(); index++) {
-            years.push({ label: `${index}`, value: `${index}` });
-        }
-        setYears(years);
-        if (props.profile) {
+        if (props.profile && props.profile.name) {
             setLoading(false);
-        } else {
-            getProfile().then(res => {
+            return;
+        }
+
+        getProfile().then(res => {
+            if (res.data) {
                 const item = res.data;
                 const profile = {
                     ...item,
                     dob: (new Date(item.dob)).getFullYear() + '',
-                    note: item.briefMessage,
                     images: item.images.map((image: any) => ({
-                        ...image,
+                        filename: null,
                         uri: AxiosClient.defaults.baseURL + image.url
                     }))
-                }
+                };
                 setData(profile);
-                setLoading(false);
-            });
-        }
-    }, [props.profile]);
+                props.updateProfile(profile);
+            }
+            setLoading(false);
+        });
+    }, []);
 
     const onSaveHandler = () => {
+        let images = props.profile.images;
+        if (images.length === 0) {
+            images = data.images;
+        }
+
         const profile = {
             ...data,
-            dob: `01/01/${data.dob}`,
-            breifMessage: data.note
+            images: images
         };
+
         props.updateProfile(profile);
         props.navigation.navigate('UploadProfileImages');
     };
@@ -89,6 +81,19 @@ function UpdateProfileScreen(props: any) {
                 }}
                 centerComponent={
                     <Text style={{ fontSize: 18, fontWeight: '600' }}>Thiết lập hồ sơ hẹn hò</Text>
+                }
+                leftComponent={
+                    props.profile && props.profile.name ? (
+                        <Button
+                        icon={
+                            <Ionicons name="md-arrow-back" size={24} color={colors.black} />
+                        }
+                        buttonStyle={{ backgroundColor: 'transparent' }}
+                        onPress={
+                            () => props.navigation.navigate('Dating')
+                        }
+                    />
+                    ) : <View />
                 }
             />
             <KeyboardAvoidingView
@@ -144,7 +149,11 @@ function UpdateProfileScreen(props: any) {
                                             dob: value
                                         })
                                     }
-                                    items={years}
+                                    items={
+                                        listOfYear.map(year => ({
+                                            label: year, value: year
+                                        }))
+                                    }
                                     value={data.dob}
                                 />
                                 <FontAwesome name="dot-circle-o" size={24} color={colors.primary} />
@@ -285,7 +294,7 @@ function UpdateProfileScreen(props: any) {
                                             fromAge: value
                                         })
                                     }
-                                    items={fromAges}
+                                    items={[]}
                                 />
                                 <Text style={{
                                     padding: 5
@@ -303,7 +312,7 @@ function UpdateProfileScreen(props: any) {
                                             toAge: value
                                         })
                                     }
-                                    items={toAges}
+                                    items={[]}
                                 />
                             </View>
 
@@ -317,10 +326,10 @@ function UpdateProfileScreen(props: any) {
                                     onChangeText={
                                         value => setData({
                                             ...data,
-                                            note: value
+                                            briefMessage: value
                                         })
                                     }
-                                    value={data.note}
+                                    value={data.briefMessage}
                                 />
                                 <FontAwesome name="dot-circle-o" size={24} color={colors.primary} />
                             </View>
@@ -343,7 +352,7 @@ function UpdateProfileScreen(props: any) {
                                     onSaveHandler
                                 }
                                 disabled={
-                                    !data || !data.name || !data.dob || !data.gender ? true : false
+                                    !data || !data.name || !data.gender ? true : false
                                 }
                             />
                         </ScrollView>
@@ -354,15 +363,15 @@ function UpdateProfileScreen(props: any) {
     )
 }
 
-const mapStateToProps = (state) => {
+const mapStateToProps = (state: any) => {
     return {
         profile: state.profileReducer.profile
     }
 }
 
-const mapDispatchToProps = (dispatch) => {
+const mapDispatchToProps = (dispatch: any) => {
     return {
-        updateProfile: (profile) => {
+        updateProfile: (profile: any) => {
             dispatch(updateProfile(profile));
         }
     }

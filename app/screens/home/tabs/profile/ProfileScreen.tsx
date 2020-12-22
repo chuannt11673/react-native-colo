@@ -1,6 +1,6 @@
 import { FontAwesome, SimpleLineIcons } from '@expo/vector-icons';
 import React, { useEffect, useState } from 'react';
-import { ScrollView, Text, View, ActivityIndicator } from 'react-native';
+import { ScrollView, Text, View, ActivityIndicator, Image } from 'react-native';
 import { Button } from 'react-native-elements';
 import { styles } from './ProfileStyles';
 import colors from '@shared/consts/Colors';
@@ -17,11 +17,15 @@ function ProfileScreen({ navigation, profile, updateProfile }: any) {
     const [isLoading] = useState(false);
 
     useEffect(() => {
+        if (profile && profile.name) {
+            return;
+        }
+
         getProfile().then(res => {
             const item = res.data;
             const profile = {
                 ...item,
-                images: item.images.map(image => ({
+                images: item.images.map((image: any) => ({
                     ...image,
                     uri: AxiosClient.defaults.baseURL + image.url
                 }))
@@ -38,7 +42,8 @@ function ProfileScreen({ navigation, profile, updateProfile }: any) {
             <>
                 <View>
                     {
-                        !profile.images || profile.images.length === 0 ? null : <FunnyImage uri={profile.images[0].uri} containerStyle={styles.avatarStyle} />
+                        !profile.images || profile.images.length === 0 ? null : 
+                        <Image source={{ uri: profile.images[0].uri }} style={{ width: '100%', height: 250, resizeMode: 'cover' }} />
                     }
                     <View style={styles.reorderArea}>
                         <View style={styles.reorderTouchMove}>
@@ -57,7 +62,7 @@ function ProfileScreen({ navigation, profile, updateProfile }: any) {
                     </View>
                     <View style={styles.contentArea}>
                         <Text style={styles.contentText}>
-                            {profile.note}
+                            {profile.briefMessage}
                         </Text>
                     </View>
                     <View style={styles.moreInfoView}>
@@ -103,15 +108,15 @@ function ProfileScreen({ navigation, profile, updateProfile }: any) {
     );
 }
 
-const mapStateToProps = (state) => {
+const mapStateToProps = (state: any) => {
     return {
         profile: state.profileReducer.profile
     }
 }
 
-const mapDispatchToProps = (dispatch) => {
+const mapDispatchToProps = (dispatch: any) => {
     return {
-        updateProfile: (profile) => dispatch(updateProfile(profile))
+        updateProfile: (profile: any) => dispatch(updateProfile(profile))
     }
 }
 

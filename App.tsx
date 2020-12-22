@@ -101,19 +101,19 @@ export default function App() {
 
   React.useEffect(() => {
     WebBrowser.warmUpAsync();
-    setTimeout(async () => {
-      await AxiosClient.interceptors.response.use(undefined, async err => {
-        const error = err.response;
-        if (error.status === 401) {
-          await authContext.signOut();
-          return;
-        }
-        throw err;
-      });
-
-      const token = await AsyncStorage.getItem(CommonConstants.tokenKey);
+    
+    AsyncStorage.getItem(CommonConstants.tokenKey).then(token => {
       dispatch({ type: 'Retrieve_token', token: token });
-    }, 1000);
+    });
+
+    AxiosClient.interceptors.response.use(undefined, async (err) => {
+      const error = err.response;
+      if (error.status === 401) {
+        await authContext.signOut();
+        return;
+      }
+      throw err;
+    });
 
     return () => {
       WebBrowser.coolDownAsync();

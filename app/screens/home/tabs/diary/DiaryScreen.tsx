@@ -28,6 +28,7 @@ export default function DiaryScreen({ navigation }: any) {
             setData(values);
             setLoading(false);
         }, err => {
+            console.error(err);
         })
     }, []);
 
