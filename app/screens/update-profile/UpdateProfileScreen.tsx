@@ -17,7 +17,6 @@ import { getProfile } from '@shared/services/UserService';
 
 import colors from '@shared/consts/Colors';
 import { years } from '@shared/consts/CommonConstants';
-import AxiosClient from '@shared/Axios';
 
 const listOfYear = years();
 function UpdateProfileScreen(props: any) {
@@ -41,7 +40,7 @@ function UpdateProfileScreen(props: any) {
                     dob: (new Date(item.dob)).getFullYear() + '',
                     images: item.images.map((image: any) => ({
                         filename: null,
-                        uri: AxiosClient.defaults.baseURL + image.url
+                        uri: image.url
                     }))
                 };
                 setData(profile);

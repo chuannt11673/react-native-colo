@@ -10,7 +10,6 @@ import { connect } from 'react-redux';
 import { updateProfile } from '@stores/actions/profile';
 import FunnyButton from '@components/FunnyButton';
 import FunnyImageGalleryModal from 'components/FunnyImageGalleryModal';
-import FunnyImageGrid from 'components/FunnyImageGrid';
 
 import { editProfile } from '@shared/services/UserService';
 
