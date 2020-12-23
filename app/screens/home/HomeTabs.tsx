@@ -41,7 +41,7 @@ const DiaryStack = () => {
         </DiaryNavigator.Navigator>
     )
 };
-const DatingStack = (props) => {
+const DatingStack = (props: any) => {
     return (
         <DatingNavigator.Navigator initialRouteName={
             props.profile ? 'Dating' : 'UpdateProfile'
@@ -87,7 +87,7 @@ const ProfileStack = () => {
     )
 };
 
-function HomeTabs(props) {
+function HomeTabs(props: any) {
     return (
         <Tab.Navigator
             screenOptions={

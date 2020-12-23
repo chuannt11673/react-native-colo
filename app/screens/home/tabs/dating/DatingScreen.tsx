@@ -2,6 +2,7 @@ import React from 'react'
 import { SafeAreaView, View, StyleSheet, FlatList, TouchableOpacity } from 'react-native';
 
 import FunnyButton from '@components/FunnyButton';
+import FunnyAvatar from '@components/FunnyAvatar';
 
 import { AntDesign, FontAwesome } from '@expo/vector-icons';
 
@@ -9,26 +10,33 @@ import colors from '@shared/consts/Colors';
 import { Button } from 'react-native-elements';
 
 import { connect } from 'react-redux';
-import FunnyAvatar from 'components/FunnyAvatar';
+import { getProfiles } from '@shared/services/UserService';
 
 function DatingScreen(props: any) {
     const [mode, setMode] = React.useState('top');
-    const [data] = React.useState<any[]>([
-        {
-            id: '1',
-            avatar: 'https://images.unsplash.com/photo-1510832198440-a52376950479?ixid=MXwxMjA3fDB8MHxzZWFyY2h8Mnx8Z2lybHxlbnwwfHwwfA%3D%3D&ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=60',
-            name: 'Phùng Khánh Linh',
-            isLiked: true,
-            top: true,
-        },
-        {
-            id: '2',
-            avatar: 'https://images.unsplash.com/photo-1469334031218-e382a71b716b?ixid=MXwxMjA3fDB8MHxzZWFyY2h8N3x8Z2lybHxlbnwwfHwwfA%3D%3D&ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=60',
-            name: 'Phương Uyên',
-            isLiked: false,
-            top: true
-        }
-    ]);
+    const [data, setData] = React.useState<any[]>([]);
+
+    React.useEffect(() => {
+        getProfiles(50, 1).then(res => {
+            const data = res.data.map((item: any) => {
+                const result = {
+                    id: item.id,
+                    name: item.name,
+                    avatar: item.avatar,
+                    isLiked: false,
+                    top: true,
+                };
+
+                if (!result.avatar && item.images) {
+                    result.avatar = item.images[0].url;
+                }
+
+                return result;
+            });
+
+            setData(data);
+        });
+    }, []);
 
     const updateProfileHandler = () => {
         props.navigation.navigate('UpdateProfile');

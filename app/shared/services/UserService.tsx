@@ -9,6 +9,9 @@ export const getDiary = () => {
 export const getProfile = () => {
     return AxiosClient.get('/api/Users/GetUserProfile');
 };
+export const getProfiles = (pageSize: number, pageIndex: number) => {
+    return AxiosClient.get(`/api/Users/GetUserProfiles?pageSize=${pageSize}&pageIndex=${pageIndex}`);
+};
 export const getCommunicationMessages = (communicationId: string) => {
     return AxiosClient.post('/api/Users/GetChatHistory', {
         communicationId: communicationId
@@ -21,4 +24,4 @@ export const editProfile = (form: FormData) => {
             'Content-Type': 'multipart/form-data'
         }
     });
-}
+};

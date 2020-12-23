@@ -1,11 +1,10 @@
 import React, { useState } from 'react';
-import { ScrollView, Text, View, Image, TouchableWithoutFeedback, Keyboard, Platform, KeyboardAvoidingView, TextInput, Dimensions } from 'react-native';
+import { ScrollView, Text, View, Image, TouchableWithoutFeedback, Keyboard, KeyboardAvoidingView, Platform } from 'react-native';
 
 import styles from './ChatStyle';
 
-import FunnyChat from '@components/FunnyChat';
-import FunnyChatAndroid from '@components/FunnyChatAndroid';
 import FunnyHeader from '@components/FunnyHeader';
+import FunnyGiftChat from '@components/FunnyGiftChat';
 
 import { Button } from 'react-native-elements';
 
@@ -20,8 +19,9 @@ import CommonConsts from '@shared/consts/CommonConstants';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
 const defaultAvatar = require('@assets/images/default-avatar.jpg');
-export default function ChatScreen({ route, navigation }: any) {
-    const [data] = useState(route.params.item);
+
+export default function ChatScreen(props: any) {
+    const [data] = useState(props.route.params.item);
     const [messages, setMessages] = React.useState<ChatMessageModel[]>();
     const [user, setUser] = useState<UserInfoResponseModel>();
 
@@ -51,75 +51,80 @@ export default function ChatScreen({ route, navigation }: any) {
 
     return (
         <>
-            <TouchableWithoutFeedback
-                onPress={
-                    () => {
-                        Keyboard.dismiss();
-                    }
+            <KeyboardAvoidingView
+                style={{ flex: 1 }}
+                behavior={
+                    Platform.OS === 'ios' ? 'padding' : 'height'
                 }
             >
-                <View
-                    style={{ flex: 1 }}
+                <TouchableWithoutFeedback
+                    onPress={
+                        () => {
+                            Keyboard.dismiss();
+                        }
+                    }
                 >
-                    <FunnyHeader
-                        title={data.name}
-                        leftComponent={
-                            <Button
-                                icon={
-                                    <Ionicons name="md-arrow-back" size={24} color={colors.white} />
-                                }
-                                buttonStyle={{ backgroundColor: 'transparent' }}
-                                onPress={
-                                    () => navigation.goBack()
-                                }
-                            />
-                        }
-                        rightComponent={
-                            <View />
-                        }
-                    />
-                    <ScrollView
-                        style={styles.container}
+                    <View
+                        style={{ flex: 1 }}
                     >
-                        {
-                            messages?.map((item: any, index: number) => {
-                                return item.username === user?.name ? (
-                                    <View key={index} style={[styles.item, { justifyContent: 'flex-end' }, item.isNew ? { marginTop: 5 } : { padding: 5 }]}>
-                                        <View style={[styles.message, { marginRight: 10, backgroundColor: '#99ffff' }]}>
-                                            <Text style={styles.messageText}>
-                                                {item.message}
-                                            </Text>
-                                        </View>
-                                        <Image
-                                            style={[styles.avatar]}
-                                            source={
-                                                item.avatar ? { uri: item.avatar } : defaultAvatar
-                                            }
-                                        />
-                                    </View>
-                                ) : (
-                                        <View key={index} style={[styles.item, item.isNew ? { marginTop: 5 } : { padding: 0 }]}>
+                        <FunnyHeader
+                            title={data.name}
+                            leftComponent={
+                                <Button
+                                    icon={
+                                        <Ionicons name="md-arrow-back" size={24} color={colors.white} />
+                                    }
+                                    buttonStyle={{ backgroundColor: 'transparent' }}
+                                    onPress={
+                                        () => props.navigation.goBack()
+                                    }
+                                />
+                            }
+                            rightComponent={
+                                <View />
+                            }
+                        />
+                        <ScrollView
+                            style={styles.container}
+                        >
+                            {
+                                messages?.map((item: any, index: number) => {
+                                    return item.username === user?.name ? (
+                                        <View key={index} style={[styles.item, { justifyContent: 'flex-end' }, item.isNew ? { marginTop: 5 } : { padding: 5 }]}>
+                                            <View style={[styles.message, { marginRight: 10, backgroundColor: '#99ffff' }]}>
+                                                <Text style={styles.messageText}>
+                                                    {item.message}
+                                                </Text>
+                                            </View>
                                             <Image
                                                 style={[styles.avatar]}
                                                 source={
                                                     item.avatar ? { uri: item.avatar } : defaultAvatar
                                                 }
                                             />
-                                            <View style={[styles.message, { marginLeft: 10, backgroundColor: '#c2d6d6' }]}>
-                                                <Text style={styles.messageText}>
-                                                    {item.message}
-                                                </Text>
-                                            </View>
                                         </View>
-                                    )
-                            })
-                        }
-                    </ScrollView>
-                    {
-                        Platform.OS === 'ios' ? <FunnyChat onSend={onSendMessageHandler} /> : <FunnyChatAndroid onSend={onSendMessageHandler} />
-                    }
-                </View>
-            </TouchableWithoutFeedback>
+                                    ) : (
+                                            <View key={index} style={[styles.item, item.isNew ? { marginTop: 5 } : { padding: 0 }]}>
+                                                <Image
+                                                    style={[styles.avatar]}
+                                                    source={
+                                                        item.avatar ? { uri: item.avatar } : defaultAvatar
+                                                    }
+                                                />
+                                                <View style={[styles.message, { marginLeft: 10, backgroundColor: '#c2d6d6' }]}>
+                                                    <Text style={styles.messageText}>
+                                                        {item.message}
+                                                    </Text>
+                                                </View>
+                                            </View>
+                                        )
+                                })
+                            }
+                        </ScrollView>
+                        <FunnyGiftChat onSend={onSendMessageHandler} />
+                    </View>
+                </TouchableWithoutFeedback>
+            </KeyboardAvoidingView>
         </>
     )
 }

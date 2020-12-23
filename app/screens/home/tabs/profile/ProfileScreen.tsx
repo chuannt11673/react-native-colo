@@ -13,37 +13,41 @@ import AxiosClient from '@shared/Axios';
 import { connect } from 'react-redux';
 import { updateProfile } from '@stores/actions/profile';
 
-function ProfileScreen({ navigation, profile, updateProfile }: any) {
-    const [isLoading] = useState(false);
+function ProfileScreen(props: any) {
+    const [isLoading, setLoading] = useState(true);
 
     useEffect(() => {
-        if (profile && profile.name) {
+        if (props.profile && props.profile.name) {
+            setLoading(false);
             return;
         }
 
         getProfile().then(res => {
             const item = res.data;
-            const profile = {
-                ...item,
-                images: item.images.map((image: any) => ({
-                    ...image,
-                    uri: AxiosClient.defaults.baseURL + image.url
-                }))
+            if (item) {
+                const profile = {
+                    ...item,
+                    images: item.images.map((image: any) => ({
+                        ...image,
+                        uri: AxiosClient.defaults.baseURL + image.url
+                    }))
+                }
+                updateProfile(profile);
             }
-            updateProfile(profile);
+            setLoading(false);
         });
-    }, []);
+    });
 
     const renderData = () => {
-        if (!profile)
+        if (!props.profile || !props.profile.name)
             return null;
 
         return (
             <>
                 <View>
                     {
-                        !profile.images || profile.images.length === 0 ? null : 
-                        <Image source={{ uri: profile.images[0].uri }} style={{ width: '100%', height: 250, resizeMode: 'cover' }} />
+                        !props.profile.images || props.profile.images.length === 0 ? null : 
+                        <Image source={{ uri: props.profile.images[0].uri }} style={{ width: '100%', height: 250, resizeMode: 'cover' }} />
                     }
                     <View style={styles.reorderArea}>
                         <View style={styles.reorderTouchMove}>
@@ -52,8 +56,8 @@ function ProfileScreen({ navigation, profile, updateProfile }: any) {
                     </View>
                     <View style={styles.titleArea}>
                         <View>
-                            <Text style={styles.titleName}>{profile.name}</Text>
-                            <Text style={styles.titleInfo}>{profile.gender}, {profile.dob} </Text>
+                            <Text style={styles.titleName}>{props.profile.name}</Text>
+                            <Text style={styles.titleInfo}>{props.profile.gender}, {props.profile.dob} </Text>
                         </View>
                         <View style={{ alignItems: 'center' }}>
                             <SimpleLineIcons name="heart" size={21} color={colors.secondary} />
@@ -62,15 +66,15 @@ function ProfileScreen({ navigation, profile, updateProfile }: any) {
                     </View>
                     <View style={styles.contentArea}>
                         <Text style={styles.contentText}>
-                            {profile.briefMessage}
+                            {props.profile.briefMessage}
                         </Text>
                     </View>
                     <View style={styles.moreInfoView}>
-                        <Text style={styles.moreInfoText}>Đang ở {profile.address}</Text>
-                        <Text style={styles.moreInfoText}>Làm việc tại {profile.workAddress}</Text>
+                        <Text style={styles.moreInfoText}>Đang ở {props.profile.address}</Text>
+                        <Text style={styles.moreInfoText}>Làm việc tại {props.profile.workAddress}</Text>
                         <View style={styles.moreInfoButtonView}>
                             {
-                                profile.hobbies ? profile.hobbies.split(',').map((item: any, index: number) => (
+                                props.profile.hobbies ? props.profile.hobbies.split(',').map((item: any, index: number) => (
                                     <Button key={index} title={item}
                                         titleStyle={styles.moreInfoButtonTitle}
                                         buttonStyle={styles.moreInfoButton}
@@ -81,7 +85,7 @@ function ProfileScreen({ navigation, profile, updateProfile }: any) {
                         </View>
                     </View>
                     {
-                        profile.images && profile.images.length > 0 ? profile.images.map((item: any, index: number) => index === 0 ? null : <FunnyImage key={index} uri={item.uri} />) : null
+                        props.profile.images && props.profile.images.length > 0 ? props.profile.images.map((item: any, index: number) => index === 0 ? null : <FunnyImage key={index} uri={item.uri} />) : null
                     }
                 </View>
             </>
@@ -90,7 +94,7 @@ function ProfileScreen({ navigation, profile, updateProfile }: any) {
 
     return (
         <>
-            <FunnyHeader title='Cá Nhân' navigation={navigation} />
+            <FunnyHeader title='Cá Nhân' navigation={props.navigation} />
             {
                 isLoading ? (
                     <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
