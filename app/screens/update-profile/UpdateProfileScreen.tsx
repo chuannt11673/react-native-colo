@@ -113,7 +113,8 @@ function UpdateProfileScreen(props: any) {
                         <ScrollView style={{
                             padding: 25,
                         }}>
-                            <Text style={styles.title} >Tên hiển thị</Text>
+                            {/* name */}
+                            <Text style={styles.title} >Tên hiển thị *</Text>
                             <View style={{
                                 flexDirection: 'row',
                                 alignItems: 'center',
@@ -130,8 +131,8 @@ function UpdateProfileScreen(props: any) {
                                 />
                                 <FontAwesome name="dot-circle-o" size={24} color={colors.primary} />
                             </View>
-
-                            <Text style={styles.title} >Năm sinh</Text>
+                            {/* dob */}
+                            <Text style={styles.title} >Năm sinh *</Text>
                             <View style={{
                                 flexDirection: 'row',
                                 alignItems: 'center',
@@ -157,8 +158,8 @@ function UpdateProfileScreen(props: any) {
                                 />
                                 <FontAwesome name="dot-circle-o" size={24} color={colors.primary} />
                             </View>
-
-                            <Text style={styles.title} >Giới tính</Text>
+                            {/* gender */}
+                            <Text style={styles.title} >Giới tính *</Text>
                             <View style={{
                                 flexDirection: 'row',
                                 alignItems: 'center',
@@ -187,37 +188,84 @@ function UpdateProfileScreen(props: any) {
                                 </View>
                                 <FontAwesome name="dot-circle-o" size={24} color={colors.primary} />
                             </View>
-
-                            <Text style={styles.title} >Quê quán</Text>
+                            {/* address */}
+                            <Text style={styles.title} >Làm việc tại</Text>
                             <View style={{
                                 flexDirection: 'row',
                                 alignItems: 'center',
                                 justifyContent: 'space-between'
                             }}>
-                                <TextInput style={[styles.input, { width: '90%' }]} placeholder='' onChangeText={
-                                    value => setData({
-                                        ...data,
-                                        hometown: value
-                                    })
-                                } />
+                                <TextInput
+                                    style={[styles.input, { width: '90%' }]}
+                                    placeholder=''
+                                    onChangeText={
+                                        value => setData({
+                                            ...data,
+                                            address: value
+                                        })
+                                    }
+                                    value={data.address}
+                                />
                                 <FontAwesome name="dot-circle-o" size={24} color={colors.primary} />
                             </View>
-
+                            {/* work address */}
                             <Text style={styles.title} >Công việc</Text>
                             <View style={{
                                 flexDirection: 'row',
                                 alignItems: 'center',
                                 justifyContent: 'space-between'
                             }}>
-                                <TextInput style={[styles.input, { width: '90%' }]} placeholder='' onChangeText={
-                                    value => setData({
-                                        ...data,
-                                        job: value
-                                    })
-                                } />
+                                <TextInput style={[styles.input, { width: '90%' }]} placeholder=''
+                                    onChangeText={
+                                        value => setData({
+                                            ...data,
+                                            workAddress: value
+                                        })
+                                    }
+                                    value={data.workAddress}
+                                />
                                 <FontAwesome name="dot-circle-o" size={24} color={colors.primary} />
                             </View>
-
+                            {/* college */}
+                            <Text style={styles.title} >Học tại</Text>
+                            <View style={{
+                                flexDirection: 'row',
+                                alignItems: 'center',
+                                justifyContent: 'space-between'
+                            }}>
+                                <TextInput style={[styles.input, { width: '90%' }]} placeholder=''
+                                    onChangeText={
+                                        value => setData({
+                                            ...data,
+                                            college: value
+                                        })
+                                    }
+                                    value={data.college}
+                                />
+                                <FontAwesome name="dot-circle-o" size={24} color={colors.primary} />
+                            </View>
+                            {/* hobbies */}
+                            <Text style={styles.title} >Sở thích</Text>
+                            <View style={{
+                                flexDirection: 'row',
+                                alignItems: 'center',
+                                justifyContent: 'space-between'
+                            }}>
+                                <TextInput
+                                    style={[styles.input, { width: '90%' }]}
+                                    multiline
+                                    placeholder='Nghe nhạc, Xem phim,...'
+                                    onChangeText={
+                                        value => setData({
+                                            ...data,
+                                            hobbies: value
+                                        })
+                                    }
+                                    value={data.hobbies}
+                                />
+                                <FontAwesome name="dot-circle-o" size={24} color={colors.primary} />
+                            </View>
+                            {/* target */}
                             <View style={{
                                 flexDirection: 'row',
                                 justifyContent: 'space-between',
@@ -276,7 +324,7 @@ function UpdateProfileScreen(props: any) {
                                     <FontAwesome name="dot-circle-o" size={24} color={colors.primary} />
                                 </View>
                             </View>
-
+                            {/* target ages */}
                             <Text style={styles.title} >Độ tuổi</Text>
                             <View style={{
                                 flexDirection: 'row',
@@ -314,7 +362,7 @@ function UpdateProfileScreen(props: any) {
                                     items={[]}
                                 />
                             </View>
-
+                            {/* brief message */}
                             <Text style={styles.title} >Ghi chú</Text>
                             <View style={{
                                 flexDirection: 'row',
@@ -332,6 +380,7 @@ function UpdateProfileScreen(props: any) {
                                 />
                                 <FontAwesome name="dot-circle-o" size={24} color={colors.primary} />
                             </View>
+                            {/* save btn */}
                             <FunnyButton
                                 containerStyle={{
                                     marginTop: 20,

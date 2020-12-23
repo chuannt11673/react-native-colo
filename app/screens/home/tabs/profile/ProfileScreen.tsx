@@ -66,8 +66,8 @@ function ProfileScreen({ navigation, profile, updateProfile }: any) {
                         </Text>
                     </View>
                     <View style={styles.moreInfoView}>
-                        <Text style={styles.moreInfoText}>Đang ở {profile.hometown}</Text>
-                        <Text style={styles.moreInfoText}>Làm việc tại {profile.job}</Text>
+                        <Text style={styles.moreInfoText}>Đang ở {profile.address}</Text>
+                        <Text style={styles.moreInfoText}>Làm việc tại {profile.workAddress}</Text>
                         <View style={styles.moreInfoButtonView}>
                             {
                                 profile.hobbies ? profile.hobbies.split(',').map((item: any, index: number) => (

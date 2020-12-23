@@ -2,7 +2,7 @@ export default interface  UserProfileModel {
     name: string;
     dob: string;
     gender: string;
-    hometown: string;
+    address: string;
     job: string;
     targetGender: string;
     height: string;

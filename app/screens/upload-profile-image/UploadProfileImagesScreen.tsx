@@ -32,6 +32,10 @@ function UploadProfileImagesScreen(props: any) {
         form.append('gender', profile.gender);
         form.append('dob', `01/01/${profile.dob}`);
         form.append('briefMessage', profile.briefMessage);
+        form.append('address', profile.address);
+        form.append('workAddress', profile.workAddress);
+        form.append('college', profile.college);
+        form.append('hobbies', profile.hobbies);
 
         if (images !== props.profile.images) {
             images.forEach(element => {
