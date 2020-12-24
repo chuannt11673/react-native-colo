@@ -16,16 +16,18 @@ export default function DiaryScreen({ navigation }: any) {
     const [isLoading, setLoading] = useState(true);
     useEffect(() => {
         UserService.getDiary().then((res: any) => {
-            const values = res.map((item: any) => {
-                return {
-                    ...item,
-                    photos: item.images.map((image: any) => {
-                        const url = `${AxiosClient.defaults.baseURL}/${image.url}`;
-                        return url;
-                    })
-                }
-            });
-            setData(values);
+            if (res) {
+                const values = res.map((item: any) => {
+                    return {
+                        ...item,
+                        photos: item.images.map((image: any) => {
+                            const url = `${AxiosClient.defaults.baseURL}/${image.url}`;
+                            return url;
+                        })
+                    }
+                });
+                setData(values);
+            }
             setLoading(false);
         }, err => {
             console.error(err?.response);
