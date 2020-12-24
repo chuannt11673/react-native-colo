@@ -9,6 +9,7 @@ import FunnyButton from '@components/FunnyButton';
 
 import HomeTabs from '@screens/home/HomeTabs';
 import ChatScreen from '@screens/chat/ChatScreen';
+import CreatePostScreen from '@screens/create-post/CreatePostScreen';
 
 import AuthContext from '@shared/context/AuthContext';
 import CommonConsts from '@shared/consts/CommonConstants';
@@ -81,6 +82,7 @@ export default function HomeStack() {
     <Drawer.Navigator drawerContent={props => <DrawerContent {...props} />}>
       <Drawer.Screen name='Home' component={HomeTabs} options={{ headerShown: false }} />
       <Drawer.Screen name='Chat' component={ChatScreen} />
+      <Drawer.Screen name='CreatePost' component={CreatePostScreen} />
     </Drawer.Navigator>
   );
 };

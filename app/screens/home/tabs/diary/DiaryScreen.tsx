@@ -82,7 +82,7 @@ export default function DiaryScreen({ navigation }: any) {
                             <View style={styles.header}>
                                 <TouchableOpacity onPress={
                                     () => {
-                                        // navigation.navigate('CreatePost');
+                                        navigation.navigate('CreatePost');
                                     }
                                 }>
                                     <View style={styles.headerAvatar}>
