@@ -21,6 +21,7 @@ function DiaryScreen(props: any) {
     
     useEffect(() => {
         UserService.getDiary().then((res: any) => {
+            console.log(res);
             if (res) {
                 const values = res.map((item: any) => {
                     return {

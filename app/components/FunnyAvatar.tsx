@@ -7,18 +7,15 @@ interface FunnyAvatarProps {
     name?: string;
     content?: string;
 };
-const defaultUri = require('@assets/images/default-avatar.jpg');
-export default function FunnyAvatar(props: FunnyAvatarProps) {
-    const [uri, setUri] = React.useState(defaultUri);
-    React.useEffect(() => {
-        if (props.uri) {
-            setUri({ uri: props.uri });
-        }
-    }, []);
 
+export default function FunnyAvatar(props: FunnyAvatarProps) {
     return (
         <View style={itemStyles.item}>
-            <Image source={uri} style={itemStyles.avatar} />
+            {
+                props.uri ? (
+                    <Image source={{ uri: props.uri }} style={itemStyles.avatar} />
+                ) : null
+            }
             <View>
                 {
                     props.name ? (
@@ -48,14 +45,15 @@ const itemStyles = StyleSheet.create({
     },
     item: {
         height: 80,
+        padding: 10,
         flexDirection: 'row',
         alignItems: 'center',
     },
     avatar: {
-        margin: 10,
         width: 60,
         height: 60,
         borderRadius: 60,
+        marginRight: 10
     },
     name: {
         fontSize: 16,

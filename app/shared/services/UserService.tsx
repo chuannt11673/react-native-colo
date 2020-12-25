@@ -18,10 +18,16 @@ export const getCommunicationMessages = (communicationId: string) => {
     });
 };
 export const editProfile = (form: FormData) => {
-    
     return AxiosClient.post('/api/Users/UpdateUserProfile', form, {
         headers: {
             'Content-Type': 'multipart/form-data'
         }
     });
 };
+export const createPost = (form: FormData) => {
+    return AxiosClient.post('/api/Posts/CreatePost', form, {
+        headers: {
+            'Content-Type': 'multipart/form-data'
+        }
+    });
+}
