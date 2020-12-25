@@ -1,5 +1,5 @@
-import React, { useEffect, useState } from 'react';
-import { StyleSheet, Text, View } from 'react-native';
+import React, { useEffect } from 'react';
+import { StyleSheet, View } from 'react-native';
 import { LinearGradient } from 'expo-linear-gradient';
 
 import { createDrawerNavigator } from '@react-navigation/drawer';
@@ -12,32 +12,18 @@ import ChatScreen from '@screens/chat/ChatScreen';
 import CreatePostScreen from '@screens/create-post/CreatePostScreen';
 
 import AuthContext from '@shared/context/AuthContext';
-import CommonConsts from '@shared/consts/CommonConstants';
 import colors from '@shared/consts/Colors';
 
-import AsyncStorage from '@react-native-async-storage/async-storage';
-import UserInfoResponseModel from 'shared/interfaces/UserInfoResponseModel';
-
-import { FontAwesome } from '@expo/vector-icons';
+//  redux
+import { connect } from 'react-redux';
 
 const Drawer = createDrawerNavigator();
 
-function DrawerContent() {
+function DrawerContent(props: any) {
   const { signOut } = React.useContext(AuthContext);
-  const [user, setUser] = useState('');
-
-  const signOutHandler = async () => {
-    await signOut();
-  };
 
   useEffect(() => {
-    AsyncStorage.getItem(CommonConsts.userInfoKey).then((res) => {
-      if (res) {
-        const userInfo: UserInfoResponseModel = JSON.parse(res);
-        setUser(userInfo.name);
-      }
-    });
-  });
+  }, []);
 
   return (
     <View style={{
@@ -58,8 +44,6 @@ function DrawerContent() {
             padding: 10
           }}
         >
-            <FontAwesome name="user" size={24} color="white" />
-            <Text style={{ marginLeft: 6, color: colors.white, fontSize: 16 }}>{user}</Text>
         </LinearGradient>
       </View>
       <FunnyButton
@@ -70,16 +54,24 @@ function DrawerContent() {
           <Ionicons name="ios-log-out" size={24} color="black" />
         }
         onPress={
-          signOutHandler
+          signOut
         }
       />
     </View>
   )
 };
 
+const mapStateToProps = (state: any) => {
+  return {
+    userInfo: state.authReducer
+  }
+};
+
+const DrawerContentMapped = connect(mapStateToProps)(DrawerContent);
+
 export default function HomeStack() {
   return (
-    <Drawer.Navigator drawerContent={props => <DrawerContent {...props} />}>
+    <Drawer.Navigator drawerContent={_ => <DrawerContentMapped />}>
       <Drawer.Screen name='Home' component={HomeTabs} options={{ headerShown: false }} />
       <Drawer.Screen name='Chat' component={ChatScreen} />
       <Drawer.Screen name='CreatePost' component={CreatePostScreen} />

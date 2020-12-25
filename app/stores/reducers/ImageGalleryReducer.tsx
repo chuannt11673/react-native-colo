@@ -4,7 +4,7 @@ const initialState = {
     images: []
 }
 
-const imageGalleryReducer = (state = initialState, action) => {
+const imageGalleryReducer = (state = initialState, action: { type: string, data: any }) => {
     switch (action.type) {
         case UPDATE_IMAGES_GALLERY:
             return {

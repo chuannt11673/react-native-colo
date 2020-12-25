@@ -10,11 +10,6 @@ import { Ionicons } from '@expo/vector-icons';
 import { connect } from 'react-redux';
 
 function CreatePostScreen(props: any) {
-
-    React.useEffect(() => {
-        console.log(props);
-    }, []);
-
     return (
         <View style={{
             flex: 1,

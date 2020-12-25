@@ -1,118 +1,42 @@
 import * as React from 'react';
 import { ActivityIndicator, View } from 'react-native';
 import { NavigationContainer } from '@react-navigation/native';
-
 import { StatusBar } from 'expo-status-bar';
-
 import AuthContext from '@shared/context/AuthContext';
-import AxiosClient from '@shared/Axios';
-import CommonConstants from '@shared/consts/CommonConstants';
 
+// services
+import { SignIn } from '@shared/services/AuthenticationService';
+
+// navigation
 import HomeStack from 'navigation/HomeStack';
 import AuthStack from 'navigation/AuthStack';
-
-import AsyncStorage from '@react-native-async-storage/async-storage';
-
-import * as AuthService from '@shared/services/AuthenticationService';
-
 import * as WebBrowser from 'expo-web-browser';
-import UserInfoResponseModel from 'shared/interfaces/UserInfoResponseModel';
 
-import { Provider } from 'react-redux';
+// actions
+import { signIn, signOut, retrieveToken, UserInfo } from '@stores/reducers/AuthReducer';
+
+// redux
 import configuredStore from '@stores/index';
+import { Provider, connect } from 'react-redux';
+import AxiosClient from 'shared/Axios';
 
 const store = configuredStore();
-
 WebBrowser.maybeCompleteAuthSession();
 
-export default function App() {
-  const initialLoginState = {
-    isLoading: true,
-    username: null,
-    access_token: null,
-  };
-
-  const loginReducer = (prevState: any, action: any) => {
-    switch (action.type) {
-      case 'Retrieve_token':
-        return {
-          ...prevState,
-          access_token: action.token,
-          isLoading: false
-        };
-      case 'Login':
-        return {
-          ...prevState,
-          username: action.id,
-          access_token: action.token,
-          isLoading: false
-        };
-      case 'Logout':
-        return {
-          ...prevState,
-          username: null,
-          access_token: null,
-          isLoading: false
-        };
-      case 'Register':
-        return {
-          ...prevState,
-          username: action.id,
-          access_token: action.token,
-          isLoading: false
-        };
-    }
-  };
-
-  const [loginState, dispatch] = React.useReducer(loginReducer, initialLoginState);
-
-  const signIn = async (token: string) => {
-    await AsyncStorage.setItem(CommonConstants.tokenKey, token);
-    const userInfo : UserInfoResponseModel = await AxiosClient.get('/connect/userinfo');
-    await AsyncStorage.setItem(CommonConstants.userInfoKey, JSON.stringify(userInfo));
-    dispatch({ type: 'Login', id: userInfo.name, token: token });
-  };
-
-  const authContext = React.useMemo(() => (
-    {
-      signIn: async (username: string, password: string, callback: (err: any) => void) => {
-        try {
-          const response = await AuthService.SignIn(username, password);
-          await signIn(response.access_token);
-        }
-        catch (err) {
-          const errorMessage = err?.response?.data?.error_description;
-          if (callback && errorMessage) {
-            callback(errorMessage);
-          }
-        }
-      },
-      signInToken: async (token: string) => {
-        await signIn(token);
-      },
-      signOut: async () => {
-        await AsyncStorage.removeItem(CommonConstants.tokenKey);
-        await AxiosClient.get('/api/Identity/logout', {
-        });
-        dispatch({ type: 'Logout' });
-      }
-    }
-  ), []);
+function Auth(props: any) {
 
   React.useEffect(() => {
+    // warnup browser
     WebBrowser.warmUpAsync();
-    
-    AsyncStorage.getItem(CommonConstants.tokenKey).then(token => {
-      dispatch({ type: 'Retrieve_token', token: token });
-    });
 
+    // retrieve token
+    props.retrieveToken().then();
+
+    // unauthorize handler
     AxiosClient.interceptors.response.use(undefined, async (err) => {
       const error = err.response;
-      if (error.status === 401) {
+      if (error.status === 401)
         await authContext.signOut();
-        return;
-      }
-      throw err;
     });
 
     return () => {
@@ -120,24 +44,76 @@ export default function App() {
     }
   }, []);
 
-  if (loginState.isLoading) {
+  const authContext = React.useMemo(() => {
+    return {
+      singIn: async (username: string, password: string, callback: (err: string) => void) => {
+        // sign in
+        SignIn(username, password).then( async res => {
+          const userInfo = {
+            username: username,
+            token: res.access_token,
+            isLoading: false
+          };
+          await signIn(userInfo);
+        });
+      },
+      signInToken: async (token: string) => {
+        const userInfo = {
+          username: '',
+          token: token
+        };
+        await props.signIn(userInfo);
+      },
+      signOut: async () => {
+        await props.signOut();
+      }      
+    }
+  }, []);
+
+  if (props.authInfo.isLoading) {
     return (
-      <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
+      <View style={{
+        flex: 1,
+        alignItems: 'center',
+        justifyContent: 'center'
+      }}>
         <ActivityIndicator size='small' />
       </View>
-    );
+    )
   }
 
   return (
+    <AuthContext.Provider value={authContext}>
+        <NavigationContainer>
+          {
+            props.authInfo.token ? <HomeStack /> : <AuthStack />
+          }
+        </NavigationContainer>
+    </AuthContext.Provider>
+  )
+}
+
+const mapStateToAuthProps = (state: any) => {
+  return {
+    authInfo: state.authReducer
+  }
+}
+
+const mapDispatchToAuthProps = (dispatch: any) => {
+  return {
+    signIn: async (userInfo: UserInfo) => dispatch(await signIn(userInfo)),
+    retrieveToken: async () => dispatch(await retrieveToken()),
+    signOut: async () => dispatch(await signOut())
+  }
+}
+
+const AuthMapped = connect(mapStateToAuthProps, mapDispatchToAuthProps)(Auth);
+
+export default function App() {
+  return (
     <Provider store={store}>
       <StatusBar style='auto' translucent={true} />
-      <AuthContext.Provider value={authContext}>
-        <NavigationContainer>
-            {
-              loginState.access_token ? <HomeStack /> : <AuthStack />
-            }
-        </NavigationContainer>
-      </AuthContext.Provider>
+      <AuthMapped />
     </Provider>
   );
 }
