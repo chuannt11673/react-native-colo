@@ -1,14 +1,14 @@
 import React from 'react';
-import { FlatList, View, Image, Text, ActivityIndicator, Dimensions, TouchableOpacity, ScrollView, TouchableWithoutFeedback } from 'react-native';
+import { FlatList, View, Image, Text, ActivityIndicator, Dimensions, TouchableWithoutFeedback } from 'react-native';
 import colors from '@shared/consts/Colors';
 
 import * as MediaLibrary from 'expo-media-library';
 
 import { connect } from 'react-redux';
-import { updateImagesGallery } from '@stores/actions/imageGallery';
 
-import { AntDesign, FontAwesome, MaterialIcons } from '@expo/vector-icons';
+import { MaterialIcons } from '@expo/vector-icons';
 import { Button, Header } from 'react-native-elements';
+import { updateImagesGallery } from '@stores/reducers/ImageGalleryReducer';
 
 const imageSize = Dimensions.get('screen').width * 0.333;
 interface FunnyImageGalleryModalProps {
@@ -19,9 +19,9 @@ interface FunnyImageGalleryModalProps {
     updateImages: (images: any[]) => void;
 }
 
-function ImageItem({ item, onSelect, onDeSelect }) {
+function ImageItem(props: any) {
     const [data, setData] = React.useState({
-        ...item,
+        ...props.item,
         selected: false
     });
     const onPressHandler = () => {
@@ -31,9 +31,9 @@ function ImageItem({ item, onSelect, onDeSelect }) {
         };
         setData(updatedData);
         if (updatedData.selected) {
-            onSelect(updatedData);
+            props.onSelect(updatedData);
         } else {
-            onDeSelect(updatedData);
+            props.onDeSelect(updatedData);
         }
     };
 
@@ -73,7 +73,7 @@ function ImageItem({ item, onSelect, onDeSelect }) {
 
 function FunnyImageGalleryModal(props: FunnyImageGalleryModalProps) {
     const [isLoading, setIsLoading] = React.useState(true);
-    const [selectedImages, setSelectedImages] = React.useState<any[]>();
+    const [selectedImages, setSelectedImages] = React.useState<any[]>([]);
 
     React.useEffect(() => {
         setSelectedImages([]);
@@ -105,12 +105,12 @@ function FunnyImageGalleryModal(props: FunnyImageGalleryModalProps) {
         });
     };
 
-    const onSelectImageHandler = (item) => {
+    const onSelectImageHandler = (item: any) => {
         const selectedImagesTemp = selectedImages?.concat([item]);
         setSelectedImages(selectedImagesTemp);
     };
 
-    const onDeselectImageHandler = (item) => {
+    const onDeselectImageHandler = (item: any) => {
         const index = selectedImages?.findIndex(x => x.id === item.id);
         if (index !== -1) {
             selectedImages?.splice(index, 1);
@@ -205,13 +205,13 @@ function FunnyImageGalleryModal(props: FunnyImageGalleryModalProps) {
     )
 };
 
-const mapStateToProps = (state) => {
+const mapStateToProps = (state: any) => {
     return {
         images: state.imageGalleryReducer.images
     }
 };
 
-const mapDispatchToProps = (dispatch) => {
+const mapDispatchToProps = (dispatch: any) => {
     return {
         updateImages: (images: any[]) => dispatch(updateImagesGallery(images))
     }

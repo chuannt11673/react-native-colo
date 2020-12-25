@@ -83,19 +83,23 @@ function Auth(props: any) {
   }
 
   return (
-    <AuthContext.Provider value={authContext}>
+    <>
+      <StatusBar style={props.statusBar.style} translucent={true} />
+      <AuthContext.Provider value={authContext}>
         <NavigationContainer>
           {
             props.authInfo.token ? <HomeStack /> : <AuthStack />
           }
         </NavigationContainer>
-    </AuthContext.Provider>
+      </AuthContext.Provider>
+    </>
   )
 }
 
 const mapStateToAuthProps = (state: any) => {
   return {
-    authInfo: state.authReducer
+    authInfo: state.authReducer,
+    statusBar: state.statusBarReducer 
   }
 }
 
@@ -112,7 +116,6 @@ const AuthMapped = connect(mapStateToAuthProps, mapDispatchToAuthProps)(Auth);
 export default function App() {
   return (
     <Provider store={store}>
-      <StatusBar style='auto' translucent={true} />
       <AuthMapped />
     </Provider>
   );

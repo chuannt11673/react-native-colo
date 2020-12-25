@@ -6,12 +6,12 @@ import { Ionicons, MaterialCommunityIcons } from '@expo/vector-icons';
 
 import colors from '@shared/consts/Colors';
 
-import { connect } from 'react-redux';
-import { updateProfile } from '@stores/actions/profile';
 import FunnyButton from '@components/FunnyButton';
-import FunnyImageGalleryModal from 'components/FunnyImageGalleryModal';
+import FunnyImageGalleryModal from '@components/FunnyImageGalleryModal';
 
+import { connect } from 'react-redux';
 import { editProfile } from '@shared/services/UserService';
+import { updateProfile } from '@stores/reducers/ProfileReducer';
 
 function UploadProfileImagesScreen(props: any) {
     const [modalVisible, setModalVisible] = React.useState(false);

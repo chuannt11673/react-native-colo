@@ -11,7 +11,7 @@ import { getProfile } from '@shared/services/UserService';
 import AxiosClient from '@shared/Axios';
 
 import { connect } from 'react-redux';
-import { updateProfile } from '@stores/actions/profile';
+import { updateProfile } from '@stores/reducers/ProfileReducer';
 
 function ProfileScreen(props: any) {
     const [isLoading, setLoading] = useState(true);

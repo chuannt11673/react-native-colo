@@ -23,4 +23,11 @@ const profileReducer = (state = initialState, action: { type: any, data: any }) 
     }
 };
 
+export const updateProfile = (profile: any) => (
+    {
+        type: UPDATE_PROFILE,
+        data: profile
+    }
+);
+
 export default profileReducer;

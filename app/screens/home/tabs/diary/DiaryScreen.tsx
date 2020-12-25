@@ -11,9 +11,14 @@ import FunnyAvatar from '@components/FunnyAvatar';
 import FunnyHeader from '@components/FunnyHeader';
 import AxiosClient from 'shared/Axios';
 
-export default function DiaryScreen({ navigation }: any) {
+// redux
+import { connect } from 'react-redux';
+import { updateStatusBar } from '@stores/reducers/StatusBarReducer';
+
+function DiaryScreen(props: any) {
     const [data, setData] = useState<any[]>([]);
     const [isLoading, setLoading] = useState(true);
+    
     useEffect(() => {
         UserService.getDiary().then((res: any) => {
             if (res) {
@@ -29,10 +34,9 @@ export default function DiaryScreen({ navigation }: any) {
                 setData(values);
             }
             setLoading(false);
-        }, err => {
-            console.error(err?.response);
-        })
-    }, []);
+        });
+    },
+    []);
 
     const renderItem = (item: any, index: number) => {
         return (
@@ -55,7 +59,7 @@ export default function DiaryScreen({ navigation }: any) {
                             <SimpleLineIcons name="bubbles" size={21} color={colors.black} />
                         }
                         onPress={
-                            () => navigation.navigate('Comment', { item: item })
+                            () => props.navigation.navigate('Comment', { item: item })
                         }
                     />
                     <FunnyButton
@@ -71,7 +75,7 @@ export default function DiaryScreen({ navigation }: any) {
 
     return (
         <>
-            <FunnyHeader title='Nhật Ký' navigation={navigation} />
+            <FunnyHeader title='Nhật Ký' navigation={props.navigation} />
             {
                 isLoading ? (
                     <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
@@ -82,7 +86,7 @@ export default function DiaryScreen({ navigation }: any) {
                             <View style={styles.header}>
                                 <TouchableOpacity onPress={
                                     () => {
-                                        navigation.navigate('CreatePost');
+                                        props.navigation.navigate('CreatePost');
                                     }
                                 }>
                                     <View style={styles.headerAvatar}>
@@ -129,3 +133,20 @@ export default function DiaryScreen({ navigation }: any) {
         </>
     )
 }
+
+const mapStateToProps = (state: any) => {
+    return {
+        profile: state.profileReducer.profile,
+        statusBar: state.statusBarReducer
+    }
+}
+
+const mapDispatchToProps = (dispatch: any) => {
+    return {
+        updateStatusBar: (data: any) => {
+            dispatch(updateStatusBar(data));
+        }
+    }
+}
+
+export default connect(mapStateToProps, mapDispatchToProps)(DiaryScreen);

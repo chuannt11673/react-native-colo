@@ -18,4 +18,11 @@ const imageGalleryReducer = (state = initialState, action: { type: string, data:
     }
 };
 
+export const updateImagesGallery = (images: any[]) => (
+    {
+        type: UPDATE_IMAGES_GALLERY,
+        data: images
+    }
+);
+
 export default imageGalleryReducer;

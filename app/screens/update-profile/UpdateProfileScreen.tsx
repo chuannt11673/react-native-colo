@@ -11,12 +11,11 @@ import { FontAwesome, Ionicons } from '@expo/vector-icons';
 import RNPickerSelect from 'react-native-picker-select';
 
 import { connect } from 'react-redux';
-import { updateProfile } from '@stores/actions/profile';
-
-import { getProfile } from '@shared/services/UserService';
 
 import colors from '@shared/consts/Colors';
 import { years } from '@shared/consts/CommonConstants';
+import { updateProfile } from '@stores/reducers/ProfileReducer';
+import { updateStatusBar } from '@stores/reducers/StatusBarReducer';
 
 const listOfYear = years();
 function UpdateProfileScreen(props: any) {
@@ -27,27 +26,7 @@ function UpdateProfileScreen(props: any) {
     });
 
     useEffect(() => {
-        if (props.profile && props.profile.name) {
-            setLoading(false);
-            return;
-        }
-
-        getProfile().then(res => {
-            if (res.data) {
-                const item = res.data;
-                const profile = {
-                    ...item,
-                    dob: (new Date(item.dob)).getFullYear() + '',
-                    images: item.images.map((image: any) => ({
-                        filename: null,
-                        uri: image.url
-                    }))
-                };
-                setData(profile);
-                props.updateProfile(profile);
-            }
-            setLoading(false);
-        });
+        setLoading(false);
     }, []);
 
     const onSaveHandler = () => {
@@ -413,7 +392,8 @@ function UpdateProfileScreen(props: any) {
 
 const mapStateToProps = (state: any) => {
     return {
-        profile: state.profileReducer.profile
+        profile: state.profileReducer.profile,
+        statusBar: state.statusBarReducer
     }
 }
 
@@ -421,6 +401,9 @@ const mapDispatchToProps = (dispatch: any) => {
     return {
         updateProfile: (profile: any) => {
             dispatch(updateProfile(profile));
+        },
+        updateStatusBar: (data: any) => {
+            dispatch(updateStatusBar(data));
         }
     }
 }
