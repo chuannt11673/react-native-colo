@@ -9,6 +9,7 @@ import colors from '@shared/consts/Colors';
 import FunnyButton from '@components/FunnyButton';
 import FunnyImageGalleryModal from '@components/FunnyImageGalleryModal';
 
+// redux
 import { connect } from 'react-redux';
 import { editProfile } from '@shared/services/UserService';
 import { updateProfile } from '@stores/reducers/ProfileReducer';

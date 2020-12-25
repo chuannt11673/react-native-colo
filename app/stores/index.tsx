@@ -6,6 +6,12 @@ import imageGalleryReducer from './reducers/ImageGalleryReducer';
 import authReducer from './reducers/AuthReducer';
 import statusBarReducer from './reducers/StatusBarReducer';
 
+// redux
+import { applyMiddleware } from 'redux';
+
+// sagas
+import createSagaMiddleware from 'redux-saga';
+
 const reducer = combineReducers({
     profileReducer: profileReducer,
     imageGalleryReducer: imageGalleryReducer,
@@ -13,6 +19,7 @@ const reducer = combineReducers({
     statusBarReducer: statusBarReducer
 });
 
-const configuredStore = () => createStore(reducer);
+export const sagaMiddleware = createSagaMiddleware();
 
+const configuredStore = () => createStore(reducer, applyMiddleware(sagaMiddleware));
 export default configuredStore;

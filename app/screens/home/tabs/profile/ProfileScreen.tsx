@@ -7,9 +7,6 @@ import colors from '@shared/consts/Colors';
 import FunnyImage from '@components/FunnyImage';
 import FunnyHeader from 'components/FunnyHeader';
 
-import { getProfile } from '@shared/services/UserService';
-import AxiosClient from '@shared/Axios';
-
 import { connect } from 'react-redux';
 import { updateProfile } from '@stores/reducers/ProfileReducer';
 
@@ -17,25 +14,7 @@ function ProfileScreen(props: any) {
     const [isLoading, setLoading] = useState(true);
 
     useEffect(() => {
-        if (props.profile && props.profile.name) {
-            setLoading(false);
-            return;
-        }
-
-        getProfile().then(res => {
-            const item = res.data;
-            if (item) {
-                const profile = {
-                    ...item,
-                    images: item.images.map((image: any) => ({
-                        ...image,
-                        uri: AxiosClient.defaults.baseURL + image.url
-                    }))
-                }
-                updateProfile(profile);
-            }
-            setLoading(false);
-        });
+        setLoading(false);
     });
 
     const renderData = () => {

@@ -16,11 +16,16 @@ import * as WebBrowser from 'expo-web-browser';
 import { signIn, signOut, retrieveToken, UserInfo } from '@stores/reducers/AuthReducer';
 
 // redux
-import configuredStore from '@stores/index';
 import { Provider, connect } from 'react-redux';
-import AxiosClient from 'shared/Axios';
+import configuredStore, { sagaMiddleware } from '@stores/index';
+
+import AxiosClient from '@shared/Axios';
+
+// sagas
+import rootSagas from '@stores/sagas/rootSagas';
 
 const store = configuredStore();
+
 WebBrowser.maybeCompleteAuthSession();
 
 function Auth(props: any) {
@@ -112,7 +117,7 @@ const mapDispatchToAuthProps = (dispatch: any) => {
 }
 
 const AuthMapped = connect(mapStateToAuthProps, mapDispatchToAuthProps)(Auth);
-
+sagaMiddleware.run(rootSagas);
 export default function App() {
   return (
     <Provider store={store}>
