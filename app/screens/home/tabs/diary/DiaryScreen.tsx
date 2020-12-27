@@ -18,16 +18,18 @@ import { updateStatusBar } from '@stores/reducers/StatusBarReducer';
 function DiaryScreen(props: any) {
     const [data, setData] = useState<any[]>([]);
     const [isLoading, setLoading] = useState(true);
+
+    let _isMounted = false;
     
     useEffect(() => {
+        _isMounted = true;
         UserService.getDiary().then((res: any) => {
-            console.log(res);
-            if (res) {
+            if (res && _isMounted) {
                 const values = res.map((item: any) => {
                     return {
                         ...item,
                         photos: item.images.map((image: any) => {
-                            const url = `${AxiosClient.defaults.baseURL}/${image.url}`;
+                            const url = item.name === 'SystemAdmin' ? `${AxiosClient.defaults.baseURL}/${image.url}` : image.url;
                             return url;
                         })
                     }
@@ -36,6 +38,10 @@ function DiaryScreen(props: any) {
             }
             setLoading(false);
         });
+
+        return () => {
+            _isMounted = false;
+        }
     },
     []);
 
@@ -60,7 +66,7 @@ function DiaryScreen(props: any) {
                             <SimpleLineIcons name="bubbles" size={21} color={colors.black} />
                         }
                         onPress={
-                            () => props.navigation.navigate('Comment', { item: item })
+                            () => {}
                         }
                     />
                     <FunnyButton

@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { Keyboard, KeyboardAvoidingView, Modal, Platform, ScrollView, Text, TextInput, TouchableWithoutFeedback, View } from 'react-native';
+import { Keyboard, KeyboardAvoidingView, Modal, Platform, ScrollView, Text, TextInput, TouchableOpacity, TouchableWithoutFeedback, View } from 'react-native';
 
 import colors from '@shared/consts/Colors';
 
@@ -22,6 +22,7 @@ function CreatePostScreen(props: any) {
         content: '',
         images: []
     });
+    const [isSending, setSending] = useState(false);
 
     useEffect(() => {
     }, []);
@@ -33,17 +34,19 @@ function CreatePostScreen(props: any) {
             const file: any = {
                 uri: uri,
                 name: Math.random().toString(),
-                type: ''
+                type: 'image/jpeg'
             };
             form.append('images', file);
         });
 
+        setSending(true);
         createPost(form).then(res => {
-            console.log(res);
             setData({
                 content: '',
                 images: []
             });
+
+            setSending(false);
         });
     };
 
@@ -94,18 +97,25 @@ function CreatePostScreen(props: any) {
                         }
                         leftComponent={
                             (
-                                <Ionicons name="md-arrow-back" size={24} color={colors.black} onPress={
-                                    props.navigation.goBack
-                                } />
+                                <TouchableOpacity onPress={props.navigation.goBack}>
+                                    <Ionicons name="md-arrow-back" size={24} color={colors.black}/>
+                                </TouchableOpacity>
                             )
                         }
                         rightComponent={
                             (
-                                <Ionicons name="md-send" size={24} color={colors.black}
+                                <TouchableOpacity
+                                    disabled={isSending}
                                     onPress={
                                         onPostHandler
                                     }
-                                />
+                                >
+                                    <Ionicons name="md-send" size={24}
+                                        color={
+                                            isSending ? colors.border : colors.black
+                                        }
+                                    />
+                                </TouchableOpacity>
                             )
                         }
                     />

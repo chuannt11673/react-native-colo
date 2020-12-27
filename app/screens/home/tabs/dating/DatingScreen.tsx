@@ -11,6 +11,7 @@ import { Button } from 'react-native-elements';
 
 import { connect } from 'react-redux';
 import { getProfiles } from '@shared/services/UserService';
+import FunnyHeader from 'components/FunnyHeader';
 
 function DatingScreen(props: any) {
     const [mode, setMode] = React.useState('top');
@@ -75,90 +76,93 @@ function DatingScreen(props: any) {
     }
 
     return (
-        <SafeAreaView style={{
-            flex: 1,
-            backgroundColor: colors.white,
-            alignItems: 'center',
-            paddingLeft: 15,
-            paddingRight: 15
-        }}>
-            {/* action buttons */}
-            <View style={{
-                width: '100%',
-                flexDirection: 'row',
-                justifyContent: 'flex-end',
-                paddingRight: 10
+        <>
+            <FunnyHeader title='Hẹn hò' navigation={props.navigation} />
+            <SafeAreaView style={{
+                flex: 1,
+                backgroundColor: colors.white,
+                alignItems: 'center',
+                paddingLeft: 15,
+                paddingRight: 15
             }}>
-                <FunnyButton
-                    icon={
-                        <AntDesign name="edit" size={31} color='#000099' />
-                    }
-                    onPress={ updateProfileHandler }
-                />
-                <FunnyButton
-                    icon={
-                        <AntDesign name="bars" size={31} color='#000099' />
-                    }
-                />
-            </View>
-            {/* main buttons */}
-            <View style={{
-                width: '100%',
-                padding: 10
-            }}>
+                {/* action buttons */}
                 <View style={{
+                    width: '100%',
                     flexDirection: 'row',
-                    justifyContent: 'center',
-                    borderWidth: 1,
-                    borderColor: colors.border,
-                    borderRadius: 10
+                    justifyContent: 'flex-end',
+                    paddingRight: 10
                 }}>
-                    <Button title='Nổi bật'
-                        titleStyle={
-                            mode === 'top' ? { color: colors.white } : { color: colors.black }
+                    <FunnyButton
+                        icon={
+                            <AntDesign name="edit" size={31} color='#000099' />
                         }
-                        containerStyle={styles.mainButton}
-                        buttonStyle={
-                            mode === 'top' ? {
-                                backgroundColor: btnColor
-                            } : {
-                                backgroundColor: colors.white
-                            }
-                        }
-                        onPress={
-                            () => setMode('top')
-                        }
+                        onPress={ updateProfileHandler }
                     />
-                    <Button title='Thích bạn'
-                        titleStyle={
-                            mode === 'like' ? { color: colors.white } : { color: colors.black }
-                        }
-                        containerStyle={styles.mainButton}
-                        buttonStyle={
-                            mode === 'like' ? {
-                                backgroundColor: btnColor
-                            } : {
-                                backgroundColor: colors.white
-                            }
-                        }
-                        onPress={
-                            () => setMode('like')
+                    <FunnyButton
+                        icon={
+                            <AntDesign name="bars" size={31} color='#000099' />
                         }
                     />
                 </View>
-            </View>
-            {/* body */}
-            <FlatList
-                style={{ width: '100%', padding: 15 }}
-                data={
-                    mode === 'top' ? data.filter(x => x.top) : data.filter(x => x.isLiked)
-                }
-                keyExtractor={item => item.id}
-                renderItem={
-                    item => renderItem(item.item)
-                }
-            />
-        </SafeAreaView>
+                {/* main buttons */}
+                <View style={{
+                    width: '100%',
+                    padding: 10
+                }}>
+                    <View style={{
+                        flexDirection: 'row',
+                        justifyContent: 'center',
+                        borderWidth: 1,
+                        borderColor: colors.border,
+                        borderRadius: 10
+                    }}>
+                        <Button title='Nổi bật'
+                            titleStyle={
+                                mode === 'top' ? { color: colors.white } : { color: colors.black }
+                            }
+                            containerStyle={styles.mainButton}
+                            buttonStyle={
+                                mode === 'top' ? {
+                                    backgroundColor: btnColor
+                                } : {
+                                    backgroundColor: colors.white
+                                }
+                            }
+                            onPress={
+                                () => setMode('top')
+                            }
+                        />
+                        <Button title='Thích bạn'
+                            titleStyle={
+                                mode === 'like' ? { color: colors.white } : { color: colors.black }
+                            }
+                            containerStyle={styles.mainButton}
+                            buttonStyle={
+                                mode === 'like' ? {
+                                    backgroundColor: btnColor
+                                } : {
+                                    backgroundColor: colors.white
+                                }
+                            }
+                            onPress={
+                                () => setMode('like')
+                            }
+                        />
+                    </View>
+                </View>
+                {/* body */}
+                <FlatList
+                    style={{ width: '100%', padding: 15 }}
+                    data={
+                        mode === 'top' ? data.filter(x => x.top) : data.filter(x => x.isLiked)
+                    }
+                    keyExtractor={item => item.id}
+                    renderItem={
+                        item => renderItem(item.item)
+                    }
+                />
+            </SafeAreaView>
+        </>
     )
 }
 const btnColor = '#000099';

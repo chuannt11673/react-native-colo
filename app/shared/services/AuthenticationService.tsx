@@ -8,7 +8,7 @@ const scopes = ['openid', 'profile', 'WebAppAPI'];
 const responseType = 'id_token token';
 const redirectUri = makeRedirectUri({
     native: 'colo.app://redirect',
-    preferLocalhost: true
+    preferLocalhost: false
 });
 const discovery = {
     authorizationEndpoint: 'https://colo-auth.azurewebsites.net/connect/authorize'

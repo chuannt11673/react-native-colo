@@ -16,6 +16,7 @@ import colors from '@shared/consts/Colors';
 
 //  redux
 import { connect } from 'react-redux';
+import FunnyHeader from 'components/FunnyHeader';
 
 const Drawer = createDrawerNavigator();
 
@@ -29,23 +30,7 @@ function DrawerContent(props: any) {
     <View style={{
       flex: 1
     }}>
-      <View style={{
-        height: 88,
-      }}>
-        <LinearGradient
-          colors={[colors.primary, colors.secondary]}
-          start={{ x: 0, y: 0.5 }}
-          end={{ x: 1, y: 0.5 }}
-          style={{
-            flex: 1,
-            flexDirection: 'row',
-            alignItems: 'flex-end',
-            justifyContent: 'center',
-            padding: 10
-          }}
-        >
-        </LinearGradient>
-      </View>
+      <FunnyHeader title='' leftComponent={(<View />)} rightComponent={(<View />)}/>
       <FunnyButton
         title='Logout'
         containerStyle={styles.loginBtnContainer}
