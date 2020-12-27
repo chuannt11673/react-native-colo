@@ -11,7 +11,7 @@ import { connect } from 'react-redux';
 // components
 import FunnyAvatar from '@components/FunnyAvatar';
 import FunnyImageGalleryModal from '@components/FunnyImageGalleryModal';
-import FunnyImageGrid from 'components/FunnyImageGrid';
+import FunnyImageGrid2 from 'components/FunnyImageGrid2';
 
 // services
 import { createPost } from '@shared/services/UserService';
@@ -139,7 +139,7 @@ function CreatePostScreen(props: any) {
                             }
                             value={data.content}
                         />
-                        <FunnyImageGrid images={data.images} maxHeight={100} containerStyle={{ height: 'auto', maxHeight: '50%' }} />
+                        <FunnyImageGrid2 images={data.images} />
                         <View style={{
                             flexDirection: 'row',
                             justifyContent: 'flex-end',

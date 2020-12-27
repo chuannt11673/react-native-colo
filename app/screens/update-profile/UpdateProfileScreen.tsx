@@ -18,6 +18,7 @@ import { updateProfile } from '@stores/reducers/ProfileReducer';
 import { updateStatusBar } from '@stores/reducers/StatusBarReducer';
 
 const listOfYear = years();
+
 function UpdateProfileScreen(props: any) {
     const [isLoading, setLoading] = useState(true);
     const [data, setData] = useState<any>({
@@ -26,8 +27,9 @@ function UpdateProfileScreen(props: any) {
     });
 
     useEffect(() => {
+        setData(props.profile);
         setLoading(false);
-    }, []);
+    }, [props.profile]);
 
     const onSaveHandler = () => {
         let images = props.profile.images;

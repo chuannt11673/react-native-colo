@@ -6,9 +6,10 @@ import { styles } from './DiaryStyle';
 import colors from '@shared/consts/Colors';
 import { FontAwesome, SimpleLineIcons } from '@expo/vector-icons';
 import FunnyTruncatedText from '@components/FunnyTruncatedText';
-import FunnyImageGrid from '@components/FunnyImageGrid';
 import FunnyAvatar from '@components/FunnyAvatar';
 import FunnyHeader from '@components/FunnyHeader';
+import FunnyImageGrid2 from '@components/FunnyImageGrid2';
+
 import AxiosClient from 'shared/Axios';
 
 // redux
@@ -28,7 +29,7 @@ function DiaryScreen(props: any) {
                 const values = res.map((item: any) => {
                     return {
                         ...item,
-                        photos: item.images.map((image: any) => {
+                        images: item.images.map((image: any) => {
                             const url = item.name === 'SystemAdmin' ? `${AxiosClient.defaults.baseURL}/${image.url}` : image.url;
                             return url;
                         })
@@ -48,8 +49,8 @@ function DiaryScreen(props: any) {
     const renderItem = (item: any, index: number) => {
         return (
             <View key={index} style={styles.item}>
-                <FunnyAvatar uri={item.avatar} name={item.name} />
-                <FunnyImageGrid images={item.photos} maxHeight={100} />
+                <FunnyAvatar uri={ item.avatar || item.images[0] } name={item.name} />
+                <FunnyImageGrid2 images={item.images} />
                 <View style={styles.content}>
                     <FunnyTruncatedText text={item.content} />
                 </View>
