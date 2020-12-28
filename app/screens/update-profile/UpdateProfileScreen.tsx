@@ -4,12 +4,11 @@ import { ActivityIndicator, Keyboard, KeyboardAvoidingView, Platform, ScrollView
 // components
 import FnButton from '@components/FunnyButton2';
 import FnHeader from '@components/FunnyHeader2';
+import FnPicker from '@components/FunnyPicker';
 
 import styles from './UpdateProfileStyle';
 
 import { FontAwesome, Ionicons } from '@expo/vector-icons';
-
-import RNPickerSelect from 'react-native-picker-select';
 
 import { connect } from 'react-redux';
 
@@ -115,14 +114,8 @@ function UpdateProfileScreen(props: any) {
                             }}>
                                 <View style={{
                                     width: '40%',
-                                    height: 40,
-                                    justifyContent: 'center',
-                                    borderWidth: 1,
-                                    borderRadius: 12,
-                                    borderColor: colors.border,
-                                    padding: 6                                    
                                 }}>
-                                    <RNPickerSelect
+                                    <FnPicker
                                         placeholder={{}}
                                         onValueChange={
                                             (value: any) => setData({
@@ -147,14 +140,8 @@ function UpdateProfileScreen(props: any) {
                             }}>
                                 <View style={{
                                     width: '40%',
-                                    height: 40,
-                                    justifyContent: 'center',
-                                    borderWidth: 1,
-                                    borderRadius: 12,
-                                    borderColor: colors.border,
-                                    padding: 6                                    
                                 }}>
-                                    <RNPickerSelect
+                                    <FnPicker
                                         placeholder={{}}
                                         onValueChange={
                                             (value: any) => setData({
@@ -256,14 +243,8 @@ function UpdateProfileScreen(props: any) {
                                     <Text style={styles.title} >Đối tượng hẹn hò</Text>
                                     <View style={{
                                         width: '69%',
-                                        height: 40,
-                                        justifyContent: 'center',
-                                        padding: 6,
-                                        borderWidth: 1,
-                                        borderRadius: 12,
-                                        borderColor: colors.border
                                     }}>
-                                        <RNPickerSelect
+                                        <FnPicker
                                             placeholder={{}}
                                             onValueChange={
                                                 (value: any) => setData({
@@ -283,14 +264,8 @@ function UpdateProfileScreen(props: any) {
                                     <Text style={styles.title} >Chiều cao</Text>
                                     <View style={{
                                         width: '80%',
-                                        height: 40,
-                                        justifyContent: 'center',
-                                        padding: 6,
-                                        borderWidth: 1,
-                                        borderRadius: 12,
-                                        borderColor: colors.border,
                                     }}>
-                                        <RNPickerSelect
+                                        <FnPicker
                                             placeholder={{}}
                                             value={data.targetHeight}
                                             onValueChange={
@@ -320,14 +295,8 @@ function UpdateProfileScreen(props: any) {
                             }}>
                                 <View style={{
                                     width: '30%',
-                                    height: 40,
-                                    justifyContent: 'center',
-                                    borderWidth: 1,
-                                    borderRadius: 12,
-                                    borderColor: colors.border,
-                                    padding: 6                                    ,
                                 }}>
-                                    <RNPickerSelect
+                                    <FnPicker
                                         placeholder={{}}
                                         onValueChange={
                                             value => setData({
@@ -341,14 +310,8 @@ function UpdateProfileScreen(props: any) {
                                 <Text> to </Text>
                                 <View style={{
                                     width: '30%',
-                                    height: 40,
-                                    justifyContent: 'center',
-                                    borderWidth: 1,
-                                    borderRadius: 12,
-                                    borderColor: colors.border,
-                                    padding: 6                                    ,
                                 }}>
-                                    <RNPickerSelect
+                                    <FnPicker
                                         placeholder={{}}
                                         onValueChange={
                                             value => setData({

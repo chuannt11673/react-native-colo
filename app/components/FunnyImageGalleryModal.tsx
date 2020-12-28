@@ -143,8 +143,7 @@ function FunnyImageGalleryModal(props: FunnyImageGalleryModalProps) {
 
     return (
         <View style={{
-            flex: 1,
-            backgroundColor: colors.secondary
+            flex: 1
         }}>
             <FnHeader
                 disableLinearGradient
