@@ -3,7 +3,7 @@ import { Keyboard, KeyboardAvoidingView, Modal, Platform, ScrollView, Text, Text
 
 import colors from '@shared/consts/Colors';
 
-import { Header, Button } from 'react-native-elements';
+import { Header } from 'react-native-elements';
 import { Ionicons } from '@expo/vector-icons';
 
 import { connect } from 'react-redux';
@@ -12,6 +12,7 @@ import { connect } from 'react-redux';
 import FunnyAvatar from '@components/FunnyAvatar';
 import FunnyImageGalleryModal from '@components/FunnyImageGalleryModal';
 import FunnyImageGrid2 from 'components/FunnyImageGrid2';
+import FnButton from '@components/FunnyButton2';
 
 // services
 import { createPost } from '@shared/services/UserService';
@@ -145,32 +146,30 @@ function CreatePostScreen(props: any) {
                             justifyContent: 'flex-end',
                             padding: 15
                         }}>
-                            <Button
+                            <FnButton
                                 title='Thêm ảnh'
                                 titleStyle={{ color: '#01a41c' }}
-                                buttonStyle={{
-                                    paddingTop: 6,
-                                    paddingBottom: 6,
-                                    backgroundColor: colors.white,
-                                    borderWidth: 1,
-                                    borderRadius: 12,
-                                    borderColor: '#01a41c'
-                                }}
                                 containerStyle={{
-                                    marginRight: 5
+                                    height: 30,
+                                    padding: 12,
+                                    backgroundColor: colors.white,
+                                    borderWidth: 0.5,
+                                    borderRadius: 12,
+                                    borderColor: '#01a41c',
+                                    marginRight: 10
                                 }}
                                 onPress={
                                     () => setModalVisible(true)
                                 }
                             />
-                            <Button
+                            <FnButton
                                 title='Gắn thẻ'
                                 titleStyle={{ color: colors.secondary }}
-                                buttonStyle={{
-                                    paddingTop: 6,
-                                    paddingBottom: 6,
+                                containerStyle={{
+                                    height: 30,
+                                    padding: 12,
                                     backgroundColor: colors.white,
-                                    borderWidth: 1,
+                                    borderWidth: 0.5,
                                     borderRadius: 12,
                                     borderColor: colors.secondary
                                 }}

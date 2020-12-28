@@ -36,12 +36,20 @@ export const styles = StyleSheet.create({
     },
     headerContainer: {
         width: windowWidth / 3,
+        height: 30,
         borderTopWidth: 1,
         borderLeftWidth: 1,
         borderColor: colors.border,
         borderRadius: 0
     },
     headerTitleStyle: {
-        fontSize: 13
+        fontSize: 13,
+        marginLeft: 5
+    },
+    actionBtnContainer: {
+        width: 46
+    },
+    actionBtnTitle: {
+        marginLeft: 5
     }
 })

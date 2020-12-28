@@ -1,17 +1,19 @@
 import React from 'react'
 import { SafeAreaView, View, StyleSheet, FlatList, TouchableOpacity } from 'react-native';
 
-import FunnyButton from '@components/FunnyButton';
+// components
 import FunnyAvatar from '@components/FunnyAvatar';
+import FunnyHeader from '@components/FunnyHeader';
+import FnButton from '@components/FunnyButton2';
 
+// icons
 import { AntDesign, FontAwesome } from '@expo/vector-icons';
 
-import colors from '@shared/consts/Colors';
-import { Button } from 'react-native-elements';
-
+// redux
 import { connect } from 'react-redux';
+
+import colors from '@shared/consts/Colors';
 import { getProfiles } from '@shared/services/UserService';
-import FunnyHeader from 'components/FunnyHeader';
 
 function DatingScreen(props: any) {
     const [mode, setMode] = React.useState('top');
@@ -45,7 +47,9 @@ function DatingScreen(props: any) {
 
     const renderItem = (item: any) => {
         return (
-            <TouchableOpacity>
+            <TouchableOpacity style={{
+                marginBottom: 15
+            }}>
                 <View style={{
                     borderRadius: 12,
                     borderColor: '#d9d9d9',
@@ -53,19 +57,12 @@ function DatingScreen(props: any) {
                     borderBottomWidth: 3,
                     borderLeftWidth: 0.5,
                     borderRightWidth: 3,
-                    marginBottom: 15,
+                    flexDirection: 'row',
+                    justifyContent: 'space-between',
+                    paddingRight: 10
                 }}>
                     <FunnyAvatar uri={item.avatar} name={item.name} content={item.isLiked ? 'Đã thích bạn' : 'Người lạ'} />
-                    <Button
-                        containerStyle={{
-                            position: 'absolute',
-                            right: 5,
-                            top: '25%',
-                            borderRadius: 8,
-                        }}
-                        buttonStyle={{
-                            backgroundColor: '#e6e6e6'
-                        }}
+                    <FnButton
                         icon={
                             <FontAwesome name="heartbeat" size={24} color={colors.primary} />
                         }
@@ -88,20 +85,29 @@ function DatingScreen(props: any) {
                 {/* action buttons */}
                 <View style={{
                     width: '100%',
+                    height: 46,
                     flexDirection: 'row',
                     justifyContent: 'flex-end',
                     paddingRight: 10
                 }}>
-                    <FunnyButton
+                    <FnButton
                         icon={
                             <AntDesign name="edit" size={31} color='#000099' />
                         }
-                        onPress={ updateProfileHandler }
+                        containerStyle={{
+                            width: 46
+                        }}
+                        onPress={
+                            updateProfileHandler
+                        }
                     />
-                    <FunnyButton
+                    <FnButton
                         icon={
                             <AntDesign name="bars" size={31} color='#000099' />
                         }
+                        containerStyle={{
+                            width: 46
+                        }}
                     />
                 </View>
                 {/* main buttons */}
@@ -112,38 +118,35 @@ function DatingScreen(props: any) {
                     <View style={{
                         flexDirection: 'row',
                         justifyContent: 'center',
-                        borderWidth: 1,
+                        borderWidth: 0.5,
                         borderColor: colors.border,
-                        borderRadius: 10
+                        borderRadius: 12,
+                        overflow: 'hidden'
                     }}>
-                        <Button title='Nổi bật'
-                            titleStyle={
-                                mode === 'top' ? { color: colors.white } : { color: colors.black }
-                            }
-                            containerStyle={styles.mainButton}
-                            buttonStyle={
-                                mode === 'top' ? {
-                                    backgroundColor: btnColor
-                                } : {
-                                    backgroundColor: colors.white
-                                }
-                            }
+                        <FnButton
+                            title='Nổi bật'
+                            titleStyle={{
+                                color: mode === 'top' ? colors.white : colors.black
+                            }}
+                            containerStyle={{
+                                width: '50%',
+                                height: 46,
+                                backgroundColor: mode === 'top' ? btnColor : colors.white
+                            }}
                             onPress={
                                 () => setMode('top')
                             }
                         />
-                        <Button title='Thích bạn'
-                            titleStyle={
-                                mode === 'like' ? { color: colors.white } : { color: colors.black }
-                            }
-                            containerStyle={styles.mainButton}
-                            buttonStyle={
-                                mode === 'like' ? {
-                                    backgroundColor: btnColor
-                                } : {
-                                    backgroundColor: colors.white
-                                }
-                            }
+                        <FnButton
+                            title='Thích bạn'
+                            titleStyle={{
+                                color: mode === 'like' ? colors.white : colors.black
+                            }}
+                            containerStyle={{
+                                width: '50%',
+                                height: 46,
+                                backgroundColor: mode === 'like' ? btnColor : colors.white
+                            }}
                             onPress={
                                 () => setMode('like')
                             }

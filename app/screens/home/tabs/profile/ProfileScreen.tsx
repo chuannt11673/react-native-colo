@@ -1,11 +1,13 @@
 import { FontAwesome, SimpleLineIcons } from '@expo/vector-icons';
 import React, { useEffect, useState } from 'react';
 import { ScrollView, Text, View, ActivityIndicator, Image } from 'react-native';
-import { Button } from 'react-native-elements';
 import { styles } from './ProfileStyles';
 import colors from '@shared/consts/Colors';
+
+// component
 import FunnyImage from '@components/FunnyImage';
 import FunnyHeader from 'components/FunnyHeader';
+import FnButton from '@components/FunnyButton2';
 
 import { connect } from 'react-redux';
 import { updateProfile } from '@stores/reducers/ProfileReducer';
@@ -54,9 +56,9 @@ function ProfileScreen(props: any) {
                         <View style={styles.moreInfoButtonView}>
                             {
                                 props.profile.hobbies ? props.profile.hobbies.split(',').map((item: any, index: number) => (
-                                    <Button key={index} title={item}
+                                    <FnButton
+                                        key={index} title={item}
                                         titleStyle={styles.moreInfoButtonTitle}
-                                        buttonStyle={styles.moreInfoButton}
                                         containerStyle={styles.moreInfoButtonContainer}
                                     />
                                 )) : null

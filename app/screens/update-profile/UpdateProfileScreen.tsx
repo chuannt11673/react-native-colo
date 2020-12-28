@@ -1,8 +1,9 @@
 import React, { useEffect, useState } from 'react';
 import { ActivityIndicator, Keyboard, KeyboardAvoidingView, Platform, ScrollView, Text, TextInput, TouchableWithoutFeedback, View } from 'react-native';
-import { Button, Header } from 'react-native-elements';
+import { Header } from 'react-native-elements';
 
-import FunnyButton from '@components/FunnyButton';
+// components
+import FnButton from '@components/FunnyButton2';
 
 import styles from './UpdateProfileStyle';
 
@@ -64,15 +65,14 @@ function UpdateProfileScreen(props: any) {
                 }
                 leftComponent={
                     props.profile && props.profile.name ? (
-                        <Button
-                        icon={
-                            <Ionicons name="md-arrow-back" size={24} color={colors.black} />
-                        }
-                        buttonStyle={{ backgroundColor: 'transparent' }}
-                        onPress={
-                            () => props.navigation.navigate('Dating')
-                        }
-                    />
+                        <FnButton
+                            icon={
+                                <Ionicons name="md-arrow-back" size={24} color={colors.black} />
+                            }
+                            onPress={
+                                () => props.navigation.navigate('Dating')
+                            }
+                        />
                     ) : <View />
                 }
             />
@@ -362,26 +362,24 @@ function UpdateProfileScreen(props: any) {
                                 <FontAwesome name="dot-circle-o" size={24} color={colors.primary} />
                             </View>
                             {/* save btn */}
-                            <FunnyButton
+                            <FnButton
+                                title='Tiếp theo'
                                 containerStyle={{
-                                    marginTop: 20,
-                                    width: '100%',
-                                }}
-                                buttonStyle={{
                                     backgroundColor: colors.primary,
                                     borderRadius: 12,
+                                    marginTop: 20,
                                     width: '90%',
                                     height: 50
                                 }}
                                 titleStyle={{
-                                    color: colors.white
+                                    color: colors.white,
+                                    fontSize: 15
                                 }}
-                                title='Tiếp theo'
-                                onPress={
-                                    onSaveHandler
-                                }
                                 disabled={
                                     !data || !data.name || !data.gender ? true : false
+                                }
+                                onPress={
+                                    onSaveHandler
                                 }
                             />
                         </ScrollView>

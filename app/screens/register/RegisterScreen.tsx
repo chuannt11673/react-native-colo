@@ -1,15 +1,17 @@
-import FunnyText from '@components/FunnyText';
-import FunnyTextInput from '@components/FunnyTextInput';
-import FunnyLogo from '@components/FunnyLogo';
-
-import { AntDesign, Ionicons } from '@expo/vector-icons';
 import React from 'react';
 import { Keyboard, KeyboardAvoidingView, Platform, TouchableWithoutFeedback } from 'react-native';
 import { ScrollView } from 'react-native-gesture-handler';
 import colors from '@shared/consts/Colors';
 
+// components
+import FunnyText from '@components/FunnyText';
+import FunnyTextInput from '@components/FunnyTextInput';
+import FunnyLogo from '@components/FunnyLogo';
+import FnButton from '@components/FunnyButton2';
+
+import { AntDesign, Ionicons } from '@expo/vector-icons';
+
 import styles from './RegisterStyle';
-import { Button } from 'react-native-elements';
 
 export default function RegisterScreen({ navigation }: any) {
     const [securePassword, setSecurePassword] = React.useState(true);
@@ -87,10 +89,19 @@ export default function RegisterScreen({ navigation }: any) {
                             (value: string) => confirmPressHandler(value)
                         }
                     />
-                    <Button
-                        containerStyle={styles.loginButtonContainer}
-                        buttonStyle={styles.loginButton}
+                    <FnButton
+                        containerStyle={{
+                            width: '80%',
+                            height: 46,
+                            marginTop: 20,
+                            backgroundColor: colors.primary,
+                            borderRadius: 14
+                        }}
                         title='Đăng ký'
+                        titleStyle={{
+                            color: colors.white,
+                            fontSize: 15
+                        }}
                         onPress={
                             registerHandler
                         }

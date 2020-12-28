@@ -5,18 +5,19 @@ import { LinearGradient } from 'expo-linear-gradient';
 import { createDrawerNavigator } from '@react-navigation/drawer';
 import { Ionicons } from '@expo/vector-icons';
 
-import FunnyButton from '@components/FunnyButton';
 
 import HomeTabs from '@screens/home/HomeTabs';
 import ChatScreen from '@screens/chat/ChatScreen';
 import CreatePostScreen from '@screens/create-post/CreatePostScreen';
 
 import AuthContext from '@shared/context/AuthContext';
-import colors from '@shared/consts/Colors';
+
+// components
+import FnButton from '@components/FunnyButton2';
+import FunnyHeader from '@components/FunnyHeader';
 
 //  redux
 import { connect } from 'react-redux';
-import FunnyHeader from 'components/FunnyHeader';
 
 const Drawer = createDrawerNavigator();
 
@@ -31,13 +32,16 @@ function DrawerContent(props: any) {
       flex: 1
     }}>
       <FunnyHeader title='' leftComponent={(<View />)} rightComponent={(<View />)}/>
-      <FunnyButton
+      <FnButton
         title='Logout'
-        containerStyle={styles.loginBtnContainer}
-        buttonStyle={styles.logoutBtn}
         icon={
           <Ionicons name="ios-log-out" size={24} color="black" />
         }
+        containerStyle={{
+          height: 46,
+          backgroundColor: '#ccc',
+          borderRadius: 0,
+        }}
         onPress={
           signOut
         }

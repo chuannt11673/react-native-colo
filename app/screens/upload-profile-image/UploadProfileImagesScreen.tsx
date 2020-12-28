@@ -2,11 +2,12 @@ import React from 'react';
 import { ActivityIndicator, Image, Modal, ScrollView, Text, TouchableOpacity, View } from 'react-native';
 import { Button, Header } from 'react-native-elements';
 
-import { Ionicons, MaterialCommunityIcons } from '@expo/vector-icons';
+import { FontAwesome, Ionicons } from '@expo/vector-icons';
 
 import colors from '@shared/consts/Colors';
 
-import FunnyButton from '@components/FunnyButton';
+// components
+import FnButton from '@components/FunnyButton2';
 import FunnyImageGalleryModal from '@components/FunnyImageGalleryModal';
 
 // redux
@@ -157,26 +158,20 @@ function UploadProfileImagesScreen(props: any) {
                                 </ScrollView>
                             )
                     }
-                    <FunnyButton
+                    <FnButton
+                        icon={
+                            <FontAwesome name="image" size={24} color={colors.white} />
+                        }
                         containerStyle={{
                             position: 'absolute',
-                            bottom: 10
-                        }}
-                        buttonStyle={{
+                            height: 46,
+                            bottom: 10,
                             borderWidth: 1,
                             borderRadius: 12,
                             paddingLeft: 10,
                             paddingRight: 10,
                             backgroundColor: '#0000b3',
                         }}
-                        title='Thêm ảnh'
-                        titleStyle={{
-                            color: colors.white,
-                            marginLeft: 5
-                        }}
-                        icon={
-                            <MaterialCommunityIcons name="image-plus" size={24} color={colors.white} />
-                        }
                         onPress={
                             addImagesHandler
                         }
@@ -196,21 +191,20 @@ function UploadProfileImagesScreen(props: any) {
                         </TouchableOpacity>
                     ) : 
                     (
-                        <FunnyButton
+                        <FnButton
+                            title='Hoàn thành'
                             containerStyle={{
-                                marginTop: 30,
                                 width: '100%',
-                            }}
-                            buttonStyle={{
+                                height: 46,
+                                marginTop: 20,
                                 backgroundColor: colors.primary,
                                 borderRadius: 12,
-                                width: '100%',
-                                height: 50
                             }}
                             titleStyle={{
-                                color: colors.white
+                                color: colors.white,
+                                fontSize: 17,
+                                opacity: 1
                             }}
-                            title='Hoàn thành'
                             onPress={
                                 onSaveHandler
                             }

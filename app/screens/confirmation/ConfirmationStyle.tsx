@@ -34,15 +34,14 @@ const styles = StyleSheet.create({
     },
     loginButtonContainer: {
         width: '79%',
-        marginTop: 30
-    },
-    loginButton: {
+        marginTop: 30,
         backgroundColor: colors.primary,
         borderRadius: 20,
         height: 50
     },
     loginTitle: {
-        color: colors.white
+        color: colors.white,
+        fontSize: 15
     },
     getCode: {
         flexDirection: 'row',

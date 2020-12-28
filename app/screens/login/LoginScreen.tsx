@@ -1,10 +1,10 @@
 import React, { useState } from 'react';
 import { Keyboard, SafeAreaView, TouchableOpacity, TouchableWithoutFeedback, View } from 'react-native';
-import { Button } from 'react-native-elements';
 
 import FunnyText from '@components/FunnyText';
 import FunnyTextInput from '@components/FunnyTextInput';
 import FunnyLogo from '@components/FunnyLogo';
+import FnButton from '@components/FunnyButton2';
 
 import { AntDesign, Ionicons, FontAwesome } from '@expo/vector-icons';
 
@@ -121,19 +121,21 @@ export default function LoginScreen({ navigation }: any) {
                     <FunnyText style={styles.forgotPasswordText}>Quên mật khẩu</FunnyText>
                 </View>
                 <ErrorMessage />
-                <Button
+                <FnButton
                     containerStyle={styles.loginButtonContainer}
-                    buttonStyle={styles.loginButton}
                     title='Đăng nhập'
+                    titleStyle={{
+                        color: colors.white,
+                        fontSize: 15
+                    }}
                     onPress={
                         signInHandler
                     }
                 />
                 <FunnyText style={styles.otherLoginText}>Hoặc đăng nhập với...</FunnyText>
                 <View style={styles.externalLogin}>
-                    <Button
+                    <FnButton
                         containerStyle={styles.externalLoginContainer}
-                        buttonStyle={styles.externalLoginButton}
                         titleStyle={styles.externalLoginTitle}
                         title='Google'
                         icon={
@@ -143,9 +145,8 @@ export default function LoginScreen({ navigation }: any) {
                             googleSignInHandler
                         }
                     />
-                    <Button
+                    <FnButton
                         containerStyle={styles.externalLoginContainer}
-                        buttonStyle={styles.externalLoginButton}
                         titleStyle={styles.externalLoginTitle}
                         title='Facebook'
                         icon={

@@ -2,7 +2,6 @@ import React from 'react'
 import { Header } from 'react-native-elements';
 
 import * as ExpoGradient from 'expo-linear-gradient';
-import { StatusBar } from 'expo-status-bar';
 
 import colors from '@shared/consts/Colors';
 

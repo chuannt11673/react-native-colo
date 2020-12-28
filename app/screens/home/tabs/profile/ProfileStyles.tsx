@@ -73,12 +73,11 @@ export const styles = StyleSheet.create({
         color: colors.black
     },
     moreInfoButtonContainer: {
+        padding: 6,
         marginRight: 10,
         marginBottom: 10,
-    },
-    moreInfoButton: {
         borderWidth: 1,
-        borderRadius: 21,
+        borderRadius: 18,
         borderColor: colors.black,
         backgroundColor: colors.white
     },

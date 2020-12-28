@@ -7,14 +7,17 @@ import * as MediaLibrary from 'expo-media-library';
 import { connect } from 'react-redux';
 
 import { MaterialIcons } from '@expo/vector-icons';
-import { Button, Header } from 'react-native-elements';
+import { Header } from 'react-native-elements';
 import { updateImagesGallery } from '@stores/reducers/ImageGalleryReducer';
+
+// components
+import FnButton from '@components/FunnyButton2';
 
 const imageSize = Dimensions.get('screen').width * 0.333;
 interface FunnyImageGalleryModalProps {
     onSelectImage?: (uri: string) => void;
     onCloseHandler?: () => void;
-    onSendHandler?: (images: any[]) => void; 
+    onSendHandler?: (images: any[]) => void;
     images: any[];
     updateImages: (images: any[]) => void;
 }
@@ -24,8 +27,9 @@ function ImageItem(props: any) {
         ...props.item,
         selected: false
     });
+
     const onPressHandler = () => {
-        const updatedData  = {
+        const updatedData = {
             ...data,
             selected: !data.selected
         };
@@ -78,12 +82,16 @@ function FunnyImageGalleryModal(props: FunnyImageGalleryModalProps) {
     React.useEffect(() => {
         setSelectedImages([]);
         if (props.images.length === 0) {
-            MediaLibrary.getAssetsAsync().then(res => {
-                const assets = res.assets;
-                props.updateImages(assets);
-                setTimeout(() => {
-                    setIsLoading(false);
-                }, 500);
+            MediaLibrary.requestPermissionsAsync().then(res => {
+                if (res.granted) {
+                    MediaLibrary.getAssetsAsync().then(res => {
+                        const assets = res.assets;
+                        props.updateImages(assets);
+                        setTimeout(() => {
+                            setIsLoading(false);
+                        }, 500);
+                    });
+                }
             });
         } else {
             setIsLoading(false);
@@ -144,11 +152,7 @@ function FunnyImageGalleryModal(props: FunnyImageGalleryModalProps) {
                 }}
                 leftComponent={
                     (
-                        <Button
-                            buttonStyle={{
-                                backgroundColor: 'transparent',
-                                padding: 0
-                            }}
+                        <FnButton
                             icon={
                                 <MaterialIcons name="close" size={31} color={colors.white} />
                             }
@@ -160,11 +164,7 @@ function FunnyImageGalleryModal(props: FunnyImageGalleryModalProps) {
                 }
                 rightComponent={
                     (
-                        <Button
-                            buttonStyle={{
-                                backgroundColor: 'transparent',
-                                padding: 0
-                            }}
+                        <FnButton
                             icon={
                                 <MaterialIcons name="send" size={31} color={colors.white} />
                             }

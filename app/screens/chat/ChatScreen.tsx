@@ -5,8 +5,7 @@ import styles from './ChatStyle';
 
 import FunnyHeader from '@components/FunnyHeader';
 import FunnyGiftChat from '@components/FunnyGiftChat';
-
-import { Button } from 'react-native-elements';
+import FnButton from '@components/FunnyButton2';
 
 import { Ionicons } from '@expo/vector-icons';
 
@@ -70,11 +69,10 @@ export default function ChatScreen(props: any) {
                         <FunnyHeader
                             title={data.name}
                             leftComponent={
-                                <Button
+                                <FnButton
                                     icon={
                                         <Ionicons name="md-arrow-back" size={24} color={colors.white} />
                                     }
-                                    buttonStyle={{ backgroundColor: 'transparent' }}
                                     onPress={
                                         () => props.navigation.goBack()
                                     }

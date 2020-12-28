@@ -35,9 +35,7 @@ const styles = StyleSheet.create({
     },
     loginButtonContainer: {
         width: '79%',
-        marginTop: 30
-    },
-    loginButton: {
+        marginTop: 30,
         backgroundColor: colors.primary,
         borderRadius: 20,
         height: 50
@@ -53,9 +51,8 @@ const styles = StyleSheet.create({
     },
     externalLoginContainer: {
         width: 130,
-        marginTop: 20
-    },
-    externalLoginButton: {
+        height: 46,
+        marginTop: 20,
         justifyContent: 'space-evenly',
         backgroundColor: colors.white,
         borderWidth: 1,
@@ -63,7 +60,8 @@ const styles = StyleSheet.create({
         borderRadius: 12
     },
     externalLoginTitle: {
-        color: colors.black
+        color: colors.black,
+        marginLeft: 6
     },
     registerContainer: {
         marginTop: 20,

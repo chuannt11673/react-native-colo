@@ -1,14 +1,16 @@
 import React, { useEffect, useState } from 'react';
 import { ActivityIndicator, ScrollView, Text, TouchableOpacity, View } from 'react-native';
 import * as UserService from '@shared/services/UserService';
-import FunnyButton from '@components/FunnyButton';
 import { styles } from './DiaryStyle';
 import colors from '@shared/consts/Colors';
 import { FontAwesome, SimpleLineIcons } from '@expo/vector-icons';
+
+// components
 import FunnyTruncatedText from '@components/FunnyTruncatedText';
 import FunnyAvatar from '@components/FunnyAvatar';
 import FunnyHeader from '@components/FunnyHeader';
 import FunnyImageGrid2 from '@components/FunnyImageGrid2';
+import FnButton from '@components/FunnyButton2';
 
 import AxiosClient from 'shared/Axios';
 
@@ -21,7 +23,7 @@ function DiaryScreen(props: any) {
     const [isLoading, setLoading] = useState(true);
 
     let _isMounted = false;
-    
+
     useEffect(() => {
         _isMounted = true;
         UserService.getDiary().then((res: any) => {
@@ -44,37 +46,40 @@ function DiaryScreen(props: any) {
             _isMounted = false;
         }
     },
-    []);
+        []);
 
     const renderItem = (item: any, index: number) => {
         return (
             <View key={index} style={styles.item}>
-                <FunnyAvatar uri={ item.avatar || item.images[0] } name={item.name} />
+                <FunnyAvatar uri={item.avatar || item.images[0]} name={item.name} />
                 <FunnyImageGrid2 images={item.images} />
                 <View style={styles.content}>
                     <FunnyTruncatedText text={item.content} />
                 </View>
                 <View style={styles.action}>
-                    <FunnyButton
+                    <FnButton
                         title={item.likes.length + ''}
                         icon={
                             <SimpleLineIcons name="heart" size={21} color={colors.secondary} />
                         }
+                        containerStyle={styles.actionBtnContainer}
+                        titleStyle={styles.actionBtnTitle}
                     />
-                    <FunnyButton
+                    <FnButton
                         title={item.comments.length + ''}
                         icon={
                             <SimpleLineIcons name="bubbles" size={21} color={colors.black} />
                         }
-                        onPress={
-                            () => {}
-                        }
+                        containerStyle={styles.actionBtnContainer}
+                        titleStyle={styles.actionBtnTitle}
                     />
-                    <FunnyButton
+                    <FnButton
                         title={item.shares.length + ''}
                         icon={
                             <SimpleLineIcons name="cursor" size={21} color={colors.black} />
                         }
+                        containerStyle={styles.actionBtnContainer}
+                        titleStyle={styles.actionBtnTitle}
                     />
                 </View>
             </View>
@@ -106,29 +111,29 @@ function DiaryScreen(props: any) {
                                 </TouchableOpacity>
 
                                 <View style={styles.headerActions}>
-                                    <FunnyButton
-                                        containerStyle={styles.headerContainer}
+                                    <FnButton
                                         title='Photo'
-                                        titleStyle={styles.headerTitleStyle}
                                         icon={
                                             <FontAwesome name="file-image-o" size={19} color="#00b300" />
                                         }
-                                    />
-                                    <FunnyButton
                                         containerStyle={styles.headerContainer}
-                                        title='Video'
                                         titleStyle={styles.headerTitleStyle}
+                                    />
+                                    <FnButton
+                                        title='Video'
                                         icon={
                                             <FontAwesome name="video-camera" size={19} color="#ff1ac6" />
                                         }
-                                    />
-                                    <FunnyButton
                                         containerStyle={styles.headerContainer}
-                                        title='Paint'
                                         titleStyle={styles.headerTitleStyle}
+                                    />
+                                    <FnButton
+                                        title='Draw'
                                         icon={
                                             <FontAwesome name="paint-brush" size={19} color="#ff1ac6" />
                                         }
+                                        containerStyle={styles.headerContainer}
+                                        titleStyle={styles.headerTitleStyle}
                                     />
                                 </View>
                             </View>

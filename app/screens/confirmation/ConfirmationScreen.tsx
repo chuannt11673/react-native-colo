@@ -1,10 +1,12 @@
 import React from 'react';
 import { Keyboard, KeyboardAvoidingView, Platform, TextInput, TouchableOpacity, TouchableWithoutFeedback, View } from 'react-native';
+
+// components
 import FunnyText from '@components/FunnyText';
 import FunnyLogo from '@components/FunnyLogo';
+import FnButton from '@components/FunnyButton2';
 
 import styles from './ConfirmationStyle';
-import { Button } from 'react-native-elements';
 
 export default function ConfirmationScreen() {
     const [disableButton, setDisableButton] = React.useState(true);
@@ -88,11 +90,10 @@ export default function ConfirmationScreen() {
                             }}
                         />
                     </View>
-                    <Button
+                    
+                    <FnButton
                         containerStyle={styles.loginButtonContainer}
-                        buttonStyle={styles.loginButton}
                         disabled={disableButton}
-                        disabledTitleStyle={styles.loginTitle}
                         title='Tiếp theo'
                         titleStyle={styles.loginTitle}
                     />
