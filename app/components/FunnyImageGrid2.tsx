@@ -82,7 +82,6 @@ function Grid3(props: { images: string[] }) {
 }
 
 export default function FunnyImageGrid2(props: FunnyImageGrid2Props) {
-    
     if (props.images.length === 0) {
         return null;
     }

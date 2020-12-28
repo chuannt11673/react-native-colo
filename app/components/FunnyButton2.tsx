@@ -1,5 +1,6 @@
 import React from 'react';
 import { GestureResponderEvent, StyleProp, Text, TextStyle, TouchableOpacity, View, ViewStyle } from 'react-native';
+import colors from 'shared/consts/Colors';
 
 interface FunnyButton2Props {
     icon?: boolean | React.ReactElement<{}>;
@@ -16,8 +17,14 @@ export default function FunnyButton2(props: FunnyButton2Props) {
             props.disabled ? {
                 backgroundColor: '#d9d9d9'
             } : null
-        ]}>
-            <TouchableOpacity disabled={props.disabled} style={[{ flex: 1, flexDirection: 'row', justifyContent: 'center', alignItems: 'center' }, props.buttonStyle]} onPress={props.onPress}>
+        ]}
+        >
+            <TouchableOpacity disabled={props.disabled} style={[{
+                flex: 1,
+                alignItems: 'center',
+                flexDirection: 'row',
+                justifyContent: 'center',
+            }, props.buttonStyle]} onPress={props.onPress}>
                 {
                     props.icon
                 }

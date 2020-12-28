@@ -1,6 +1,5 @@
 import React from 'react';
 import { ActivityIndicator, Image, Modal, ScrollView, Text, TouchableOpacity, View } from 'react-native';
-import { Button, Header } from 'react-native-elements';
 
 import { FontAwesome, Ionicons } from '@expo/vector-icons';
 
@@ -8,6 +7,7 @@ import colors from '@shared/consts/Colors';
 
 // components
 import FnButton from '@components/FunnyButton2';
+import FnHeader from '@components/FunnyHeader2';
 import FunnyImageGalleryModal from '@components/FunnyImageGalleryModal';
 
 // redux
@@ -90,26 +90,18 @@ function UploadProfileImagesScreen(props: any) {
                     />
                 </View>
             </Modal>
-            <Header
-                containerStyle={{
-                    backgroundColor: colors.white
+            <FnHeader
+                title='Ảnh hồ sơ'
+                disableLinearGradient
+                titleStyle={{
+                    color: colors.black
                 }}
-                centerComponent={
-                    <Text style={{ fontSize: 18, fontWeight: '600' }}>Ảnh hồ sơ</Text>
-                }
                 leftComponent={
-                    <Button
-                        icon={
-                            <Ionicons name="md-arrow-back" size={24} color={colors.black} />
-                        }
-                        buttonStyle={{ backgroundColor: 'transparent' }}
-                        onPress={
-                            () => props.navigation.goBack()
-                        }
-                    />
-                }
-                rightComponent={
-                    <View />
+                    <TouchableOpacity onPress={
+                        props.navigation.goBack
+                    }>
+                        <Ionicons name="md-arrow-back" size={24} color={colors.black} />
+                    </TouchableOpacity>
                 }
             />
             <View style={{

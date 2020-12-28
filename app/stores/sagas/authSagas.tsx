@@ -15,7 +15,7 @@ function* signInHandler() {
                 {
                     ...profile,
                     avatar: profile.images.length > 0 ? profile.images[0].url : 'https://images.unsplash.com/photo-1510832198440-a52376950479?ixid=MXwxMjA3fDB8MHxzZWFyY2h8Mnx8Z2lybHxlbnwwfHwwfA%3D%3D&ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=60',
-                    dob: new Date(response.data.dob).getFullYear().toString(),
+                    dob: new Date(response.data.dob).getFullYear(),
                     images: profile.images.map((img: any) => ({
                         id: img.id,
                         uri: img.url

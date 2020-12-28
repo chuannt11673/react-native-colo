@@ -3,14 +3,14 @@ import { ActivityIndicator, ScrollView, Text, TouchableOpacity, View } from 'rea
 import * as UserService from '@shared/services/UserService';
 import { styles } from './DiaryStyle';
 import colors from '@shared/consts/Colors';
-import { FontAwesome, SimpleLineIcons } from '@expo/vector-icons';
+import { FontAwesome, Ionicons, SimpleLineIcons } from '@expo/vector-icons';
 
 // components
 import FunnyTruncatedText from '@components/FunnyTruncatedText';
 import FunnyAvatar from '@components/FunnyAvatar';
-import FunnyHeader from '@components/FunnyHeader';
 import FunnyImageGrid2 from '@components/FunnyImageGrid2';
 import FnButton from '@components/FunnyButton2';
+import FnHeader from '@components/FunnyHeader2';
 
 import AxiosClient from 'shared/Axios';
 
@@ -28,6 +28,7 @@ function DiaryScreen(props: any) {
         _isMounted = true;
         UserService.getDiary().then((res: any) => {
             if (res && _isMounted) {
+                res = res.filter((item: any) => item.content || item.images.length > 0);
                 const values = res.map((item: any) => {
                     return {
                         ...item,
@@ -53,9 +54,13 @@ function DiaryScreen(props: any) {
             <View key={index} style={styles.item}>
                 <FunnyAvatar uri={item.avatar || item.images[0]} name={item.name} />
                 <FunnyImageGrid2 images={item.images} />
-                <View style={styles.content}>
-                    <FunnyTruncatedText text={item.content} />
-                </View>
+                {
+                    item.content ? (
+                        <View style={styles.content}>
+                            <FunnyTruncatedText text={item.content} />
+                        </View>
+                    ) : null
+                }
                 <View style={styles.action}>
                     <FnButton
                         title={item.likes.length + ''}
@@ -88,7 +93,21 @@ function DiaryScreen(props: any) {
 
     return (
         <>
-            <FunnyHeader title='Nhật Ký' navigation={props.navigation} />
+            <FnHeader
+                title='Nhật ký'
+                leftComponent={
+                    <TouchableOpacity onPress={
+                        () => props.navigation.openDrawer()
+                    }>
+                        <FontAwesome name="bars" size={21} color={colors.white} />
+                    </TouchableOpacity>
+                }
+                rightComponent={
+                    <TouchableOpacity>
+                        <Ionicons name="md-notifications" size={24} color={colors.white} />
+                    </TouchableOpacity>
+                }
+            />
             {
                 isLoading ? (
                     <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>

@@ -1,12 +1,16 @@
 import React, { useEffect, useState } from 'react'
 import { Text, TouchableOpacity, View, Image, FlatList } from 'react-native';
-import * as UserService from '@shared/services/UserService';
 import { styles, itemStyles } from './MessageStyle';
 import Moment from 'moment';
-import FunnyHeader from 'components/FunnyHeader';
+
+import FnHeader from '@components/FunnyHeader2';
+import { FontAwesome, Ionicons } from '@expo/vector-icons';
+
+import colors from '@shared/consts/Colors';
+import * as UserService from '@shared/services/UserService';
 
 const defaultAvatar = require('@assets/images/default-avatar.jpg');
-export default function MessageScreen({ navigation }: any) {
+export default function MessageScreen(props: any) {
     const [data, setData] = useState<any[]>([]);
     useEffect(() => {
         UserService.getMesssages().then((res: any) => {
@@ -31,7 +35,7 @@ export default function MessageScreen({ navigation }: any) {
         return (
             <TouchableOpacity onPress={
                 () => {
-                    navigation.navigate('Chat', {
+                    props.navigation.navigate('Chat', {
                         item: {
                             ...item,
                             time: null
@@ -62,7 +66,21 @@ export default function MessageScreen({ navigation }: any) {
 
     return (
         <View style={styles.container}>
-            <FunnyHeader title='Tin Nhắn' navigation={navigation} />
+            <FnHeader
+                title='Nhật ký'
+                leftComponent={
+                    <TouchableOpacity onPress={
+                        () => props.navigation.openDrawer()
+                    }>
+                        <FontAwesome name="bars" size={21} color={colors.white} />
+                    </TouchableOpacity>
+                }
+                rightComponent={
+                    <TouchableOpacity>
+                        <Ionicons name="md-notifications" size={24} color={colors.white} />
+                    </TouchableOpacity>
+                }
+            />
             <FlatList
                 data={data}
                 keyExtractor={item => item.id}

@@ -1,11 +1,10 @@
 import React, { useState } from 'react';
-import { ScrollView, Text, View, Image, TouchableWithoutFeedback, Keyboard, KeyboardAvoidingView, Platform } from 'react-native';
+import { ScrollView, Text, View, Image, TouchableWithoutFeedback, Keyboard, KeyboardAvoidingView, Platform, TouchableOpacity } from 'react-native';
 
 import styles from './ChatStyle';
 
-import FunnyHeader from '@components/FunnyHeader';
 import FunnyGiftChat from '@components/FunnyGiftChat';
-import FnButton from '@components/FunnyButton2';
+import FnHeader from '@components/FunnyHeader2';
 
 import { Ionicons } from '@expo/vector-icons';
 
@@ -66,20 +65,14 @@ export default function ChatScreen(props: any) {
                     <View
                         style={{ flex: 1 }}
                     >
-                        <FunnyHeader
+                        <FnHeader
                             title={data.name}
                             leftComponent={
-                                <FnButton
-                                    icon={
-                                        <Ionicons name="md-arrow-back" size={24} color={colors.white} />
-                                    }
-                                    onPress={
-                                        () => props.navigation.goBack()
-                                    }
-                                />
-                            }
-                            rightComponent={
-                                <View />
+                                <TouchableOpacity onPress={
+                                    () => props.navigation.goBack()
+                                }>
+                                    <Ionicons name="md-arrow-back" size={24} color={colors.white} />
+                                </TouchableOpacity>
                             }
                         />
                         <ScrollView

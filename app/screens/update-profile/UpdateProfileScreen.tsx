@@ -1,9 +1,9 @@
 import React, { useEffect, useState } from 'react';
-import { ActivityIndicator, Keyboard, KeyboardAvoidingView, Platform, ScrollView, Text, TextInput, TouchableWithoutFeedback, View } from 'react-native';
-import { Header } from 'react-native-elements';
+import { ActivityIndicator, Keyboard, KeyboardAvoidingView, Platform, ScrollView, Text, TextInput, TouchableOpacity, TouchableWithoutFeedback, View } from 'react-native';
 
 // components
 import FnButton from '@components/FunnyButton2';
+import FnHeader from '@components/FunnyHeader2';
 
 import styles from './UpdateProfileStyle';
 
@@ -14,11 +14,15 @@ import RNPickerSelect from 'react-native-picker-select';
 import { connect } from 'react-redux';
 
 import colors from '@shared/consts/Colors';
-import { years } from '@shared/consts/CommonConstants';
+import { years, genders, heights, ages } from '@shared/consts/CommonConstants';
+
 import { updateProfile } from '@stores/reducers/ProfileReducer';
 import { updateStatusBar } from '@stores/reducers/StatusBarReducer';
 
 const listOfYear = years();
+const listOfGender = genders();
+const listOfHeight = heights();
+const listOfAge = ages();
 
 function UpdateProfileScreen(props: any) {
     const [isLoading, setLoading] = useState(true);
@@ -56,24 +60,14 @@ function UpdateProfileScreen(props: any) {
 
     return (
         <>
-            <Header
-                containerStyle={{
-                    backgroundColor: colors.white
-                }}
-                centerComponent={
-                    <Text style={{ fontSize: 18, fontWeight: '600' }}>Thiết lập hồ sơ hẹn hò</Text>
-                }
+            <FnHeader
+                title='Thiết lập hồ sơ hẹn hò'
                 leftComponent={
-                    props.profile && props.profile.name ? (
-                        <FnButton
-                            icon={
-                                <Ionicons name="md-arrow-back" size={24} color={colors.black} />
-                            }
-                            onPress={
-                                () => props.navigation.navigate('Dating')
-                            }
-                        />
-                    ) : <View />
+                    <TouchableOpacity onPress={
+                        () => props.navigation.navigate('Dating')
+                    }>
+                        <Ionicons name="md-arrow-back" size={24} color={colors.white} />
+                    </TouchableOpacity>
                 }
             />
             <KeyboardAvoidingView
@@ -90,7 +84,7 @@ function UpdateProfileScreen(props: any) {
                         paddingBottom: 50,
                         backgroundColor: colors.white
                     }}>
-                        
+
                         <ScrollView style={{
                             padding: 25,
                         }}>
@@ -119,24 +113,29 @@ function UpdateProfileScreen(props: any) {
                                 alignItems: 'center',
                                 justifyContent: 'space-between'
                             }}>
-                                <RNPickerSelect
-                                    style={{
-                                        inputIOS: styles.targetRNPicker,
-                                        inputAndroid: styles.targetRNPicker
-                                    }}
-                                    onValueChange={
-                                        (value: any) => setData({
-                                            ...data,
-                                            dob: value
-                                        })
-                                    }
-                                    items={
-                                        listOfYear.map(year => ({
-                                            label: year, value: year
-                                        }))
-                                    }
-                                    value={data.dob}
-                                />
+                                <View style={{
+                                    width: '40%',
+                                    height: 40,
+                                    justifyContent: 'center',
+                                    borderWidth: 1,
+                                    borderRadius: 12,
+                                    borderColor: colors.border,
+                                    padding: 6                                    
+                                }}>
+                                    <RNPickerSelect
+                                        placeholder={{}}
+                                        onValueChange={
+                                            (value: any) => setData({
+                                                ...data,
+                                                dob: value
+                                            })
+                                        }
+                                        items={
+                                            listOfYear
+                                        }
+                                        value={data.dob}
+                                    />
+                                </View>
                                 <FontAwesome name="dot-circle-o" size={24} color={colors.primary} />
                             </View>
                             {/* gender */}
@@ -147,23 +146,23 @@ function UpdateProfileScreen(props: any) {
                                 justifyContent: 'space-between'
                             }}>
                                 <View style={{
-                                    width: '50%'
+                                    width: '40%',
+                                    height: 40,
+                                    justifyContent: 'center',
+                                    borderWidth: 1,
+                                    borderRadius: 12,
+                                    borderColor: colors.border,
+                                    padding: 6                                    
                                 }}>
                                     <RNPickerSelect
-                                        style={{
-                                            inputIOS: styles.targetRNPicker,
-                                            inputAndroid: styles.targetRNPicker
-                                        }}
+                                        placeholder={{}}
                                         onValueChange={
                                             (value: any) => setData({
                                                 ...data,
                                                 gender: value
                                             })
                                         }
-                                        items={[
-                                            { label: 'Nam', value: 'male' },
-                                            { label: 'Nữ', value: 'female' }
-                                        ]}
+                                        items={listOfGender}
                                         value={data.gender}
                                     />
                                 </View>
@@ -255,46 +254,54 @@ function UpdateProfileScreen(props: any) {
                                     width: '50%'
                                 }}>
                                     <Text style={styles.title} >Đối tượng hẹn hò</Text>
-                                    <RNPickerSelect
-                                        style={{
-                                            inputIOS: styles.targetRNPicker,
-                                            inputAndroid: styles.targetRNPicker
-                                        }}
-                                        onValueChange={
-                                            (value: any) => setData({
-                                                ...data,
-                                                targetGender: value
-                                            })
-                                        }
-                                        items={[
-                                            { label: 'Nam', value: 'male' },
-                                            { label: 'Nữ', value: 'female' }
-                                        ]}
-                                    />
+                                    <View style={{
+                                        width: '69%',
+                                        height: 40,
+                                        justifyContent: 'center',
+                                        padding: 6,
+                                        borderWidth: 1,
+                                        borderRadius: 12,
+                                        borderColor: colors.border
+                                    }}>
+                                        <RNPickerSelect
+                                            placeholder={{}}
+                                            onValueChange={
+                                                (value: any) => setData({
+                                                    ...data,
+                                                    targetGender: value
+                                                })
+                                            }
+                                            items={
+                                                listOfGender
+                                            }
+                                        />
+                                    </View>
                                 </View>
                                 <View style={{
                                     width: '40%'
                                 }}>
                                     <Text style={styles.title} >Chiều cao</Text>
-                                    <RNPickerSelect
-                                        style={{
-                                            inputIOS: styles.heightRNPicker,
-                                            inputAndroid: styles.heightRNPicker
-                                        }}
-                                        onValueChange={
-                                            (value: any) => setData({
-                                                ...data,
-                                                targetHeight: value
-                                            })
-                                        }
-                                        items={[
-                                            { label: '150 cm', value: '150' },
-                                            { label: '160 cm', value: '160' },
-                                            { label: '170 cm', value: '170' },
-                                            { label: '180 cm', value: '180' },
-                                            { label: '190 cm', value: '190' },
-                                        ]}
-                                    />
+                                    <View style={{
+                                        width: '80%',
+                                        height: 40,
+                                        justifyContent: 'center',
+                                        padding: 6,
+                                        borderWidth: 1,
+                                        borderRadius: 12,
+                                        borderColor: colors.border,
+                                    }}>
+                                        <RNPickerSelect
+                                            placeholder={{}}
+                                            value={data.targetHeight}
+                                            onValueChange={
+                                                (value: any) => setData({
+                                                    ...data,
+                                                    targetHeight: value
+                                                })
+                                            }
+                                            items={listOfHeight}
+                                        />
+                                    </View>
                                 </View>
                                 <View style={{
                                     width: '10%',
@@ -311,37 +318,47 @@ function UpdateProfileScreen(props: any) {
                                 flexDirection: 'row',
                                 alignItems: 'center'
                             }}>
-                                <RNPickerSelect
-                                    style={{
-                                        inputIOS: styles.ageRangeRNPicker,
-                                        inputAndroid: styles.ageRangeRNPicker
-                                    }}
-                                    onValueChange={
-                                        value => setData({
-                                            ...data,
-                                            fromAge: value
-                                        })
-                                    }
-                                    items={[]}
-                                />
-                                <Text style={{
-                                    padding: 5
+                                <View style={{
+                                    width: '30%',
+                                    height: 40,
+                                    justifyContent: 'center',
+                                    borderWidth: 1,
+                                    borderRadius: 12,
+                                    borderColor: colors.border,
+                                    padding: 6                                    ,
                                 }}>
-                                    to
-                            </Text>
-                                <RNPickerSelect
-                                    style={{
-                                        inputIOS: styles.ageRangeRNPicker,
-                                        inputAndroid: styles.ageRangeRNPicker
-                                    }}
-                                    onValueChange={
-                                        value => setData({
-                                            ...data,
-                                            toAge: value
-                                        })
-                                    }
-                                    items={[]}
-                                />
+                                    <RNPickerSelect
+                                        placeholder={{}}
+                                        onValueChange={
+                                            value => setData({
+                                                ...data,
+                                                fromAge: value
+                                            })
+                                        }
+                                        items={listOfAge}
+                                    />
+                                </View>
+                                <Text> to </Text>
+                                <View style={{
+                                    width: '30%',
+                                    height: 40,
+                                    justifyContent: 'center',
+                                    borderWidth: 1,
+                                    borderRadius: 12,
+                                    borderColor: colors.border,
+                                    padding: 6                                    ,
+                                }}>
+                                    <RNPickerSelect
+                                        placeholder={{}}
+                                        onValueChange={
+                                            value => setData({
+                                                ...data,
+                                                toAge: value
+                                            })
+                                        }
+                                        items={listOfAge}
+                                    />
+                                </View>
                             </View>
                             {/* brief message */}
                             <Text style={styles.title} >Ghi chú</Text>

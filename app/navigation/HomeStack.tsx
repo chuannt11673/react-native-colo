@@ -14,7 +14,7 @@ import AuthContext from '@shared/context/AuthContext';
 
 // components
 import FnButton from '@components/FunnyButton2';
-import FunnyHeader from '@components/FunnyHeader';
+import FnHeader from '@components/FunnyHeader2';
 
 //  redux
 import { connect } from 'react-redux';
@@ -31,7 +31,7 @@ function DrawerContent(props: any) {
     <View style={{
       flex: 1
     }}>
-      <FunnyHeader title='' leftComponent={(<View />)} rightComponent={(<View />)}/>
+      <FnHeader />
       <FnButton
         title='Logout'
         icon={

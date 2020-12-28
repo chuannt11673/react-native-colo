@@ -19,15 +19,7 @@ const styles = StyleSheet.create({
         paddingRight: 6
     },
     targetRNPicker: {
-        width: '90%',
-        minWidth: 100,
-        height: 46,
-        borderWidth: 1,
-        borderColor: colors.border,
-        borderRadius: 6,
-        justifyContent: 'center',
-        paddingLeft: 6,
-        paddingRight: 6
+        flex: 1
     },
     heightRNPicker: {
         width: '100%',

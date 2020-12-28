@@ -1,13 +1,13 @@
-import { FontAwesome, SimpleLineIcons } from '@expo/vector-icons';
+import { FontAwesome, Ionicons, SimpleLineIcons } from '@expo/vector-icons';
 import React, { useEffect, useState } from 'react';
-import { ScrollView, Text, View, ActivityIndicator, Image } from 'react-native';
+import { ScrollView, Text, View, ActivityIndicator, Image, TouchableOpacity } from 'react-native';
 import { styles } from './ProfileStyles';
 import colors from '@shared/consts/Colors';
 
 // component
 import FunnyImage from '@components/FunnyImage';
-import FunnyHeader from 'components/FunnyHeader';
 import FnButton from '@components/FunnyButton2';
+import FnHeader from '@components/FunnyHeader2';
 
 import { connect } from 'react-redux';
 import { updateProfile } from '@stores/reducers/ProfileReducer';
@@ -75,7 +75,21 @@ function ProfileScreen(props: any) {
 
     return (
         <>
-            <FunnyHeader title='Cá Nhân' navigation={props.navigation} />
+            <FnHeader
+                title='Cá nhân'
+                leftComponent={
+                    <TouchableOpacity onPress={
+                        () => props.navigation.openDrawer()
+                    }>
+                        <FontAwesome name="bars" size={21} color={colors.white} />
+                    </TouchableOpacity>
+                }
+                rightComponent={
+                    <TouchableOpacity>
+                        <Ionicons name="md-notifications" size={24} color={colors.white} />
+                    </TouchableOpacity>
+                }
+            />
             {
                 isLoading ? (
                     <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>

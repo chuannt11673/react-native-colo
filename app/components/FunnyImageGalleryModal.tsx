@@ -1,5 +1,5 @@
 import React from 'react';
-import { FlatList, View, Image, Text, ActivityIndicator, Dimensions, TouchableWithoutFeedback } from 'react-native';
+import { FlatList, View, Image, Text, ActivityIndicator, Dimensions, TouchableWithoutFeedback, TouchableOpacity } from 'react-native';
 import colors from '@shared/consts/Colors';
 
 import * as MediaLibrary from 'expo-media-library';
@@ -7,11 +7,10 @@ import * as MediaLibrary from 'expo-media-library';
 import { connect } from 'react-redux';
 
 import { MaterialIcons } from '@expo/vector-icons';
-import { Header } from 'react-native-elements';
 import { updateImagesGallery } from '@stores/reducers/ImageGalleryReducer';
 
 // components
-import FnButton from '@components/FunnyButton2';
+import FnHeader from '@components/FunnyHeader2';
 
 const imageSize = Dimensions.get('screen').width * 0.333;
 interface FunnyImageGalleryModalProps {
@@ -96,6 +95,9 @@ function FunnyImageGalleryModal(props: FunnyImageGalleryModalProps) {
         } else {
             setIsLoading(false);
         }
+
+        return () => {
+        }
     }, []);
 
     const onEndReachHandler = () => {
@@ -141,42 +143,28 @@ function FunnyImageGalleryModal(props: FunnyImageGalleryModalProps) {
 
     return (
         <View style={{
-            flex: 1
+            flex: 1,
+            backgroundColor: colors.secondary
         }}>
-            <Header
-                containerStyle={{
-                    backgroundColor: 'rgba(52, 52, 52, 0.8)'
-                }}
-                style={{
-                    backgroundColor: 'transparent'
-                }}
+            <FnHeader
+                disableLinearGradient
                 leftComponent={
-                    (
-                        <FnButton
-                            icon={
-                                <MaterialIcons name="close" size={31} color={colors.white} />
-                            }
-                            onPress={
-                                props.onCloseHandler
-                            }
-                        />
-                    )
+                    <TouchableOpacity onPress={props.onCloseHandler}>
+                        <MaterialIcons name="close" size={31} color={colors.black} />
+                    </TouchableOpacity>
                 }
                 rightComponent={
-                    (
-                        <FnButton
-                            icon={
-                                <MaterialIcons name="send" size={31} color={colors.white} />
-                            }
-                            onPress={
-                                () => {
-                                    if (props.onSendHandler && selectedImages) {
-                                        props.onSendHandler(selectedImages);
-                                    }
+                    <TouchableOpacity
+                        onPress={
+                            () => {
+                                if (props.onSendHandler && selectedImages) {
+                                    props.onSendHandler(selectedImages);
                                 }
                             }
-                        />
-                    )
+                        }
+                    >
+                        <MaterialIcons name="send" size={31} color={colors.black} />
+                    </TouchableOpacity>
                 }
             />
             {

@@ -3,11 +3,11 @@ import { SafeAreaView, View, StyleSheet, FlatList, TouchableOpacity } from 'reac
 
 // components
 import FunnyAvatar from '@components/FunnyAvatar';
-import FunnyHeader from '@components/FunnyHeader';
 import FnButton from '@components/FunnyButton2';
+import FnHeader from '@components/FunnyHeader2';
 
 // icons
-import { AntDesign, FontAwesome } from '@expo/vector-icons';
+import { AntDesign, FontAwesome, Ionicons } from '@expo/vector-icons';
 
 // redux
 import { connect } from 'react-redux';
@@ -74,7 +74,21 @@ function DatingScreen(props: any) {
 
     return (
         <>
-            <FunnyHeader title='Hẹn hò' navigation={props.navigation} />
+            <FnHeader
+                title='Hẹn hò'
+                leftComponent={
+                    <TouchableOpacity onPress={
+                        () => props.navigation.openDrawer()
+                    }>
+                        <FontAwesome name="bars" size={21} color={colors.white} />
+                    </TouchableOpacity>
+                }
+                rightComponent={
+                    <TouchableOpacity>
+                        <Ionicons name="md-notifications" size={24} color={colors.white} />
+                    </TouchableOpacity>
+                }
+            />
             <SafeAreaView style={{
                 flex: 1,
                 backgroundColor: colors.white,
