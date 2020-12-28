@@ -44,7 +44,7 @@ function UploadProfileImagesScreen(props: any) {
                 const file: any = {
                     uri: element.uri,
                     name: element.filename,
-                    type: ''
+                    type: 'image/jpeg'
                 };
                 form.append('images', file);
             });
