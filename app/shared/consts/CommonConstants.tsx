@@ -35,10 +35,10 @@ export const heights  = () => {
 };
 
 export const ages = () => {
-    const res : any[] = [];
+    const res = [];
     for (let index = 16; index < 69; index++) {
         res.push(
-            { label: index.toString(), value: index }
+            { label: index + '', value: index + '' }
         );        
     }
 

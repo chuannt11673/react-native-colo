@@ -3,7 +3,7 @@ import TokenResponse from '@shared/interfaces/TokenResponse';
 
 import { AuthRequestConfig, makeRedirectUri, Prompt, useAuthRequest } from 'expo-auth-session';
 
-const clientId = 'native';
+const clientId = 'dev';
 const scopes = ['openid', 'profile', 'WebAppAPI'];
 const responseType = 'id_token token';
 const redirectUri = makeRedirectUri({

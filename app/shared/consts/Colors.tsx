@@ -3,7 +3,7 @@ const colors = {
     black: 'black',
     primary: '#ff0600',
     secondary: '#f31a9f',
-    border: '#999999',
+    border: '#b3b3b3',
     hyperlink: '#3333ff',
     name: '#404040',
     darkblue: '#000099'
