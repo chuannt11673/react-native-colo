@@ -1,17 +1,50 @@
-import React from 'react'
-import { StyleSheet, Text, View } from 'react-native';
+import React from 'react';
+import { StyleProp, View, ViewStyle } from 'react-native';
 
 import { Picker } from '@react-native-community/picker';
 
-export default function FunnyPicker2() {
+import colors from '@shared/consts/Colors';
+
+interface FunnyPickerProps {
+    items?: { label: string; value: number | string }[];
+    placeholder?: string;
+    containerStyle?: StyleProp<ViewStyle>;
+    value?: number | string;
+    onValueChange?: (value: number | string) => void;
+}
+export default function FunnyPicker2(props: FunnyPickerProps) {
     return (
-        <Picker style={{
-            height: 50,
-            width: 100
-        }}>
-            <Picker.Item label='Java' value='java' />
-        </Picker>
+        <View style={[
+            {
+                height: 46,
+                width: 100,
+                borderWidth: 1,
+                borderRadius: 8,
+                borderColor: colors.border,
+                justifyContent: 'center'
+            },
+            props.containerStyle
+        ]}>
+            <Picker
+                selectedValue={props.value}
+                onValueChange={
+                    value => {
+                        if (props.onValueChange) {
+                            props.onValueChange(value);
+                        }
+                    }
+                }
+            >
+                <Picker.Item label={props.placeholder || 'Select an item...'} value='' color={colors.border}/>
+                {
+                    props.items ? props.items.map((item, index) => (
+                        <Picker.Item key={index} label={item.label} value={item.value} />
+                    )) : null
+                }
+            </Picker>
+        </View>
+
     )
 }
 
-const styles = StyleSheet.create({})
+

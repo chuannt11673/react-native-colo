@@ -4,7 +4,8 @@ import { ActivityIndicator, Keyboard, KeyboardAvoidingView, Platform, ScrollView
 // components
 import FnButton from '@components/FunnyButton2';
 import FnHeader from '@components/FunnyHeader2';
-import FnPicker from '@components/FunnyPicker2';
+import FunnyPicker2 from '@components/FunnyPicker2';
+import FnMultiplePicker from '@components/FunnyMultiplePicker';
 
 import styles from './UpdateProfileStyle';
 
@@ -105,6 +106,18 @@ function UpdateProfileScreen(props: any) {
                         <View style={{
                             width: '40%',
                         }}>
+                            <FunnyPicker2 placeholder='Select a year' containerStyle={{
+                                width: '100%'
+                            }}
+                                items={listOfYear}
+                                value={data.dob}
+                                onValueChange={
+                                    value => setData({
+                                        ...data,
+                                        dob: value
+                                    })
+                                }
+                            />
                         </View>
                         <FontAwesome name="dot-circle-o" size={24} color={colors.primary} />
                     </View>
@@ -118,6 +131,18 @@ function UpdateProfileScreen(props: any) {
                         <View style={{
                             width: '40%',
                         }}>
+                            <FunnyPicker2 placeholder='Select a gender' containerStyle={{
+                                width: '100%'
+                            }}
+                                items={listOfGender}
+                                value={data.gender}
+                                onValueChange={
+                                    value => setData({
+                                        ...data,
+                                        gender: value
+                                    })
+                                }
+                            />
                         </View>
                         <FontAwesome name="dot-circle-o" size={24} color={colors.primary} />
                     </View>
@@ -254,13 +279,50 @@ function UpdateProfileScreen(props: any) {
                             <View style={{
                                 width: '90%',
                             }}>
+                                <FunnyPicker2 placeholder='Select a gender' containerStyle={{
+                                    width: '100%'
+                                }}
+                                    items={listOfGender}
+                                    value={data.targetGender}
+                                    onValueChange={
+                                        value => setData({
+                                            ...data,
+                                            targetGender: value
+                                        })
+                                    }
+                                />
                             </View>
                         </View>
                         <View style={{
-                            width: '39%'
+                            width: '30%'
                         }}>
                             <Text style={styles.title} >Độ tuổi</Text>
-                            <FnPicker />
+                            <FnMultiplePicker
+                                item={{
+                                    firstItems: listOfAge,
+                                    secondItems: listOfAge
+                                }}
+                                placeholder={{
+                                    first: 'fr',
+                                    second: 'to'
+                                }}
+                                value={{
+                                    first: data.fromAge,
+                                    second: data.toAge
+                                }}
+                                onFirstValueChange={
+                                    value => setData({
+                                        ...data,
+                                        fromAge: value
+                                    })
+                                }
+                                onSecondValueChange={
+                                    value => setData({
+                                        ...data,
+                                        toAge: value
+                                    })
+                                }
+                            />
                         </View>
                     </View>
                 </View>
