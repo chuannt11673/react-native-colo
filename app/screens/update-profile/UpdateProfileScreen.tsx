@@ -308,19 +308,19 @@ function UpdateProfileScreen(props: any) {
                                     second: ' '
                                 }}
                                 value={{
-                                    first: data.fromAge,
-                                    second: data.toAge
+                                    first: data.targetFromAge,
+                                    second: data.targetToAge
                                 }}
                                 onFirstValueChange={
                                     value => setData({
                                         ...data,
-                                        fromAge: value
+                                        targetFromAge: value
                                     })
                                 }
                                 onSecondValueChange={
                                     value => setData({
                                         ...data,
-                                        toAge: value
+                                        targetToAge: value
                                     })
                                 }
                             />
@@ -336,15 +336,16 @@ function UpdateProfileScreen(props: any) {
                             justifyContent: 'space-between'
                         }}>
                             <Text style={styles.title}>Khoảng cách tối đa</Text>
-                            <Text style={[styles.title, { fontWeight: '400' }]}>{data.distance ?? 0} km</Text>
+                            <Text style={[styles.title, { fontWeight: '400' }]}>{data.targetDistance ?? 0} km</Text>
                         </View>
                         <FnSlider minimumValue={0} maximumValue={1000}
+                            value={data.targetDistance}
                             onValueChange={
                                 value => {
                                     const distance = Math.round(value);
                                     setData({
                                         ...data,
-                                        distance: distance
+                                        targetDistance: distance
                                     });
                                 }
                             }

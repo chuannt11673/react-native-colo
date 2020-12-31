@@ -38,7 +38,7 @@ export const ages = () => {
     const res = [];
     for (let index = 16; index < 69; index++) {
         res.push(
-            { label: index + '', value: index + '' }
+            { label: index + '', value: index }
         );        
     }
 

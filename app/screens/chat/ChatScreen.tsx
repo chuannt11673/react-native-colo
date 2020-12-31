@@ -11,37 +11,29 @@ import { Ionicons } from '@expo/vector-icons';
 import colors from '@shared/consts/Colors';
 import * as UserService from '@shared/services/UserService';
 import ChatMessageModel from '@shared/interfaces/ChatMessageModel';
-import UserInfoResponseModel from '@shared/interfaces/UserInfoResponseModel';
-import CommonConsts from '@shared/consts/CommonConstants';
-
-import AsyncStorage from '@react-native-async-storage/async-storage';
 
 const defaultAvatar = require('@assets/images/default-avatar.jpg');
 
-export default function ChatScreen(props: any) {
+import { connect } from 'react-redux';
+
+function ChatScreen(props: any) {
     const [data] = useState(props.route.params.item);
     const [messages, setMessages] = React.useState<ChatMessageModel[]>();
-    const [user, setUser] = useState<UserInfoResponseModel>();
 
     React.useEffect(() => {
-        AsyncStorage.getItem(CommonConsts.userInfoKey).then((res) => {
-            if (res) {
-                const userInfo: UserInfoResponseModel = JSON.parse(res);
-                setUser(userInfo);
-            };
 
-            // get conversations
-            UserService.getCommunicationMessages(data.id).then(res => {
-                const communicationMessages: ChatMessageModel[] = res.data;
-                setMessages(communicationMessages);
-            });
+        // get conversations
+        UserService.getCommunicationMessages(data.id).then(res => {
+            const communicationMessages: ChatMessageModel[] = res.data;
+            setMessages(communicationMessages);
         });
+
     }, []);
 
     const onSendMessageHandler = (value: string) => {
         const newMessages = messages?.concat({
             userId: '',
-            username: user?.name || '',
+            username: props.profile.name,
             message: value
         });
         setMessages(newMessages);
@@ -80,7 +72,7 @@ export default function ChatScreen(props: any) {
                         >
                             {
                                 messages?.map((item: any, index: number) => {
-                                    return item.username === user?.name ? (
+                                    return item.username === props.profile?.name ? (
                                         <View key={index} style={[styles.item, { justifyContent: 'flex-end' }, item.isNew ? { marginTop: 5 } : { padding: 5 }]}>
                                             <View style={[styles.message, { marginRight: 10, backgroundColor: '#99ffff' }]}>
                                                 <Text style={styles.messageText}>
@@ -119,3 +111,11 @@ export default function ChatScreen(props: any) {
         </>
     )
 }
+
+const mapStateToProps = (state: any) => {
+    return {
+        profile: state.profileReducer.profile
+    }
+}
+
+export default connect(mapStateToProps)(ChatScreen);

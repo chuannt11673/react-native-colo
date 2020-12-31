@@ -39,6 +39,11 @@ function UploadProfileImagesScreen(props: any) {
         form.append('college', profile.college);
         form.append('hobbies', profile.hobbies);
 
+        form.append('targetGender', profile.targetGender);
+        form.append('targetFromAge', profile.targetFromAge);
+        form.append('targetToAge', profile.targetToAge);
+        form.append('targetDistance', profile.targetDistance);
+
         if (images !== props.profile.images) {
             images.forEach(element => {
                 const file: any = {

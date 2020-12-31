@@ -5,6 +5,7 @@ import Slider from '@react-native-community/slider';
 interface FunnySliderProps {
     minimumValue: number;
     maximumValue: number;
+    value?: number;
     onValueChange?: (value: number) => void;
 }
 export default function FunnySlider(props: FunnySliderProps) {
@@ -18,6 +19,7 @@ export default function FunnySlider(props: FunnySliderProps) {
                 maximumValue={props.maximumValue}
                 minimumTrackTintColor="#009900"
                 maximumTrackTintColor="#000000"
+                value={props.value}
                 onValueChange={
                     value => {
                         if (props.onValueChange) {
