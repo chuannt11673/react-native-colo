@@ -190,7 +190,7 @@ function UploadProfileImagesScreen(props: any) {
                                 height: 46,
                                 marginTop: 20,
                                 backgroundColor: colors.primary,
-                                borderRadius: 12,
+                                borderRadius: 24,
                             }}
                             titleStyle={{
                                 color: colors.white,

@@ -6,6 +6,7 @@ import FnButton from '@components/FunnyButton2';
 import FnHeader from '@components/FunnyHeader2';
 import FunnyPicker2 from '@components/FunnyPicker2';
 import FnMultiplePicker from '@components/FunnyMultiplePicker';
+import FnSlider from '@components/FunnySlider';
 
 import styles from './UpdateProfileStyle';
 
@@ -62,9 +63,9 @@ function UpdateProfileScreen(props: any) {
         return (
             <View style={{
                 width: '100%',
-                borderWidth: 0.8,
                 borderRadius: 12,
                 borderColor: colors.border,
+                backgroundColor: '#f2f2f2',
                 overflow: 'hidden',
             }}>
                 <View style={{
@@ -76,7 +77,7 @@ function UpdateProfileScreen(props: any) {
                     <Text style={{ textAlign: 'center', color: colors.white, fontSize: 18 }}>Thiết lập hồ sơ hẹn hò</Text>
                 </View>
                 <View style={{
-                    padding: 6,
+                    padding: 10,
                 }}>
                     {/* name */}
                     <Text style={styles.title} >Tên hiển thị *</Text>
@@ -250,11 +251,11 @@ function UpdateProfileScreen(props: any) {
         return (
             <View style={{
                 width: '100%',
-                borderWidth: 0.8,
                 borderRadius: 12,
                 borderColor: colors.border,
+                backgroundColor: '#f2f2f2',
                 overflow: 'hidden',
-                marginTop: 15
+                marginTop: 20
             }}>
                 <View style={{
                     width: '100%',
@@ -265,7 +266,7 @@ function UpdateProfileScreen(props: any) {
                     <Text style={{ textAlign: 'center', color: colors.white, fontSize: 18 }}>Thiết lập đối tượng hẹn hò</Text>
                 </View>
                 <View style={{
-                    padding: 6
+                    padding: 10
                 }}>
                     {/* target */}
                     <View style={{
@@ -294,7 +295,7 @@ function UpdateProfileScreen(props: any) {
                             </View>
                         </View>
                         <View style={{
-                            width: '30%'
+                            width: '23%'
                         }}>
                             <Text style={styles.title} >Độ tuổi</Text>
                             <FnMultiplePicker
@@ -303,8 +304,8 @@ function UpdateProfileScreen(props: any) {
                                     secondItems: listOfAge
                                 }}
                                 placeholder={{
-                                    first: 'fr',
-                                    second: 'to'
+                                    first: ' ',
+                                    second: ' '
                                 }}
                                 value={{
                                     first: data.fromAge,
@@ -324,6 +325,30 @@ function UpdateProfileScreen(props: any) {
                                 }
                             />
                         </View>
+                    </View>
+
+                    {/* range */}
+                    <View style={{
+                        width: '100%'
+                    }}>
+                        <View style={{
+                            flexDirection: 'row',
+                            justifyContent: 'space-between'
+                        }}>
+                            <Text style={styles.title}>Khoảng cách tối đa</Text>
+                            <Text style={[styles.title, { fontWeight: '400' }]}>{data.distance ?? 0} km</Text>
+                        </View>
+                        <FnSlider minimumValue={0} maximumValue={1000}
+                            onValueChange={
+                                value => {
+                                    const distance = Math.round(value);
+                                    setData({
+                                        ...data,
+                                        distance: distance
+                                    });
+                                }
+                            }
+                        />
                     </View>
                 </View>
             </View>
@@ -376,7 +401,7 @@ function UpdateProfileScreen(props: any) {
                                 title='Tiếp theo'
                                 containerStyle={{
                                     backgroundColor: colors.primary,
-                                    borderRadius: 12,
+                                    borderRadius: 24,
                                     marginTop: 20,
                                     width: '90%',
                                     height: 50

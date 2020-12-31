@@ -1,7 +1,7 @@
 import React from 'react';
-import { StyleProp, View, ViewStyle } from 'react-native';
+import { StyleProp, View, ViewStyle, Platform } from 'react-native';
 
-import { Picker } from '@react-native-community/picker';
+import { Picker, PickerIOS } from '@react-native-picker/picker';
 
 import colors from '@shared/consts/Colors';
 
