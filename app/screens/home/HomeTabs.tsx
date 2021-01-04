@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import colors from '@shared/consts/Colors';
 import { SimpleLineIcons } from '@expo/vector-icons';
@@ -12,6 +12,7 @@ import UpdateProfileScreen from '@screens/update-profile/UpdateProfileScreen';
 import UploadProfileImagesScreen from '@screens/upload-profile-image/UploadProfileImagesScreen';
 
 import { connect } from 'react-redux';
+import { Keyboard } from 'react-native';
 
 const Tab = createBottomTabNavigator();
 const MessageNavigator = createStackNavigator();
@@ -88,6 +89,25 @@ const ProfileStack = () => {
 };
 
 function HomeTabs(props: any) {
+    const [tabBarVisible, setTabBarVisible] = useState(true);
+    useEffect(() => {
+        Keyboard.addListener('keyboardDidShow', _keyboardDidShowHandler);
+        Keyboard.addListener('keyboardDidHide', _keyboardDidHideHandler);
+
+        return () => {
+            Keyboard.removeListener('keyboardDidShow', _keyboardDidShowHandler);
+            Keyboard.removeListener('keyboardDidHide', _keyboardDidHideHandler);
+        }
+    }, []);
+
+    const _keyboardDidShowHandler = () => {
+        setTabBarVisible(false);
+    };
+
+    const _keyboardDidHideHandler = () => {
+        setTabBarVisible(true);
+    };
+
     return (
         <Tab.Navigator
             screenOptions={
@@ -120,21 +140,24 @@ function HomeTabs(props: any) {
                 name="Diary"
                 component={DiaryStack}
                 options={{
-                    title: 'Trang chủ'
+                    title: 'Trang chủ',
+                    tabBarVisible: tabBarVisible
                 }}
             />
             <Tab.Screen
                 name="Message"
                 component={MessageStack}
                 options={{
-                    title: 'Trò chuyện'
+                    title: 'Trò chuyện',
+                    tabBarVisible: tabBarVisible
                 }}
             />
             <Tab.Screen
                 name="Dating"
                 component={DatingStack}
                 options={{
-                    title: 'Hẹn hò'
+                    title: 'Hẹn hò',
+                    tabBarVisible: tabBarVisible
                 }}
                 {...props}
             />
@@ -142,21 +165,23 @@ function HomeTabs(props: any) {
                 name="Notification"
                 component={NotificationStack}
                 options={{
-                    title: 'Thông báo'
+                    title: 'Thông báo',
+                    tabBarVisible: tabBarVisible
                 }}
             />
             <Tab.Screen
                 name="Profile"
                 component={ProfileStack}
                 options={{
-                    title: 'Cá nhân'
+                    title: 'Cá nhân',
+                    tabBarVisible: tabBarVisible
                 }}
             />
         </Tab.Navigator>
     )
 };
 
-const mapStateToProps = (state) => {
+const mapStateToProps = (state: any) => {
     return {
         profile: state.profileReducer.profile
     }

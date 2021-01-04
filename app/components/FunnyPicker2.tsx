@@ -5,7 +5,7 @@ import { Picker, PickerIOS } from '@react-native-picker/picker';
 
 import colors from '@shared/consts/Colors';
 
-interface FunnyPickerProps {
+export interface FunnyPickerProps {
     items?: { label: string; value: number | string }[];
     placeholder?: string;
     containerStyle?: StyleProp<ViewStyle>;

@@ -1,10 +1,10 @@
 import React, { useEffect, useState } from 'react';
-import { ActivityIndicator, Keyboard, KeyboardAvoidingView, Platform, ScrollView, Text, TextInput, TouchableOpacity, TouchableWithoutFeedback, View } from 'react-native';
+import { ActivityIndicator, Keyboard, KeyboardAvoidingView, Platform, ScrollView, Text, TextInput, TextInputProps, TouchableOpacity, TouchableWithoutFeedback, View } from 'react-native';
 
 // components
 import FnButton from '@components/FunnyButton2';
 import FnHeader from '@components/FunnyHeader2';
-import FunnyPicker2 from '@components/FunnyPicker2';
+import FunnyPicker2, { FunnyPickerProps } from '@components/FunnyPicker2';
 import FnMultiplePicker from '@components/FunnyMultiplePicker';
 import FnSlider from '@components/FunnySlider';
 
@@ -23,6 +23,70 @@ import { updateStatusBar } from '@stores/reducers/StatusBarReducer';
 const listOfYear = years();
 const listOfGender = genders();
 const listOfAge = ages();
+
+interface UpdateProfileTextInputProps extends TextInputProps {
+    title?: string;
+}
+function UpdateProfileTextInput(props: UpdateProfileTextInputProps) {
+    const [visible, setVisible] = useState(true);
+
+    return (
+        <>
+            <Text style={styles.title} >{props.title}</Text>
+            <View style={{
+                flexDirection: 'row',
+                alignItems: 'center',
+                justifyContent: 'space-between'
+            }}>
+                <TextInput style={[styles.input, { width: '90%' }]} placeholder=''
+                    {...props}
+                />
+                <FontAwesome name="dot-circle-o" size={24} color={
+                    visible ? colors.primary : colors.border
+                }
+                    onPress={
+                        () => setVisible(!visible)
+                    }
+                />
+            </View>
+        </>
+    )
+}
+
+interface UpdateProfilePickerProps extends FunnyPickerProps {
+    title?: string;
+}
+function UpdateProfilePicker(props: UpdateProfilePickerProps) {
+    const [visible, setVisible] = useState(true);
+
+    return (
+        <>
+            <Text style={styles.title} >{props.title}</Text>
+            <View style={{
+                flexDirection: 'row',
+                alignItems: 'center',
+                justifyContent: 'space-between'
+            }}>
+                <View style={{
+                    width: '40%',
+                }}>
+                    <FunnyPicker2 containerStyle={{
+                        width: '100%'
+                    }}
+                        {...props}
+                    />
+                </View>
+                <FontAwesome name="dot-circle-o" size={24} color={
+                    visible ? colors.primary : colors.border
+                }
+                    onPress={
+                        () => setVisible(!visible)
+                    }
+                />
+            </View>
+        </>
+    )
+}
 
 function UpdateProfileScreen(props: any) {
     const [isLoading, setLoading] = useState(true);
@@ -80,168 +144,96 @@ function UpdateProfileScreen(props: any) {
                     padding: 10,
                 }}>
                     {/* name */}
-                    <Text style={styles.title} >Tên hiển thị *</Text>
-                    <View style={{
-                        flexDirection: 'row',
-                        alignItems: 'center',
-                        justifyContent: 'space-between'
-                    }}>
-                        <TextInput style={[styles.input, { width: '90%' }]} placeholder=''
-                            onChangeText={
-                                value => setData({
-                                    ...data,
-                                    name: value
-                                })
-                            }
-                            value={data.name}
-                        />
-                        <FontAwesome name="dot-circle-o" size={24} color={colors.primary} />
-                    </View>
+                    <UpdateProfileTextInput title='Tên hiển thị *'
+                        value={data.name}
+                        onChangeText={
+                            value => setData({
+                                ...data,
+                                name: value
+                            })
+                        }
+                    />
                     {/* dob */}
-                    <Text style={styles.title} >Năm sinh *</Text>
-                    <View style={{
-                        flexDirection: 'row',
-                        alignItems: 'center',
-                        justifyContent: 'space-between'
-                    }}>
-                        <View style={{
-                            width: '40%',
-                        }}>
-                            <FunnyPicker2 placeholder='Select a year' containerStyle={{
-                                width: '100%'
-                            }}
-                                items={listOfYear}
-                                value={data.dob}
-                                onValueChange={
-                                    value => setData({
-                                        ...data,
-                                        dob: value
-                                    })
-                                }
-                            />
-                        </View>
-                        <FontAwesome name="dot-circle-o" size={24} color={colors.primary} />
-                    </View>
+                    <UpdateProfilePicker title='Năm sinh *'
+                        items={listOfYear}
+                        value={data.dob}
+                        onValueChange={
+                            value => setData({
+                                ...data,
+                                dob: value
+                            })
+                        }
+                    />
                     {/* gender */}
-                    <Text style={styles.title} >Giới tính *</Text>
-                    <View style={{
-                        flexDirection: 'row',
-                        alignItems: 'center',
-                        justifyContent: 'space-between'
-                    }}>
-                        <View style={{
-                            width: '40%',
-                        }}>
-                            <FunnyPicker2 placeholder='Select a gender' containerStyle={{
-                                width: '100%'
-                            }}
-                                items={listOfGender}
-                                value={data.gender}
-                                onValueChange={
-                                    value => setData({
-                                        ...data,
-                                        gender: value
-                                    })
-                                }
-                            />
-                        </View>
-                        <FontAwesome name="dot-circle-o" size={24} color={colors.primary} />
-                    </View>
+                    <UpdateProfilePicker
+                        title='Giới tính *'
+                        items={listOfGender}
+                        value={data.gender}
+                        onValueChange={
+                            value => setData({
+                                ...data,
+                                gender: value
+                            })
+                        }
+                    />
                     {/* address */}
-                    <Text style={styles.title} >Làm việc tại</Text>
-                    <View style={{
-                        flexDirection: 'row',
-                        alignItems: 'center',
-                        justifyContent: 'space-between'
-                    }}>
-                        <TextInput
-                            style={[styles.input, { width: '90%' }]}
-                            placeholder=''
-                            onChangeText={
-                                value => setData({
-                                    ...data,
-                                    address: value
-                                })
-                            }
-                            value={data.address}
-                        />
-                        <FontAwesome name="dot-circle-o" size={24} color={colors.primary} />
-                    </View>
+                    <UpdateProfileTextInput
+                        title='Làm việc tại'
+                        onChangeText={
+                            value => setData({
+                                ...data,
+                                address: value
+                            })
+                        }
+                        value={data.address}
+                    />
                     {/* work address */}
-                    <Text style={styles.title} >Công việc</Text>
-                    <View style={{
-                        flexDirection: 'row',
-                        alignItems: 'center',
-                        justifyContent: 'space-between'
-                    }}>
-                        <TextInput style={[styles.input, { width: '90%' }]} placeholder=''
-                            onChangeText={
-                                value => setData({
-                                    ...data,
-                                    workAddress: value
-                                })
-                            }
-                            value={data.workAddress}
-                        />
-                        <FontAwesome name="dot-circle-o" size={24} color={colors.primary} />
-                    </View>
+                    <UpdateProfileTextInput
+                        title='Công việc'
+                        onChangeText={
+                            value => setData({
+                                ...data,
+                                workAddress: value
+                            })
+                        }
+                        value={data.workAddress}
+                    />
                     {/* college */}
-                    <Text style={styles.title} >Học tại</Text>
-                    <View style={{
-                        flexDirection: 'row',
-                        alignItems: 'center',
-                        justifyContent: 'space-between'
-                    }}>
-                        <TextInput style={[styles.input, { width: '90%' }]} placeholder=''
-                            onChangeText={
-                                value => setData({
-                                    ...data,
-                                    college: value
-                                })
-                            }
-                            value={data.college}
-                        />
-                        <FontAwesome name="dot-circle-o" size={24} color={colors.primary} />
-                    </View>
+                    <UpdateProfileTextInput
+                        title='Học tại'
+                        onChangeText={
+                            value => setData({
+                                ...data,
+                                college: value
+                            })
+                        }
+                        value={data.college}
+                    />
                     {/* hobbies */}
-                    <Text style={styles.title} >Sở thích</Text>
-                    <View style={{
-                        flexDirection: 'row',
-                        alignItems: 'center',
-                        justifyContent: 'space-between'
-                    }}>
-                        <TextInput
-                            style={[styles.input, { width: '90%' }]}
-                            multiline
-                            placeholder='Nghe nhạc, Xem phim,...'
-                            onChangeText={
-                                value => setData({
-                                    ...data,
-                                    hobbies: value
-                                })
-                            }
-                            value={data.hobbies}
-                        />
-                        <FontAwesome name="dot-circle-o" size={24} color={colors.primary} />
-                    </View>
+                    <UpdateProfileTextInput
+                        title='Sở thích'
+                        multiline
+                        placeholder='Nghe nhạc, Xem phim,...'
+                        onChangeText={
+                            value => setData({
+                                ...data,
+                                hobbies: value
+                            })
+                        }
+                        value={data.hobbies}
+                    />
                     {/* brief message */}
-                    <Text style={styles.title} >Giới thiệu bản thân</Text>
-                    <View style={{
-                        flexDirection: 'row',
-                        alignItems: 'center',
-                        justifyContent: 'space-between'
-                    }}>
-                        <TextInput style={[styles.input, { width: '90%', height: 'auto', minHeight: 46 }]} placeholder='' multiline
-                            onChangeText={
-                                value => setData({
-                                    ...data,
-                                    briefMessage: value
-                                })
-                            }
-                            value={data.briefMessage}
-                        />
-                        <FontAwesome name="dot-circle-o" size={24} color={colors.primary} />
-                    </View>
+                    <UpdateProfileTextInput
+                        title='Giới thiệu bản thân'
+                        multiline
+                        onChangeText={
+                            value => setData({
+                                ...data,
+                                briefMessage: value
+                            })
+                        }
+                        value={data.briefMessage}
+                    />
                 </View>
             </View>
         )
