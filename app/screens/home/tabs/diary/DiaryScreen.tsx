@@ -3,7 +3,7 @@ import { ActivityIndicator, ScrollView, Text, TouchableOpacity, View } from 'rea
 import * as UserService from '@shared/services/UserService';
 import { styles } from './DiaryStyle';
 import colors from '@shared/consts/Colors';
-import { FontAwesome, Ionicons, SimpleLineIcons } from '@expo/vector-icons';
+import { Entypo, FontAwesome, Ionicons, MaterialCommunityIcons, MaterialIcons, SimpleLineIcons } from '@expo/vector-icons';
 
 // components
 import FunnyTruncatedText from '@components/FunnyTruncatedText';
@@ -50,10 +50,17 @@ function DiaryScreen(props: any) {
         []);
 
     const renderItem = (item: any, index: number) => {
+        let action = undefined;
+        if (item.images && item.images.length > 0) {
+            action = `đã đăng ${item.images.length} ảnh mới`;
+        }
         return (
             <View key={index} style={styles.item}>
-                <FunnyAvatar uri={item.avatar || item.images[0]} name={item.name} />
-                <FunnyImageGrid2 images={item.images} />
+                <FunnyAvatar uri={item.avatar || item.images[0]}
+                    name={item.name}
+                    action={action}
+                    localtion='Hà nội'
+                />
                 {
                     item.content ? (
                         <View style={styles.content}>
@@ -61,6 +68,7 @@ function DiaryScreen(props: any) {
                         </View>
                     ) : null
                 }
+                <FunnyImageGrid2 images={item.images} />
                 <View style={styles.action}>
                     <FnButton
                         title={item.likes.length + ''}
@@ -69,22 +77,24 @@ function DiaryScreen(props: any) {
                         }
                         containerStyle={styles.actionBtnContainer}
                         titleStyle={styles.actionBtnTitle}
+                        buttonStyle={{ justifyContent: 'flex-start', paddingLeft: 10 }}
                     />
                     <FnButton
-                        title={item.comments.length + ''}
+                        title='Bình luận'
                         icon={
-                            <SimpleLineIcons name="bubbles" size={21} color={colors.black} />
+                            <FontAwesome name="comment" size={21} color={colors.blue} />
                         }
                         containerStyle={styles.actionBtnContainer}
                         titleStyle={styles.actionBtnTitle}
                     />
                     <FnButton
-                        title={item.shares.length + ''}
+                        title='Chia sẻ'
                         icon={
-                            <SimpleLineIcons name="cursor" size={21} color={colors.black} />
+                            <MaterialCommunityIcons name="share" size={21} color={colors.black} style={{ opacity: 0.6 }} />
                         }
                         containerStyle={styles.actionBtnContainer}
                         titleStyle={styles.actionBtnTitle}
+                        buttonStyle={{ justifyContent: 'flex-end', paddingRight: 10 }}
                     />
                 </View>
             </View>
@@ -125,13 +135,19 @@ function DiaryScreen(props: any) {
                                         <FunnyAvatar
                                             uri='https://images.unsplash.com/photo-1529626455594-4ff0802cfb7e?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=500&q=60'
                                         />
-                                        <Text style={styles.headerText}>Hôm nay bạn thế nào?</Text>
+                                        <Text style={styles.headerText}>Chia sẻ câu chuyện của bạn...</Text>
                                     </View>
                                 </TouchableOpacity>
-
+                                <View style={{
+                                    width: '95%',
+                                    borderTopColor: colors.border,
+                                    borderTopWidth: 1.5,
+                                    opacity: 0.6,
+                                    alignSelf: 'center'
+                                }} />
                                 <View style={styles.headerActions}>
                                     <FnButton
-                                        title='Photo'
+                                        title='Ảnh'
                                         icon={
                                             <FontAwesome name="file-image-o" size={19} color="#00b300" />
                                         }
@@ -141,15 +157,15 @@ function DiaryScreen(props: any) {
                                     <FnButton
                                         title='Video'
                                         icon={
-                                            <FontAwesome name="video-camera" size={19} color="#ff1ac6" />
+                                            <MaterialIcons name="video-library" size={19} color="#ff1ac6" />
                                         }
                                         containerStyle={styles.headerContainer}
                                         titleStyle={styles.headerTitleStyle}
                                     />
                                     <FnButton
-                                        title='Draw'
+                                        title='Link'
                                         icon={
-                                            <FontAwesome name="paint-brush" size={19} color="#ff1ac6" />
+                                            <Entypo name="link" size={19} color={colors.blue} />
                                         }
                                         containerStyle={styles.headerContainer}
                                         titleStyle={styles.headerTitleStyle}

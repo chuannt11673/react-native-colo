@@ -17,7 +17,8 @@ export const styles = StyleSheet.create({
     },
     action: {
         flexDirection: 'row',
-        justifyContent: 'flex-end',
+        justifyContent: 'space-around',
+        marginTop: 15
     },
     header: {
         borderBottomColor: '#f2f2f2',
@@ -28,18 +29,18 @@ export const styles = StyleSheet.create({
         alignItems: 'center'
     },
     headerText: {
-        fontSize: 16
+        fontSize: 16,
+        opacity: 0.6
     },
     headerActions: {
         flexDirection: 'row',
-        justifyContent: 'flex-end'
+        justifyContent: 'space-between',
+        paddingTop: 5,
+        paddingBottom: 5
     },
     headerContainer: {
-        width: windowWidth / 3,
+        width: '33.333%',
         height: 30,
-        borderTopWidth: 1,
-        borderLeftWidth: 1,
-        borderColor: colors.border,
         borderRadius: 0
     },
     headerTitleStyle: {
@@ -47,9 +48,10 @@ export const styles = StyleSheet.create({
         marginLeft: 5
     },
     actionBtnContainer: {
-        width: 46
+        width: '33.333%'
     },
     actionBtnTitle: {
-        marginLeft: 5
+        marginLeft: 5,
+        opacity: 0.6
     }
 })

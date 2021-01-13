@@ -1,11 +1,14 @@
 import React from 'react';
 import { StyleSheet, Text, View, Image } from 'react-native';
 import colors from '@shared/consts/Colors';
+import { Entypo } from '@expo/vector-icons';
 
 interface FunnyAvatarProps {
     uri?: string;
     name?: string;
+    action?: string;
     content?: string;
+    localtion?: string;
 };
 
 export default function FunnyAvatar(props: FunnyAvatarProps) {
@@ -19,12 +22,35 @@ export default function FunnyAvatar(props: FunnyAvatarProps) {
             <View>
                 {
                     props.name ? (
-                        <Text style={itemStyles.name}>
-                            {props.name}
-                        </Text>
+                        <View style={{ flexDirection: 'row' }}>
+                            <Text style={itemStyles.name}>
+                                {props.name}
+                                
+                            </Text>
+                            <Text style={{
+                                fontWeight: 'normal',
+                                fontSize: 15,
+                                marginLeft: 5,
+                                opacity: 0.6
+                            }}>
+                                {props.action}
+                            </Text>
+                        </View>
                     ) : null
                 }
-
+                {
+                    props.localtion ? (
+                        <View style={{
+                            flexDirection: 'row',
+                        }}>
+                            <Entypo name="location-pin" size={24} color={colors.blue} />
+                            <Text>tại</Text>
+                            <Text style={{ fontWeight: 'bold', marginLeft: 5 }}>
+                                {props.localtion}
+                            </Text>
+                        </View>
+                    ) : null
+                }
                 {
                     props.content ? (
                         <Text numberOfLines={1} style={itemStyles.message}>

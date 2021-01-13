@@ -2,6 +2,7 @@ const colors = {
     white: 'white',
     black: 'black',
     primary: '#ff0600',
+    blue: '#8080ff',
     secondary: '#f31a9f',
     border: '#b3b3b3',
     hyperlink: '#3333ff',
