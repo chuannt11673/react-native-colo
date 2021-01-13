@@ -1,22 +1,113 @@
 import React, { useEffect, useState } from 'react';
-import { ActivityIndicator, ScrollView, Text, TouchableOpacity, View } from 'react-native';
+import { ActivityIndicator, ScrollView, Text, TouchableOpacity, View, Image, FlatList, ImageBackground, TouchableWithoutFeedback } from 'react-native';
 import * as UserService from '@shared/services/UserService';
 import { styles } from './DiaryStyle';
 import colors from '@shared/consts/Colors';
-import { Entypo, FontAwesome, Ionicons, MaterialCommunityIcons, MaterialIcons, SimpleLineIcons } from '@expo/vector-icons';
+import { Entypo, FontAwesome, MaterialCommunityIcons, MaterialIcons, SimpleLineIcons } from '@expo/vector-icons';
 
 // components
 import FunnyTruncatedText from '@components/FunnyTruncatedText';
 import FunnyAvatar from '@components/FunnyAvatar';
 import FunnyImageGrid2 from '@components/FunnyImageGrid2';
 import FnButton from '@components/FunnyButton2';
-import FnHeader from '@components/FunnyHeader2';
 
 import AxiosClient from 'shared/Axios';
+
+import { getStories } from '@shared/services/UserService';
 
 // redux
 import { connect } from 'react-redux';
 import { updateStatusBar } from '@stores/reducers/StatusBarReducer';
+
+function DiaryHeader() {
+    return (
+        <View style={{
+            width: '100%',
+            height: 90,
+            backgroundColor: colors.white,
+        }}>
+            <View style={{
+                flex: 1,
+                flexDirection: 'row',
+                justifyContent: 'space-between',
+                alignItems: 'flex-end',
+                padding: 15
+            }}>
+                <View style={{ width: 60, height: 60, justifyContent: 'flex-end' }}>
+                </View>
+                <View style={{
+                    flexDirection: 'row'
+                }}>
+                    <TouchableOpacity>
+                        <FontAwesome name="search" size={24} color="black" style={{ opacity: 0.6, width: 30 }} />
+                    </TouchableOpacity>
+                    <TouchableOpacity>
+                        <FontAwesome name="bars" size={24} color="black" style={{ opacity: 0.6, width: 30, textAlign: 'right' }} />
+                    </TouchableOpacity>
+                </View>
+            </View>
+        </View>
+    )
+}
+
+function DiaryStories() {
+    const [data, setData] = useState<any[]>([]);
+    useEffect(() => {
+        getStories().then(data => {
+            setData(data);
+        });
+    }, []);
+
+    return (
+        <View style={{
+            width: '100%',
+            height: 130,
+        }}>
+            <FlatList
+                contentContainerStyle={{
+                    alignItems: 'center',
+                    padding: 10
+                }}
+                data={data}
+                horizontal
+                renderItem={
+                    ({ item, index }) => (
+                        <TouchableOpacity
+                            key={index}
+                            onPress={
+                                event => {}
+                            }
+                        >
+                            <View style={{
+                                width: 80,
+                                height: 110,
+                                borderRadius: 8,
+                                overflow: 'hidden',
+                                marginRight: 10
+                            }}>
+                                <Image source={{ uri: item.storyUrl }} style={{
+                                    flex: 1,
+                                    justifyContent: 'center'
+                                }} />
+                            </View>
+                        </TouchableOpacity>
+                    )
+                }
+            />
+        </View>
+    )
+}
+
+function DiaryDivision() {
+    return (
+        <View style={{
+            width: '100%',
+            height: 4,
+            backgroundColor: colors.border,
+            opacity: 0.6
+        }} />
+    )
+}
 
 function DiaryScreen(props: any) {
     const [data, setData] = useState<any[]>([]);
@@ -103,21 +194,8 @@ function DiaryScreen(props: any) {
 
     return (
         <>
-            <FnHeader
-                title='Nhật ký'
-                leftComponent={
-                    <TouchableOpacity onPress={
-                        () => props.navigation.openDrawer()
-                    }>
-                        <FontAwesome name="bars" size={21} color={colors.white} />
-                    </TouchableOpacity>
-                }
-                rightComponent={
-                    <TouchableOpacity>
-                        <Ionicons name="md-notifications" size={24} color={colors.white} />
-                    </TouchableOpacity>
-                }
-            />
+            <DiaryHeader />
+            <DiaryDivision />
             {
                 isLoading ? (
                     <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
@@ -172,6 +250,12 @@ function DiaryScreen(props: any) {
                                     />
                                 </View>
                             </View>
+                            <DiaryDivision />
+                            
+                            {/* stories */}
+                            <DiaryStories />
+
+                            <DiaryDivision />
                             {
                                 data.map((item, index) => renderItem(item, index))
                             }

@@ -30,4 +30,13 @@ export const createPost = (form: FormData) => {
             'Content-Type': 'multipart/form-data'
         }
     });
+};
+export const getStories = () => {
+    return Promise.resolve([
+        { id: '1', name: '', avatar: 'https://cdsweetheartstorage.blob.core.windows.net/assets/3388e561243d43128b38e84f6e1c3965.jpg', storyUrl: 'https://cdsweetheartstorage.blob.core.windows.net/assets/3388e561243d43128b38e84f6e1c3965.jpg' },
+        { id: '2', name: '', avatar: 'https://cdsweetheartstorage.blob.core.windows.net/assets/73fc639ed0a21f67b89696cde5890651.jpg', storyUrl: 'https://cdsweetheartstorage.blob.core.windows.net/assets/73fc639ed0a21f67b89696cde5890651.jpg' },
+        { id: '3', name: '', avatar: 'https://cdsweetheartstorage.blob.core.windows.net/assets/2a0fffbbd69f01e8659f302c5851ff83.jpg', storyUrl: 'https://cdsweetheartstorage.blob.core.windows.net/assets/2a0fffbbd69f01e8659f302c5851ff83.jpg' },
+        { id: '4', name: '', avatar: 'https://cdsweetheartstorage.blob.core.windows.net/assets/8263ed25f96fc9721af5a025118ee507.jpg', storyUrl: 'https://cdsweetheartstorage.blob.core.windows.net/assets/8263ed25f96fc9721af5a025118ee507.jpg' },
+        { id: '5', name: '', avatar: 'https://cdsweetheartstorage.blob.core.windows.net/assets/d645c7b5c22bcfd8b54c5bf1a01798b8.jpg', storyUrl: 'https://cdsweetheartstorage.blob.core.windows.net/assets/d645c7b5c22bcfd8b54c5bf1a01798b8.jpg' }
+    ]);
 }

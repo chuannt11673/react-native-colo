@@ -5,7 +5,7 @@ const windowWidth = Dimensions.get('window').width;
 export const styles = StyleSheet.create({
     container: {
         flex: 1,
-        backgroundColor: colors.white
+        backgroundColor: colors.white,
     },
     item: {
         paddingBottom: 10,
@@ -21,8 +21,7 @@ export const styles = StyleSheet.create({
         marginTop: 15
     },
     header: {
-        borderBottomColor: '#f2f2f2',
-        borderBottomWidth: 5
+        
     },
     headerAvatar: {
         flexDirection: 'row',
