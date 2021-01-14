@@ -1,5 +1,6 @@
 import React from 'react';
 import { Dimensions, Image, StyleSheet, Text, View } from 'react-native';
+import colors from 'shared/consts/Colors';
 
 interface FunnyImageGrid2Props {
     images: string[];
@@ -18,7 +19,7 @@ function Grid1(props : { uri: string }) {
     }, []);
 
     return (
-        <Image source={{ uri: props.uri }} style={{ width: '100%', height: height, resizeMode: 'cover' }} />
+        <Image source={{ uri: props.uri }} style={[styles.image ,{ width: '100%', height: height, resizeMode: 'cover' }]} />
     )
 }
 
@@ -30,7 +31,7 @@ function Grid2(props: { images: string[] }) {
         }}>
             {
                 props.images.map((uri, index) => (
-                    <Image key={index} source={{ uri: uri }} style={{ width: '50%', minHeight: width }}/>
+                    <Image key={index} source={{ uri: uri }} style={[styles.image ,{ width: '50%', minHeight: width }]}/>
                 ))
             }
         </View>
@@ -56,7 +57,7 @@ function Grid3(props: { images: string[] }) {
                 width: '60%',
                 height: '100%'
             }}>
-                <Image source={{ uri: props.images[0] }} style={{ width: '100%', height: '100%' }} />
+                <Image source={{ uri: props.images[0] }} style={[styles.image ,{ width: '100%', height: '100%' }]} />
             </View>
             <View style={{
                 width: '40%',
@@ -72,7 +73,7 @@ function Grid3(props: { images: string[] }) {
                         const height = 100 / childrenLength + '%';
 
                         return index === 0 ? null : (
-                            <Image key={index} source={{ uri: uri }} style={{ width: '100%', height: height, position: 'absolute', top: top, right: 0 }} />
+                            <Image key={index} source={{ uri: uri }} style={[styles.image ,{ width: '100%', height: height, position: 'absolute', top: top, right: 0 }]} />
                         )
                     })
                 }
@@ -80,6 +81,13 @@ function Grid3(props: { images: string[] }) {
         </View>
     )
 }
+
+const styles = StyleSheet.create({
+    image: {
+        borderWidth: 1.5,
+        borderColor: colors.white,
+    }
+});
 
 export default function FunnyImageGrid2(props: FunnyImageGrid2Props) {
     if (props.images.length === 0) {

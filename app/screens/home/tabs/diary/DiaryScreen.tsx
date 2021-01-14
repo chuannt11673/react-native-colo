@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { ActivityIndicator, ScrollView, Text, TouchableOpacity, View, Image, FlatList, ImageBackground, TouchableWithoutFeedback } from 'react-native';
+import { ActivityIndicator, ScrollView, Text, TouchableOpacity, View, Image, FlatList } from 'react-native';
 import * as UserService from '@shared/services/UserService';
 import { styles } from './DiaryStyle';
 import colors from '@shared/consts/Colors';
@@ -13,11 +13,11 @@ import FnButton from '@components/FunnyButton2';
 
 import AxiosClient from 'shared/Axios';
 
-import { getStories } from '@shared/services/UserService';
-
 // redux
 import { connect } from 'react-redux';
 import { updateStatusBar } from '@stores/reducers/StatusBarReducer';
+
+import DiaryStory from './DiaryStory';
 
 function DiaryHeader() {
     return (
@@ -46,54 +46,6 @@ function DiaryHeader() {
                     </TouchableOpacity>
                 </View>
             </View>
-        </View>
-    )
-}
-
-function DiaryStories() {
-    const [data, setData] = useState<any[]>([]);
-    useEffect(() => {
-        getStories().then(data => {
-            setData(data);
-        });
-    }, []);
-
-    return (
-        <View style={{
-            width: '100%',
-            height: 130,
-        }}>
-            <FlatList
-                contentContainerStyle={{
-                    alignItems: 'center',
-                    padding: 10
-                }}
-                data={data}
-                horizontal
-                renderItem={
-                    ({ item, index }) => (
-                        <TouchableOpacity
-                            key={index}
-                            onPress={
-                                event => {}
-                            }
-                        >
-                            <View style={{
-                                width: 80,
-                                height: 110,
-                                borderRadius: 8,
-                                overflow: 'hidden',
-                                marginRight: 10
-                            }}>
-                                <Image source={{ uri: item.storyUrl }} style={{
-                                    flex: 1,
-                                    justifyContent: 'center'
-                                }} />
-                            </View>
-                        </TouchableOpacity>
-                    )
-                }
-            />
         </View>
     )
 }
@@ -211,7 +163,7 @@ function DiaryScreen(props: any) {
                                 }>
                                     <View style={styles.headerAvatar}>
                                         <FunnyAvatar
-                                            uri='https://images.unsplash.com/photo-1529626455594-4ff0802cfb7e?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=500&q=60'
+                                            uri={props.profile?.avatar}
                                         />
                                         <Text style={styles.headerText}>Chia sẻ câu chuyện của bạn...</Text>
                                     </View>
@@ -251,9 +203,9 @@ function DiaryScreen(props: any) {
                                 </View>
                             </View>
                             <DiaryDivision />
-                            
+
                             {/* stories */}
-                            <DiaryStories />
+                            <DiaryStory />
 
                             <DiaryDivision />
                             {

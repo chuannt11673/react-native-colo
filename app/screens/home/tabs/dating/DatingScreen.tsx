@@ -1,5 +1,5 @@
 import React from 'react'
-import { SafeAreaView, View, StyleSheet, FlatList, TouchableOpacity } from 'react-native';
+import { SafeAreaView, View, StyleSheet, FlatList, TouchableOpacity, Dimensions, Image, Text, ScrollView } from 'react-native';
 
 // components
 import FunnyAvatar from '@components/FunnyAvatar';
@@ -7,7 +7,7 @@ import FnButton from '@components/FunnyButton2';
 import FnHeader from '@components/FunnyHeader2';
 
 // icons
-import { AntDesign, FontAwesome, Ionicons } from '@expo/vector-icons';
+import { AntDesign, FontAwesome, FontAwesome5, Ionicons } from '@expo/vector-icons';
 
 // redux
 import { connect } from 'react-redux';
@@ -18,16 +18,18 @@ import { getProfiles } from '@shared/services/UserService';
 function DatingScreen(props: any) {
     const [mode, setMode] = React.useState('top');
     const [data, setData] = React.useState<any[]>([]);
+    const [viewMode, setViewMode] = React.useState('list');
+    const [selectedData, setSelectedData] = React.useState<any>();
 
     React.useEffect(() => {
         getProfiles(50, 1).then(res => {
             const data = res.data.map((item: any) => {
                 const result = {
+                    ...item,
                     id: item.id,
-                    name: item.name,
-                    avatar: item.avatar,
                     isLiked: false,
                     top: true,
+                    year: (new Date(item.dob)).getFullYear()
                 };
 
                 if (!result.avatar && item.images) {
@@ -38,6 +40,7 @@ function DatingScreen(props: any) {
             });
 
             setData(data);
+            setSelectedData(data[0]);
         });
     }, []);
 
@@ -69,7 +72,7 @@ function DatingScreen(props: any) {
                     />
                 </View>
             </TouchableOpacity>
-        )
+        ) 
     }
 
     return (
@@ -93,8 +96,6 @@ function DatingScreen(props: any) {
                 flex: 1,
                 backgroundColor: colors.white,
                 alignItems: 'center',
-                paddingLeft: 15,
-                paddingRight: 15
             }}>
                 {/* action buttons */}
                 <View style={{
@@ -122,6 +123,15 @@ function DatingScreen(props: any) {
                         containerStyle={{
                             width: 46
                         }}
+                        onPress={
+                            () => {
+                                if (viewMode === 'list') {
+                                    setViewMode('details');
+                                } else {
+                                    setViewMode('list');
+                                }
+                            }
+                        }
                     />
                 </View>
                 {/* main buttons */}
@@ -168,28 +178,82 @@ function DatingScreen(props: any) {
                     </View>
                 </View>
                 {/* body */}
-                <FlatList
-                    style={{ width: '100%', padding: 15 }}
-                    data={
-                        mode === 'top' ? data.filter(x => x.top) : data.filter(x => x.isLiked)
-                    }
-                    keyExtractor={item => item.id}
-                    renderItem={
-                        item => renderItem(item.item)
-                    }
-                />
+                {
+                    viewMode === 'list' ? (
+                        <FlatList
+                            style={{ width: '100%', padding: 15 }}
+                            data={
+                                mode === 'top' ? data.filter(x => x.top) : data.filter(x => x.isLiked)
+                            }
+                            keyExtractor={item => item.id}
+                            renderItem={
+                                item => renderItem(item.item)
+                            }
+                        />
+                    ) : (
+                        <ScrollView>
+                            <View style={{
+                                width: Dimensions.get('window').width,
+                                height: 320,
+                                paddingTop: 20
+                            }}>
+                                <Image source={{ uri: selectedData.avatar }} style={{ flex: 1 }} />
+                            </View>
+                            <View style={{
+                                width: '100%',
+                                flexDirection: 'row',
+                                justifyContent: 'flex-start',
+                                alignItems: 'center',
+                                padding: 15
+                            }}>
+                                <FontAwesome name="user" size={24} color={colors.black} style={{ opacity: 0.6, marginRight: 10 }} />
+                                <Text>{selectedData.name}, {selectedData.year}</Text>
+                            </View>
+                            <View style={{
+                                width: '100%',
+                                flexDirection: 'row',
+                                justifyContent: 'flex-start',
+                                alignItems: 'center',
+                                padding: 15
+                            }}>
+                                <FontAwesome name="map-marker" size={24} color={colors.black} style={{ opacity: 0.6, marginRight: 10 }} />
+                                <Text>{selectedData.address}</Text>
+                            </View>
+                            <View style={{
+                                width: '100%',
+                                flexDirection: 'row',
+                                justifyContent: 'flex-start',
+                                alignItems: 'center',
+                                padding: 15
+                            }}>
+                                <FontAwesome name="briefcase" size={24} color={colors.black} style={{ opacity: 0.6, marginRight: 10 }} />
+                                <Text>{selectedData.workAddress}</Text>
+                            </View>
+                            <View style={{
+                                width: '100%',
+                                height: 1,
+                                backgroundColor: colors.border
+                            }} />
+                            <View style={{
+                                width: '100%',
+                                flexDirection: 'row',
+                                justifyContent: 'flex-start',
+                                alignItems: 'center',
+                                padding: 15
+                            }}>
+                                <Text style={{
+                                    fontSize: 16
+                                }}>{selectedData.briefMessage}</Text>
+                            </View>
+                        </ScrollView>                 
+                    )
+                }
+                
             </SafeAreaView>
         </>
     )
 }
 const btnColor = '#000099';
-const styles = StyleSheet.create({
-    mainButton: {
-        width: '50%',
-        borderRadius: 10
-    },
-});
-
 const mapStateToProps = (state: any) => {
     return {
         profile: state.profileReducer.profile
