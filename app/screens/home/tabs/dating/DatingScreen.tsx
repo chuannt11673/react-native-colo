@@ -7,7 +7,7 @@ import FnButton from '@components/FunnyButton2';
 import FnHeader from '@components/FunnyHeader2';
 
 // icons
-import { AntDesign, FontAwesome, FontAwesome5, Ionicons } from '@expo/vector-icons';
+import { AntDesign, FontAwesome, FontAwesome5, Ionicons, MaterialCommunityIcons, SimpleLineIcons } from '@expo/vector-icons';
 
 // redux
 import { connect } from 'react-redux';
@@ -194,19 +194,29 @@ function DatingScreen(props: any) {
                         <ScrollView>
                             <View style={{
                                 width: Dimensions.get('window').width,
-                                height: 320,
+                                height: 399,
                                 paddingTop: 20
                             }}>
                                 <Image source={{ uri: selectedData.avatar }} style={{ flex: 1 }} />
+                            </View>
+                            {/* add friend btn */}
+                            <View style={{
+                                position: 'absolute',
+                                top: 420,
+                                right: 30,
+                            }}>
+                                <TouchableOpacity>
+                                    <FontAwesome5 name="user-plus" size={24} color={colors.blue} />
+                                </TouchableOpacity>
                             </View>
                             <View style={{
                                 width: '100%',
                                 flexDirection: 'row',
                                 justifyContent: 'flex-start',
                                 alignItems: 'center',
-                                padding: 15
+                                padding: 10
                             }}>
-                                <FontAwesome name="user" size={24} color={colors.black} style={{ opacity: 0.6, marginRight: 10 }} />
+                                <FontAwesome name="user-o" size={21} color={colors.black} style={{ opacity: 0.6, width: 30, marginRight: 10, textAlign: 'center' }} />
                                 <Text>{selectedData.name}, {selectedData.year}</Text>
                             </View>
                             <View style={{
@@ -214,9 +224,9 @@ function DatingScreen(props: any) {
                                 flexDirection: 'row',
                                 justifyContent: 'flex-start',
                                 alignItems: 'center',
-                                padding: 15
+                                padding: 10
                             }}>
-                                <FontAwesome name="map-marker" size={24} color={colors.black} style={{ opacity: 0.6, marginRight: 10 }} />
+                                <MaterialCommunityIcons name="map-marker-outline" size={21} color={colors.black} style={{ opacity: 0.6, width: 30, marginRight: 10, textAlign: 'center' }} />
                                 <Text>{selectedData.address}</Text>
                             </View>
                             <View style={{
@@ -224,9 +234,9 @@ function DatingScreen(props: any) {
                                 flexDirection: 'row',
                                 justifyContent: 'flex-start',
                                 alignItems: 'center',
-                                padding: 15
+                                padding: 10
                             }}>
-                                <FontAwesome name="briefcase" size={24} color={colors.black} style={{ opacity: 0.6, marginRight: 10 }} />
+                                <SimpleLineIcons name="briefcase" size={21} color={colors.black} style={{ opacity: 0.6, width: 30, marginRight: 10, textAlign: 'center' }} />
                                 <Text>{selectedData.workAddress}</Text>
                             </View>
                             <View style={{
@@ -239,7 +249,7 @@ function DatingScreen(props: any) {
                                 flexDirection: 'row',
                                 justifyContent: 'flex-start',
                                 alignItems: 'center',
-                                padding: 15
+                                padding: 10
                             }}>
                                 <Text style={{
                                     fontSize: 16

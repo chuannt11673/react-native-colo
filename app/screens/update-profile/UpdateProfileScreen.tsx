@@ -102,7 +102,7 @@ function UpdateProfileScreen(props: any) {
 
     const onSaveHandler = () => {
         let images = props.profile.images;
-        if (images.length === 0) {
+        if (images?.length === 0) {
             images = data.images;
         }
 

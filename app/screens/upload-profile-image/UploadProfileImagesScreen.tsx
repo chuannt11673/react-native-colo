@@ -23,7 +23,7 @@ function UploadProfileImagesScreen(props: any) {
     const onSaveHandler = () => {
         const profile = {
             ...props.profile,
-            images: images.map(item => ({
+            images: images?.map(item => ({
                 filename: item.filename,
                 uri: item.uri
             }))

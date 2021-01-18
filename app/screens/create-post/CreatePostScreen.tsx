@@ -62,7 +62,6 @@ function CreatePostScreen(props: any) {
         >
             <Modal
                 animationType='slide'
-                transparent={true}
                 visible={modalVisible}
                 style={{
                     flex: 1
@@ -88,7 +87,7 @@ function CreatePostScreen(props: any) {
                 </View>
             </Modal>
             <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
-                <View style={{
+                <ScrollView style={{
                     flex: 1,
                     backgroundColor: colors.white
                 }}>
@@ -180,7 +179,7 @@ function CreatePostScreen(props: any) {
                             />
                         </View>
                     </ScrollView>
-                </View>
+                </ScrollView>
             </TouchableWithoutFeedback>
         </KeyboardAvoidingView>
     )

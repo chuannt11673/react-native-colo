@@ -10,7 +10,7 @@ import FnButton from '@components/FunnyButton2';
 
 function DiaryStory(props: any) {
     let initialItem = {
-        id: props.profile?.id,
+        id: props.profile?.id || '083f3201-77b1-4a9c-8be3-8edc16254dfb',
         avatar: props.profile?.avatar,
         storyUrl: props.profile?.avatar,
         initial: true
